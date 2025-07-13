@@ -1,4 +1,6 @@
+├── .env
 ├── .gitignore
+├── electron.js
 ├── eslint.config.js
 ├── index.html
 ├── package-lock.json
@@ -12,16 +14,19 @@
 │   ├── assets
 │   │   └── react.svg
 │   ├── auth
+│   │   ├── AuthContext.jsx
 │   │   ├── Login.jsx
-│   │   ├── Register.jsx
-│   │   └── useAuth.jsx
+│   │   ├── PrivateRoute.jsx
+│   │   └── Register.jsx
 │   ├── components
 │   │   ├── Header.jsx
 │   │   ├── Sidebar.jsx
 │   │   └── ui
 │   │       ├── Button.jsx
 │   │       ├── Card.jsx
+│   │       ├── Input.jsx
 │   │       ├── Modal.jsx
+│   │       ├── Textarea.jsx
 │   │       └── ToggleSwitch.jsx
 │   ├── context
 │   │   └── AppContext.jsx
@@ -29,11 +34,13 @@
 │   ├── index.css
 │   ├── main.jsx
 │   ├── pages
+│   │   ├── AddTemplate.jsx
 │   │   ├── Analytics.jsx
 │   │   ├── Dashboard.jsx
 │   │   ├── NotFound.jsx
 │   │   ├── Notifications.jsx
 │   │   ├── Profile.jsx
+│   │   ├── ScheduledTemplates.jsx
 │   │   ├── Settings.jsx
 │   │   ├── TemplateDetail.jsx
 │   │   ├── Templates.jsx
