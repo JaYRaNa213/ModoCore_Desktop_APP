@@ -1,6 +1,5 @@
-// src/pages/Templates.jsx
 import { Link } from "react-router-dom";
-import { Button } from "../components/ui/Button"; // ✅ Add this line
+import { Button } from "../components/ui/Button"; // ✅ Ensure this is correct
 
 export default function Templates() {
   const sampleTemplates = [
@@ -10,11 +9,10 @@ export default function Templates() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-800">📂 Templates</h1>
-
-      <div className="flex justify-end">
-        <Link to="/templates/new">
-          <Button className="mb-4">➕ Add New Template</Button>
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-gray-800">📂 Templates</h1>
+        <Link to="/add-template">
+          <Button className="mb-2">➕ Add New Template</Button>
         </Link>
       </div>
 
