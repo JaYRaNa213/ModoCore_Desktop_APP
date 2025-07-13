@@ -1,0 +1,47 @@
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── public
+│   └── vite.svg
+├── README.md
+├── src
+│   ├── App.css
+│   ├── App.jsx
+│   ├── assets
+│   │   └── react.svg
+│   ├── auth
+│   │   ├── Login.jsx
+│   │   ├── Register.jsx
+│   │   └── useAuth.jsx
+│   ├── components
+│   │   ├── Header.jsx
+│   │   ├── Sidebar.jsx
+│   │   └── ui
+│   │       ├── Button.jsx
+│   │       ├── Card.jsx
+│   │       ├── Modal.jsx
+│   │       └── ToggleSwitch.jsx
+│   ├── context
+│   │   └── AppContext.jsx
+│   ├── data
+│   ├── index.css
+│   ├── main.jsx
+│   ├── pages
+│   │   ├── Analytics.jsx
+│   │   ├── Dashboard.jsx
+│   │   ├── NotFound.jsx
+│   │   ├── Notifications.jsx
+│   │   ├── Profile.jsx
+│   │   ├── Settings.jsx
+│   │   ├── TemplateDetail.jsx
+│   │   ├── Templates.jsx
+│   │   └── Workspaces.jsx
+│   └── services
+│       ├── analyticsService.js
+│       └── TemplateService.js
+├── tailwind.config.js
+├── tree.cjs
+├── tree.txt
+└── vite.config.js
