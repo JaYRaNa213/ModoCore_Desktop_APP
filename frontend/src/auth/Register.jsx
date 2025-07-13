@@ -1,7 +1,7 @@
 // src/auth/Register.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "./useAuth";
+import { useAuth } from "./AuthContext";
 
 export default function Register() {
   const { login } = useAuth(); // we'll just simulate login after "register"

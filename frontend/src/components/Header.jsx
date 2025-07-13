@@ -1,5 +1,6 @@
 // src/components/Header.jsx
-import { useAuth } from "../auth/useAuth";
+import { Link } from "react-router-dom";
+import { useAuth } from "../auth/AuthContext";
 import { LogOut } from "lucide-react";
 
 export default function Header() {
@@ -7,9 +8,9 @@ export default function Header() {
 
   return (
     <header className="bg-white px-6 py-4 border-b flex justify-between items-center">
-      <h2 className="text-lg font-bold text-gray-800">Welcome back 👋</h2>
+      <h2 className="text-lg font-bold text-gray-800">Welcome to ModoCore </h2>
 
-      {user && (
+      {user ? (
         <div className="flex items-center gap-4">
           <span className="text-sm text-gray-600">
             👤 <strong>{user.username}</strong>
@@ -21,6 +22,11 @@ export default function Header() {
             <LogOut size={16} />
             Logout
           </button>
+        </div>
+      ) : (
+        <div className="flex items-center gap-4">
+          <Link to="/login" className="text-blue-600 text-sm hover:underline">Login</Link>
+          <Link to="/register" className="text-blue-600 text-sm hover:underline">Register</Link>
         </div>
       )}
     </header>

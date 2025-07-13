@@ -1,4 +1,4 @@
-// src/auth/useAuth.jsx
+// src/auth/AuthContext.jsx
 import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
@@ -6,7 +6,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
-  const login = (username) => setUser({ username });
+  const login = (userData) => setUser(userData);
   const logout = () => setUser(null);
 
   return (
