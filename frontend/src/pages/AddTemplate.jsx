@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 import { Textarea } from "../components/ui/Textarea";
 import { Card, CardContent } from "../components/ui/Card";
+
+import { createTemplate } from "../services/TemplateService";
 
 export default function AddTemplate() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [apps, setApps] = useState([""]);
   const [websites, setWebsites] = useState([""]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleAddApp = () => setApps([...apps, ""]);
@@ -37,18 +42,32 @@ export default function AddTemplate() {
     setWebsites(updated);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     const newTemplate = {
-      id: Date.now(),
-      title,
-      description,
+      title: title.trim(),
+      description: description.trim(),
       apps: apps.filter((a) => a.trim() !== ""),
       websites: websites.filter((w) => w.trim() !== "")
     };
-    console.log("Created Template:", newTemplate);
-    // TODO: Save to backend or context
-    navigate("/templates");
+
+    try {
+      if (!newTemplate.title || !newTemplate.apps.length) {
+        toast.error("Template must have a title and at least one app.");
+        setLoading(false);
+        return;
+      }
+
+      await createTemplate(newTemplate);
+      toast.success("Template created!");
+      navigate("/templates");
+    } catch (err) {
+      console.error("Error creating template:", err);
+      toast.error("Something went wrong. Please try again.");
+      setLoading(false);
+    }
   };
 
   return (
@@ -127,8 +146,12 @@ export default function AddTemplate() {
               </Button>
             </div>
 
-            <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
-              🚀 Create Template
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+            >
+              {loading ? "Creating..." : "🚀 Create Template"}
             </Button>
           </form>
         </CardContent>

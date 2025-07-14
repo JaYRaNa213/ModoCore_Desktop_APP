@@ -11,4 +11,10 @@ export default defineConfig({
       plugins: [tailwindcss(), autoprefixer()],
     },
   },
+  server: {
+    proxy: {
+      // Proxy API requests to your backend
+      "/api": "http://localhost:5000",
+    },
+  },
 });

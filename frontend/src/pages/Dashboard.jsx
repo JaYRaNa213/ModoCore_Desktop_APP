@@ -1,23 +1,43 @@
-// src/pages/Dashboard.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getTopTemplates } from "../services/TemplateService";
 import {
   Rocket,
-  BookOpen,
-  Briefcase,
-  Coffee,
   Clock,
+  BookOpen,
   Bot,
   ShieldCheck,
+  Flame,
 } from "lucide-react";
+import { Card, CardContent } from "../components/ui/Card";
 
 export default function Dashboard() {
+  const [topTemplates, setTopTemplates] = useState([]);
   const [activeMode, setActiveMode] = useState("None");
-  const recentModes = ["📚 Study Mode", "🧑‍💼 Meeting Mode", "☕ Break Mode"];
   const totalFocusTime = "3h 45m";
 
+  useEffect(() => {
+  const fetchTopTemplates = async () => {
+    try {
+      const data = await getTopTemplates(3);
+      if (Array.isArray(data)) {
+        setTopTemplates(data);
+      } else {
+        setTopTemplates([]);
+        console.warn("Expected array but got:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching top templates:", error);
+      setTopTemplates([]);
+    }
+  };
+
+  fetchTopTemplates();
+}, []);
+
+
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-8 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-800">🚀 Welcome back</h1>
@@ -27,41 +47,62 @@ export default function Dashboard() {
       </div>
 
       {/* Current Mode */}
-      <div className="bg-indigo-50 border border-indigo-200 shadow-md rounded-xl p-6">
-        <h2 className="text-lg font-semibold text-indigo-700 mb-2 flex items-center gap-2">
-          <Rocket size={20} /> Current Mode
-        </h2>
-        <div className="text-2xl font-bold text-indigo-800">{activeMode}</div>
-        <button
-          className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-          onClick={() => setActiveMode("💻 Coding Mode")}
-        >
-          Activate Coding Mode
-        </button>
-      </div>
+      <Card>
+        <CardContent className="p-6">
+          <h2 className="text-lg font-semibold text-indigo-700 mb-2 flex items-center gap-2">
+            <Rocket size={20} /> Current Mode
+          </h2>
+          <div className="text-2xl font-bold text-indigo-800">
+            {activeMode}
+          </div>
+          <button
+            className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+            onClick={() => setActiveMode("💻 Coding Mode")}
+          >
+            Activate Coding Mode
+          </button>
+        </CardContent>
+      </Card>
 
-      {/* Recently Used Modes */}
-      <div className="bg-white border shadow-sm rounded-xl p-6">
-        <h2 className="text-lg font-semibold text-gray-700 mb-2 flex items-center gap-2">
-          <Clock size={20} /> Recently Used Modes
-        </h2>
-        <ul className="list-inside list-disc text-gray-700 space-y-1">
-          {recentModes.map((mode, index) => (
-            <li key={index} className="text-base">{mode}</li>
-          ))}
-        </ul>
-      </div>
+      {/* Top Templates */}
+      <Card>
+        <CardContent className="p-6">
+          <h2 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+            <Flame size={20} /> Top 3 Most Used Templates
+          </h2>
+          <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
+            {topTemplates.map((template) => (
+              <div
+                key={template._id}
+                className="bg-indigo-50 border border-indigo-100 p-4 rounded-xl"
+              >
+                <h3 className="text-lg font-semibold text-indigo-800 mb-1">
+                  {template.title}
+                </h3>
+                <p className="text-sm text-gray-600">{template.description}</p>
+                <p className="text-xs text-gray-400 mt-2">
+                  Usage: {template.usageCount}
+                </p>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Focus Summary */}
-      <div className="bg-green-50 border border-green-200 rounded-xl shadow-sm p-6">
-        <h2 className="text-lg font-semibold text-green-700 mb-2 flex items-center gap-2">
-          <Clock size={20} /> Today’s Focus Time
-        </h2>
-        <p className="text-2xl text-green-700 font-bold">{totalFocusTime}</p>
-      </div>
+      <Card>
+        <CardContent className="p-6">
+          <h2 className="text-lg font-semibold text-green-700 mb-2 flex items-center gap-2">
+            <Clock size={20} /> Today’s Focus Time
+          </h2>
+          <p className="text-2xl text-green-700 font-bold">
+            {totalFocusTime}
+          </p>
+        </CardContent>
+      </Card>
 
-      {/* Call To Action Buttons */}
-      <div className="flex flex-wrap gap-4 mt-6">
+      {/* Quick Actions */}
+      <div className="flex flex-wrap gap-4 pt-4">
         <Link
           to="/templates"
           className="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-3 rounded-xl font-semibold hover:bg-blue-700 transition"
