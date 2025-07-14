@@ -1,19 +1,27 @@
 // ✅ src/pages/Automations.jsx
 import React, { useEffect, useState } from "react";
-import { getAutomations, toggleAutomationStatus } from "../services/automationService";
+import { getUserAutomations, toggleAutomationStatus } from "../services/automationService";
 import AutomationForm from "../components/AutomationForm";
-import ToggleSwitch from "../components/ui/ToggleSwitch";
+import {ToggleSwitch} from "../components/ui/ToggleSwitch";
 
 const Automations = () => {
   const [automations, setAutomations] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const data = await getAutomations();
-      setAutomations(data || []);
-    })();
-  }, [refresh]);
+  (async () => {
+    try {
+      const res = await getAutomations();
+      // Assuming API returns { success: true, data: [...] }
+      setAutomations(Array.isArray(res?.data) ? res.data : []);
+    } catch (err) {
+      console.error("Error fetching automations:", err);
+      setAutomations([]); // fallback
+    }
+  })();
+}, [refresh]);
+
+
 
   const handleToggle = async (id) => {
     await toggleAutomationStatus(id);

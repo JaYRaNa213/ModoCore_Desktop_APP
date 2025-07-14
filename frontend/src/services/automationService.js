@@ -53,3 +53,15 @@ export const getAutomationLogs = async (automationId) => {
   if (!res.ok) throw new Error("Failed to fetch logs");
   return await res.json();
 };
+
+
+export const automationService = {
+  getUserAutomations,
+  createAutomation,
+  updateAutomation,
+  deleteAutomation,
+  toggleAutomationStatus,
+  fetchAutomationLogs,
+  adminCreateAutomation,
+  getAutomationLogs,
+};

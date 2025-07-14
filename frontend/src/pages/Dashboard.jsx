@@ -1,7 +1,15 @@
 // src/pages/Dashboard.jsx
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Rocket, BookOpen, Briefcase, Coffee, Clock } from "lucide-react";
+import {
+  Rocket,
+  BookOpen,
+  Briefcase,
+  Coffee,
+  Clock,
+  Bot,
+  ShieldCheck,
+} from "lucide-react";
 
 export default function Dashboard() {
   const [activeMode, setActiveMode] = useState("None");
@@ -52,13 +60,29 @@ export default function Dashboard() {
         <p className="text-2xl text-green-700 font-bold">{totalFocusTime}</p>
       </div>
 
-      {/* CTA */}
-      <Link
-        to="/templates"
-        className="inline-block bg-blue-600 text-white px-5 py-3 rounded-xl font-semibold hover:bg-blue-700 transition"
-      >
-        + Start New Work Template
-      </Link>
+      {/* Call To Action Buttons */}
+      <div className="flex flex-wrap gap-4 mt-6">
+        <Link
+          to="/templates"
+          className="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-3 rounded-xl font-semibold hover:bg-blue-700 transition"
+        >
+          <BookOpen size={18} /> New Work Template
+        </Link>
+
+        <Link
+          to="/automations"
+          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-5 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition"
+        >
+          <Bot size={18} /> View Automations
+        </Link>
+
+        <Link
+          to="/admin"
+          className="inline-flex items-center gap-2 bg-pink-600 text-white px-5 py-3 rounded-xl font-semibold hover:bg-pink-700 transition"
+        >
+          <ShieldCheck size={18} /> Admin Panel
+        </Link>
+      </div>
     </div>
   );
 }

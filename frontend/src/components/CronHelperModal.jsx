@@ -1,10 +1,10 @@
 // src/components/CronHelperModal.jsx
 import React from "react";
-import { Dialog } from "@/components/ui/Modal";
+import  Modal  from "./ui/Modal";
 
 const CronHelperModal = ({ isOpen, onClose }) => {
   return (
-    <Dialog open={isOpen} onClose={onClose} title="CRON Expression Helper">
+    <Modal open={isOpen} onClose={onClose} title="CRON Expression Helper">
       <div className="space-y-3 text-sm">
         <p>
           A CRON expression is a string used to schedule tasks. Format:
@@ -29,7 +29,7 @@ const CronHelperModal = ({ isOpen, onClose }) => {
           – Every 15 minutes
         </p>
       </div>
-    </Dialog>
+    </Modal>
   );
 };
 

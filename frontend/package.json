@@ -5,35 +5,35 @@
   "type": "module",
   "main": "electron.js",
   "scripts": {
-  "dev": "vite",
-  "build": "vite build",
-  "lint": "eslint .",
-  "preview": "vite preview",
-  "start": "electron .",
-  "dist": "electron-builder --win"
-}
-,
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
   "build": {
-  "appId": "com.contextswap.app",
-  "productName": "ContextSwap",
-  "files": ["dist/**/*", "electron.js"],
-  "directories": {
-    "buildResources": "public"
+    "appId": "com.contextswap.app",
+    "productName": "ContextSwap",
+    "files": [
+      "dist/**/*",
+      "electron.js"
+    ],
+    "directories": {
+      "buildResources": "public"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "asar": true
   },
-  "win": {
-    "target": "nsis"
+  "description": "ContextSwap – Smart workspace switcher for productivity modes",
+  "author": {
+    "name": "Jay Rana",
+    "email": "jayrana0909@gmail.com"
   },
-  "asar": true
-},
-"description": "ContextSwap – Smart workspace switcher for productivity modes",
-"author": {
-  "name": "Jay Rana",
-  "email": "jayrana0909@gmail.com"
-},
-
-
-  
   "dependencies": {
+    "axios": "^1.10.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.525.0",
     "react": "^19.1.0",

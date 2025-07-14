@@ -19,7 +19,10 @@
 │   │   ├── PrivateRoute.jsx
 │   │   └── Register.jsx
 │   ├── components
+│   │   ├── AutomationForm.jsx
+│   │   ├── CronHelperModal.jsx
 │   │   ├── Header.jsx
+│   │   ├── LogTable.jsx
 │   │   ├── Sidebar.jsx
 │   │   └── ui
 │   │       ├── Button.jsx
@@ -35,7 +38,10 @@
 │   ├── main.jsx
 │   ├── pages
 │   │   ├── AddTemplate.jsx
+│   │   ├── AdminPanel.jsx
 │   │   ├── Analytics.jsx
+│   │   ├── AutomationLogs.jsx
+│   │   ├── Automations.jsx
 │   │   ├── Dashboard.jsx
 │   │   ├── NotFound.jsx
 │   │   ├── Notifications.jsx
@@ -47,6 +53,7 @@
 │   │   └── Workspaces.jsx
 │   └── services
 │       ├── analyticsService.js
+│       ├── automationService.js
 │       └── TemplateService.js
 ├── tailwind.config.js
 ├── tree.cjs
