@@ -27,32 +27,27 @@ export const runAutomation = async (req, res) => {
   }
 };
 
-// @desc Create a new automation preset
 export const createAutomation = async (req, res) => {
   try {
-    const { title, actions } = req.body;
+    const { title, actions, schedule } = req.body;
+    const owner = req.user._id;
 
-    const preset = await Automation.create({
+    const automation = await Automation.create({
       title,
       actions,
-      owner: req.user._id,
+      schedule,
+      owner,
     });
 
-    res.status(201).json(preset);
+    res.status(201).json(automation);
   } catch (err) {
-    res.status(500).json({ message: "Failed to create automation", error: err.message });
+    console.error("Create automation error:", err);
+    res.status(500).json({ error: "Failed to create automation" });
   }
 };
 
-// @desc Get all presets for current user
-export const getMyAutomations = async (req, res) => {
-  try {
-    const presets = await Automation.find({ owner: req.user._id });
-    res.status(200).json(presets);
-  } catch (err) {
-    res.status(500).json({ message: "Failed to fetch automations" });
-  }
-};
+
+
 
 export const triggerAutomation = async (req, res) => {
   try {
@@ -67,5 +62,54 @@ export const triggerAutomation = async (req, res) => {
   } catch (err) {
     console.error("Automation Error:", err.message);
     res.status(500).json({ message: "Automation failed", error: err.message });
+  }
+};
+
+// 🔍 Get user's automations
+export const getUserAutomations = async (req, res) => {
+  try {
+    const automations = await Automation.find({ owner: req.user._id });
+    res.json(automations);
+  } catch (err) {
+    console.error("Get automations error:", err);
+    res.status(500).json({ error: "Failed to fetch automations" });
+  }
+};
+
+
+// ✏️ Update an automation
+export const updateAutomation = async (req, res) => {
+  try {
+    const automation = await Automation.findOneAndUpdate(
+      { _id: req.params.id, owner: req.user._id },
+      req.body,
+      { new: true }
+    );
+    if (!automation) return res.status(404).json({ error: "Automation not found" });
+
+    res.json(automation);
+  } catch (err) {
+    console.error("Update automation error:", err);
+    res.status(500).json({ error: "Failed to update automation" });
+  }
+};
+
+// ⏯️ Toggle active status
+export const toggleAutomationStatus = async (req, res) => {
+  try {
+    const { isActive } = req.body;
+
+    const automation = await Automation.findOneAndUpdate(
+      { _id: req.params.id, owner: req.user._id },
+      { isActive },
+      { new: true }
+    );
+
+    if (!automation) return res.status(404).json({ error: "Automation not found" });
+
+    res.json(automation);
+  } catch (err) {
+    console.error("Toggle automation error:", err);
+    res.status(500).json({ error: "Failed to update automation status" });
   }
 };

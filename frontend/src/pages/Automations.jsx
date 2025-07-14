@@ -11,7 +11,7 @@ const Automations = () => {
   useEffect(() => {
   (async () => {
     try {
-      const res = await getAutomations();
+      const res = await getUserAutomations();
       // Assuming API returns { success: true, data: [...] }
       setAutomations(Array.isArray(res?.data) ? res.data : []);
     } catch (err) {

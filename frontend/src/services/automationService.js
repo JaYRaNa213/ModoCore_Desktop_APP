@@ -55,6 +55,17 @@ export const getAutomationLogs = async (automationId) => {
 };
 
 
+export const runAutomation = async (templateId) => {
+  const res = await axios.post("/api/automations/run", { templateId });
+  return res.data;
+};
+
+export const triggerAutomation = async (apps) => {
+  const res = await axios.post("/api/automations/trigger", { apps });
+  return res.data;
+};
+
+
 export const automationService = {
   getUserAutomations,
   createAutomation,

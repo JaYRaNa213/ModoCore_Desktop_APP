@@ -7,8 +7,7 @@ import mongoose from "mongoose";
 import templateRoutes from "./routes/template.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import automationRoutes from "./routes/automation.routes.js";
-
-
+import logRoutes from "./routes/log.routes.js";
 dotenv.config();
 
 const app = express();
@@ -21,6 +20,7 @@ app.use(express.json());
 app.use("/api/templates", templateRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/automation", automationRoutes);
+app.use("/api/automation-logs", logRoutes);
 
 
 export default app;

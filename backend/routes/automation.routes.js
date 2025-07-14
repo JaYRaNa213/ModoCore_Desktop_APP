@@ -1,15 +1,27 @@
-// routes/automation.routes.js
-import express from "express";
-import { triggerAutomation } from "../controllers/automation.controller.js";
 
-import { runAutomation, createAutomation, getMyAutomations } from "../controllers/automation.controller.js";
+
+import express from "express";
+
+import {
+  runAutomation,
+  createAutomation,
+  getUserAutomations,
+  updateAutomation,
+  toggleAutomationStatus,
+  triggerAutomation
+} from "../controllers/automation.controller.js";
+
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/launch", triggerAutomation);
-router.post("/run", authMiddleware, runAutomation);
-router.post("/", authMiddleware, createAutomation);
-router.get("/", authMiddleware, getMyAutomations);
+router.get("/", authMiddleware,getUserAutomations);
+router.post("/", authMiddleware,createAutomation);
+router.put("/:id", authMiddleware,updateAutomation);
+router.patch("/:id/status", authMiddleware ,toggleAutomationStatus);
+
+// Additional:
+router.post("/run", authMiddleware,runAutomation);          // Run by preset ID
+router.post("/trigger",authMiddleware, triggerAutomation);  // Launch custom actions instantly
 
 export default router;
