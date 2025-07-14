@@ -15,6 +15,9 @@ import Profile from "./pages/Profile";
 import Notifications from "./pages/Notifications";
 import Workspaces from "./pages/Workspaces";
 import AddTemplate from "./pages/AddTemplate";
+import Automations from "./pages/Automations";
+import AutomationLogs from "./pages/AutomationLogs";
+import AdminPanel from "./pages/AdminPanel";
 
 export default function App() {
   return (
@@ -43,10 +46,15 @@ export default function App() {
                 
               }
             />
+            <Route path="/automations" element={<Automations />} />
+              <Route path="/automation-logs" element={<AutomationLogs />} />
+              <Route path="/admin-panel" element={<AdminPanel />} />
 
             {/* 🧾 Auth Pages */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+
+
 
             {/* 🚫 Not Found */}
             <Route path="*" element={<NotFound />} />
