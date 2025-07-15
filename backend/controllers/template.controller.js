@@ -87,3 +87,17 @@ export const launchTemplate = async (req, res) => {
     res.status(500).json({ error: "Launch failed", details: err.message });
   }
 };
+
+
+export const deleteTemplate = async (req, res, next) => {
+  try {
+    const deleted = await Template.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ message: "Template not found" });
+    }
+    res.json({ message: "Template deleted successfully" });
+  } catch (err) {
+    console.error("❌ Delete Template Error:", err.message);
+    next(err);
+  }
+};

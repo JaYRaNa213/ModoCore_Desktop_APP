@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 import { Button } from "../components/ui/Button";
 import {
   Rocket,
@@ -33,15 +34,18 @@ export default function Templates() {
 
 
   const handleDelete = async (id) => {
-    const confirm = window.confirm("Delete this template?");
-    if (!confirm) return;
-    try {
-      await axios.delete(`http://localhost:5000/api/templates/${id}`);
-      setTemplates(templates.filter((t) => t._id !== id));
-    } catch (err) {
-      alert("Failed to delete");
-    }
-  };
+  if (!window.confirm("Are you sure you want to delete this template?")) return;
+
+  try {
+    await axios.delete(`/api/templates/${id}`);
+    toast.success("Template deleted");
+    // Optionally refetch the list or remove from local state
+  } catch (err) {
+    console.error("Delete failed", err);
+    toast.error("Failed to delete template");
+  }
+};
+
 
   return (
     <div className="p-6 space-y-6">
@@ -108,7 +112,7 @@ export default function Templates() {
                 onClick={() => handleDelete(template._id)}
                 className="bg-red-600 hover:bg-red-700 text-white flex-1"
               >
-                <Trash size={18} />
+                <Trash size={30} />
               </Button>
             </div>
           </div>

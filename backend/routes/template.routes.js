@@ -5,6 +5,7 @@ import {
   getAllTemplates,
   getTemplateById,
   incrementUsage,
+  deleteTemplate,
   launchTemplate, // ✅ Keep only this (it uses doLaunch)
 } from "../controllers/template.controller.js";
 
@@ -14,6 +15,7 @@ router.post("/", createTemplate);
 router.get("/", getAllTemplates);
 router.get("/:id", getTemplateById);
 router.post("/:id/use", incrementUsage);
-router.post("/:id/launch", launchTemplate); // ✅ Use this one only
+router.post("/:id/launch", launchTemplate);
+router.delete("/:id", deleteTemplate); // ✅ Use this one only
 
 export default router;
