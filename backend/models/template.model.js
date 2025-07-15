@@ -7,6 +7,7 @@ const templateSchema = new mongoose.Schema(
     apps: [{ type: String, required: true }],
     websites: [{ type: String }], // ✅ Add this line
     usageCount: { type: Number, default: 0 },
+    schedule: { type: String, default: null } 
   },
   { timestamps: true }
 );

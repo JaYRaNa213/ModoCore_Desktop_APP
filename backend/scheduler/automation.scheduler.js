@@ -2,26 +2,25 @@
 import cron from "node-cron";
 import Automation from "../models/automation.model.js";
 import { launchApps } from "../utils/launchApps.js";
-
+import Template from '../models/template.model.js';
+import { launchTemplate } from '../utils/launcher.util.js';
 /**
  * Load and start scheduled automation tasks from the DB.
  */
-export const startAutomationScheduler = async () => {
-  try {
-    const automations = await Automation.find({ schedule: { $exists: true } });
 
-    automations.forEach((automation) => {
-      if (cron.validate(automation.schedule)) {
-        cron.schedule(automation.schedule, async () => {
-          console.log(`⏰ Running scheduled automation: ${automation.name}`);
-          await launchApps(automation.apps, automation.urls, automation.music);
-        });
-        console.log(`✅ Scheduled: ${automation.name} at ${automation.schedule}`);
-      } else {
-        console.warn(`⚠️ Invalid cron format for: ${automation.name}`);
+
+export const startAutomationScheduler = () => {
+  cron.schedule('* * * * *', async () => {
+    const now = new Date();
+    const templates = await Template.find({ schedule: { $ne: null } });
+
+    for (const template of templates) {
+      const [min, hour, day, month, dayOfWeek] = template.schedule.split(' ');
+      const shouldRun = cron.validate(template.schedule) &&
+        cron.schedule(template.schedule, () => true).nextDates().toDate().getMinutes() === now.getMinutes();
+      if (shouldRun) {
+        await launchTemplate(template);
       }
-    });
-  } catch (err) {
-    console.error("❌ Error setting up scheduler:", err.message);
-  }
+    }
+  });
 };

@@ -14,6 +14,8 @@ export default function AddTemplate() {
   const [description, setDescription] = useState("");
   const [apps, setApps] = useState([""]);
   const [websites, setWebsites] = useState([""]);
+  const [workspace, setWorkspace] = useState("");
+  const [schedule, setSchedule] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -46,16 +48,27 @@ export default function AddTemplate() {
     e.preventDefault();
     setLoading(true);
 
+    const filteredApps = apps.filter((a) => a.trim() !== "");
+    const filteredWebsites = websites.filter((w) => w.trim() !== "");
+
     const newTemplate = {
       title: title.trim(),
       description: description.trim(),
-      apps: apps.filter((a) => a.trim() !== ""),
-      websites: websites.filter((w) => w.trim() !== "")
+      workspace: workspace.trim(),
+      schedule: schedule.trim(),
+      apps: filteredApps,
+      websites: filteredWebsites,
     };
 
     try {
-      if (!newTemplate.title || !newTemplate.apps.length) {
-        toast.error("Template must have a title and at least one app.");
+      if (!newTemplate.title) {
+        toast.error("Template title is required.");
+        setLoading(false);
+        return;
+      }
+
+      if (filteredApps.length === 0 && filteredWebsites.length === 0) {
+        toast.error("Add at least one app or website.");
         setLoading(false);
         return;
       }
@@ -76,32 +89,65 @@ export default function AddTemplate() {
         <CardContent>
           <h2 className="text-2xl font-bold mb-6 text-indigo-700">📝 Create New Work Template</h2>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">Template Title</label>
+            {/* Title */}
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">Template Title *</label>
               <Input
-                placeholder="e.g. Focus Mode"
+                placeholder="e.g. Design Mode"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
               />
             </div>
 
-            <div className="space-y-2">
+            {/* Description */}
+            <div className="space-y-1">
               <label className="block text-sm font-medium text-gray-700">Description</label>
               <Textarea
-                placeholder="Briefly describe what this template does..."
+                placeholder="Briefly describe this template..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                required
               />
             </div>
 
-            <div className="space-y-4">
+            {/* Workspace Group */}
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">Workspace Group</label>
+              <select
+                value={workspace}
+                onChange={(e) => setWorkspace(e.target.value)}
+                className="w-full p-2 border rounded-md focus:outline-indigo-500 text-sm"
+              >
+                <option value="">-- Select workspace --</option>
+                <option value="Coding">💻 Coding</option>
+                <option value="Meeting">📞 Meeting</option>
+                <option value="Design">🎨 Design</option>
+                <option value="Writing">✍️ Writing</option>
+                <option value="Custom">🔧 Custom</option>
+              </select>
+              <p className="text-xs text-gray-500">Optional: Use this to group templates by activity.</p>
+            </div>
+
+            {/* Schedule */}
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">Schedule (Cron Format)</label>
+              <Input
+                placeholder="e.g. 0 9 * * 1-5"
+                value={schedule}
+                onChange={(e) => setSchedule(e.target.value)}
+              />
+              <p className="text-xs text-gray-500">
+                Optional. Example: <code className="bg-gray-100 p-0.5 rounded">0 9 * * 1-5</code> = 9 AM on weekdays.
+              </p>
+            </div>
+
+            {/* Apps */}
+            <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">Apps to Launch</label>
               {apps.map((app, index) => (
                 <div key={index} className="flex gap-2">
                   <Input
-                    placeholder="e.g. code, postman, figma"
+                    placeholder="e.g. code, postman"
                     value={app}
                     onChange={(e) => handleAppChange(index, e.target.value)}
                   />
@@ -119,14 +165,16 @@ export default function AddTemplate() {
               <Button type="button" onClick={handleAddApp} className="text-blue-600">
                 ➕ Add App
               </Button>
+              <p className="text-xs text-gray-500">Use app CLI names like <code>code</code>, <code>figma</code>, etc.</p>
             </div>
 
-            <div className="space-y-4">
+            {/* Websites */}
+            <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">Websites to Launch</label>
               {websites.map((site, index) => (
                 <div key={index} className="flex gap-2">
                   <Input
-                    placeholder="e.g. https://chat.openai.com"
+                    placeholder="e.g. https://github.com"
                     value={site}
                     onChange={(e) => handleWebsiteChange(index, e.target.value)}
                   />
@@ -144,8 +192,10 @@ export default function AddTemplate() {
               <Button type="button" onClick={handleAddWebsite} className="text-blue-600">
                 ➕ Add Website
               </Button>
+              <p className="text-xs text-gray-500">Include <code>https://</code> prefix for proper opening.</p>
             </div>
 
+            {/* Submit */}
             <Button
               type="submit"
               disabled={loading}
