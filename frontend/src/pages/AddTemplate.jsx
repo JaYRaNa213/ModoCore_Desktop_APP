@@ -16,6 +16,8 @@ export default function AddTemplate() {
   const [websites, setWebsites] = useState([""]);
   const [workspace, setWorkspace] = useState("");
   const [schedule, setSchedule] = useState("");
+  const [showAppTips, setShowAppTips] = useState(false);
+  const [showWebTips, setShowWebTips] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -87,11 +89,15 @@ export default function AddTemplate() {
     <div className="max-w-2xl mx-auto py-10">
       <Card className="p-6">
         <CardContent>
-          <h2 className="text-2xl font-bold mb-6 text-indigo-700">📝 Create New Work Template</h2>
+          <h2 className="text-2xl font-bold mb-6 text-indigo-700">
+            📝 Create New Work Template
+          </h2>
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Title */}
+            {/* Template Title */}
             <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-700">Template Title *</label>
+              <label className="text-sm font-medium text-gray-700">
+                Template Title *
+              </label>
               <Input
                 placeholder="e.g. Design Mode"
                 value={title}
@@ -102,17 +108,21 @@ export default function AddTemplate() {
 
             {/* Description */}
             <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-700">Description</label>
+              <label className="text-sm font-medium text-gray-700">
+                Description
+              </label>
               <Textarea
-                placeholder="Briefly describe this template..."
+                placeholder="Briefly describe what this template does"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
             </div>
 
-            {/* Workspace Group */}
+            {/* Workspace */}
             <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-700">Workspace Group</label>
+              <label className="text-sm font-medium text-gray-700">
+                Workspace Group
+              </label>
               <select
                 value={workspace}
                 onChange={(e) => setWorkspace(e.target.value)}
@@ -125,29 +135,45 @@ export default function AddTemplate() {
                 <option value="Writing">✍️ Writing</option>
                 <option value="Custom">🔧 Custom</option>
               </select>
-              <p className="text-xs text-gray-500">Optional: Use this to group templates by activity.</p>
+              <p className="text-xs text-gray-500">
+                Optional grouping for better organization.
+              </p>
             </div>
 
             {/* Schedule */}
             <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-700">Schedule (Cron Format)</label>
+              <label className="text-sm font-medium text-gray-700">
+                Schedule (Cron Format)
+              </label>
               <Input
                 placeholder="e.g. 0 9 * * 1-5"
                 value={schedule}
                 onChange={(e) => setSchedule(e.target.value)}
               />
               <p className="text-xs text-gray-500">
-                Optional. Example: <code className="bg-gray-100 p-0.5 rounded">0 9 * * 1-5</code> = 9 AM on weekdays.
+                Optional:{" "}
+                <code className="bg-gray-100 p-1 rounded">0 9 * * 1-5</code> =
+                every weekday at 9 AM
               </p>
             </div>
 
-            {/* Apps */}
+            {/* Apps to Launch */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">Apps to Launch</label>
+              <label className="text-sm font-medium text-gray-700 flex justify-between items-center">
+                Apps to Launch
+                <button
+                  type="button"
+                  className="text-xs text-indigo-600 underline"
+                  onClick={() => setShowAppTips(!showAppTips)}
+                >
+                  {showAppTips ? "Hide tips" : "ℹ️ How to add apps"}
+                </button>
+              </label>
+
               {apps.map((app, index) => (
                 <div key={index} className="flex gap-2">
                   <Input
-                    placeholder="e.g. code, postman"
+                    placeholder="e.g. code OR full path like C:\\Program Files\\App\\app.exe"
                     value={app}
                     onChange={(e) => handleAppChange(index, e.target.value)}
                   />
@@ -162,15 +188,60 @@ export default function AddTemplate() {
                   )}
                 </div>
               ))}
-              <Button type="button" onClick={handleAddApp} className="text-blue-600">
+
+              <Button
+                type="button"
+                onClick={handleAddApp}
+                className="text-blue-600"
+              >
                 ➕ Add App
               </Button>
-              <p className="text-xs text-gray-500">Use app CLI names like <code>code</code>, <code>figma</code>, etc.</p>
+
+              {showAppTips && (
+                <div className="bg-gray-50 border text-xs text-gray-600 p-3 rounded mt-2">
+                  <p>You can add apps using:</p>
+                  <ul className="list-disc pl-5 mt-1 space-y-1">
+                    <li>
+                      <strong>App name:</strong> <code>VsCode</code>,{" "}
+                      <code>notepad</code>, <code>Postman</code>
+                    </li>
+                    <li>
+                      <strong>Add Path Instruction:</strong>{" "}
+                      <ol>
+                        <li>1. Go to - C:\Program Files </li>
+                        <li>2. open App Folder </li>
+                           <li>3. Search (App Name) .exe </li>
+                         <li>4. Copy Path With (App Name).exe </li>
+                         
+
+                         </ol>
+                    </li>
+                    <li>
+                      <strong>Path Example:</strong>{" "}
+                      <code>C:\Program Files\Postman\Postman.exe</code>
+                    </li>
+                    <li>
+                      <strong>Shortcuts:</strong> Any command in your system
+                      PATH
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
 
-            {/* Websites */}
+            {/* Websites to Launch */}
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">Websites to Launch</label>
+              <label className="text-sm font-medium text-gray-700 flex justify-between items-center">
+                Websites to Launch
+                <button
+                  type="button"
+                  className="text-xs text-indigo-600 underline"
+                  onClick={() => setShowWebTips(!showWebTips)}
+                >
+                  {showWebTips ? "Hide tips" : "ℹ️ How to add websites"}
+                </button>
+              </label>
+
               {websites.map((site, index) => (
                 <div key={index} className="flex gap-2">
                   <Input
@@ -189,10 +260,42 @@ export default function AddTemplate() {
                   )}
                 </div>
               ))}
-              <Button type="button" onClick={handleAddWebsite} className="text-blue-600">
+
+              <Button
+                type="button"
+                onClick={handleAddWebsite}
+                className="text-blue-600"
+              >
                 ➕ Add Website
               </Button>
-              <p className="text-xs text-gray-500">Include <code>https://</code> prefix for proper opening.</p>
+
+              {showWebTips && (
+                <div className="bg-gray-50 border text-xs text-gray-600 p-3 rounded mt-2">
+                  <p>Make sure URLs:</p>
+                  <ul className="list-disc pl-5 mt-1 space-y-1">
+                    <li>
+                      Start with <code>http://</code> or <code>https://</code>
+                    </li>
+                    <li>
+                      Examples:
+                      <ul className="list-inside pl-3 space-y-0.5">
+                        <li>
+                          <code>https://github.com</code>
+                        </li>
+                        <li>
+                          <code>http://amazon.in</code>
+                        </li>
+                        <li>
+                          <code>https://youtube.com</code>
+                        </li>
+                        <li>
+                          <code>http://localhost:3000</code>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
 
             {/* Submit */}
