@@ -13,11 +13,12 @@ import Register from "./auth/Register";
 import PrivateRoute from "./auth/PrivateRoute";
 import Profile from "./pages/Profile";
 import Notifications from "./pages/Notifications";
-import Workspaces from "./pages/Workspaces";
+// import Workspaces from "./pages/Workspaces";
 import AddTemplate from "./pages/AddTemplate";
 import Automations from "./pages/Automations";
 import AutomationLogs from "./pages/AutomationLogs";
 import AdminPanel from "./pages/AdminPanel";
+import Logs from "./pages/Logs"; // ✅ Import
 
 export default function App() {
   return (
@@ -30,11 +31,12 @@ export default function App() {
             {/* 🔓 Public Routes */}
             <Route path="/" element={<Dashboard />} />
             <Route path="/templates" element={<Templates />} />
+            <Route path="/logs" element={<Logs />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/workspaces" element={<Workspaces />} />
+            {/* <Route path="/workspaces" element={<Workspaces />} /> */}
             <Route path="/template/:id" element={<TemplateDetail />} />
 
             {/* 🔒 Only protect the ones you want */}

@@ -1,6 +1,8 @@
+// launcher.util.js
 import open from "open";
 import { existsSync } from "fs";
 import path from "path";
+import AutomationLog from "../models/automationLogs.model.js";
 
 /**
  * Normalize website URL (adds https:// if missing)
@@ -14,9 +16,7 @@ const normalizeUrl = (url) => {
 };
 
 /**
- * Normalize app entry:
- * - If full path exists (.exe), launch directly
- * - Else fallback to CLI open
+ * Launch an app: full .exe path or CLI shortcut
  */
 const launchApp = async (rawApp) => {
   const app = rawApp.trim();
@@ -29,19 +29,24 @@ const launchApp = async (rawApp) => {
     if (isExePath || isFullPath) {
       await open(app, { wait: false });
     } else {
-      // CLI command like "code", "spotify", etc.
-      await open(app);
+      await open(app); // CLI name
     }
   } catch (err) {
     console.error(`❌ Failed to launch app: ${app}`, err.message);
+    throw err;
   }
 };
 
 /**
  * Final Launcher
+ * @param {Object} template - the template object
+ * @param {String} userId - ID of the user triggering this
+ * @param {String} source - "manual" | "schedule" | "admin"
  */
-export const launchTemplate = async ({ apps = [], websites = [] }) => {
+export const launchTemplate = async (template, userId = null, source = "manual") => {
   try {
+    const { apps = [], websites = [] } = template;
+
     for (const app of apps) {
       await launchApp(app);
     }
@@ -52,10 +57,29 @@ export const launchTemplate = async ({ apps = [], websites = [] }) => {
         await open(url);
       } catch (err) {
         console.error(`❌ Failed to open website: ${url}`, err.message);
+        throw err;
       }
     }
+
+    await AutomationLog.create({
+      automationId: template._id,
+      triggeredBy: userId,
+      status: "success",
+      source,
+    });
+
   } catch (error) {
     console.error("🚨 Launcher crashed:", error.message);
+
+    // Optional: also log failure
+    await AutomationLog.create({
+      automationId: template._id,
+      triggeredBy: userId,
+      status: "failed",
+      error: error.message,
+      source,
+    });
+
     throw new Error("Could not launch template");
   }
 };

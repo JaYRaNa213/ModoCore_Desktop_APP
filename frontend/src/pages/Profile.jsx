@@ -4,7 +4,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({
     name: "Jay Rana",
     email: "jayrana@example.com",
-    bio: "Focused on productivity and workspace automation.",
+    bio: "Focused on productivity .",
   });
 
   const handleChange = (e) => {

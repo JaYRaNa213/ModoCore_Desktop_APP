@@ -1,6 +1,6 @@
 // ✅ src/components/AutomationForm.jsx
-import React, { useState, useEffect } from "react";
-import {automationService} from "../services/automationService";
+import React, { useState } from "react";
+import { automationService } from "../services/automationService";
 import CronHelperModal from "./CronHelperModal";
 
 const AutomationForm = ({ automation = null, onSuccess }) => {

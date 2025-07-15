@@ -48,9 +48,9 @@
 │   │   ├── Profile.jsx
 │   │   ├── ScheduledTemplates.jsx
 │   │   ├── Settings.jsx
+│   │   ├── TemplateCard.jsx
 │   │   ├── TemplateDetail.jsx
-│   │   ├── Templates.jsx
-│   │   └── Workspaces.jsx
+│   │   └── Templates.jsx
 │   └── services
 │       ├── analyticsService.js
 │       ├── automationService.js

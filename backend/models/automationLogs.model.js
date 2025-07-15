@@ -27,6 +27,11 @@ const automationLogSchema = new mongoose.Schema(
       enum: ["manual", "schedule", "admin"],
       default: "manual",
     },
+    triggeredBy: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "User",
+  required: false, // ✅ allow null for scheduled launches
+},
   },
   { timestamps: true }
 );

@@ -1,4 +1,4 @@
-// src/components/Sidebar.jsx
+// ✅ src/components/Sidebar.jsx
 import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -7,7 +7,6 @@ import {
   Settings,
   Bell,
   User,
-  Layers,
   Bot,
   Clock,
   ShieldCheck,
@@ -18,7 +17,6 @@ const links = [
   { name: "Dashboard", path: "/", icon: <LayoutDashboard size={18} /> },
   { name: "Templates", path: "/templates", icon: <ListTodo size={18} /> },
   { name: "Analytics", path: "/analytics", icon: <BarChart3 size={18} /> },
-  { name: "Workspaces", path: "/workspaces", icon: <Layers size={18} /> },
   { name: "Automations", path: "/automations", icon: <Bot size={18} /> },
   { name: "Logs", path: "/logs", icon: <Clock size={18} /> },
   { name: "Admin Panel", path: "/admin", icon: <ShieldCheck size={18} /> },
@@ -32,7 +30,6 @@ export default function Sidebar() {
 
   return (
     <aside className="w-64 h-screen bg-white border-r px-6 py-8 shadow-md flex flex-col justify-between">
-      {/* Top Logo + Links */}
       <div>
         <h1 className="text-3xl font-bold text-indigo-600 mb-10 tracking-tight">
           ContextSwap
@@ -40,7 +37,6 @@ export default function Sidebar() {
         <nav className="space-y-2">
           {links.map((link) => {
             const isActive = pathname === link.path;
-
             return (
               <Link
                 key={link.path}
@@ -59,8 +55,6 @@ export default function Sidebar() {
           })}
         </nav>
       </div>
-
-      {/* Bottom Footer */}
       <div className="text-xs text-gray-400">
         <p>© 2025 ContextSwap</p>
         <p>Built with ❤️</p>

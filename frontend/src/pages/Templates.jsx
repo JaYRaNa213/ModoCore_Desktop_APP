@@ -7,10 +7,10 @@ import {
   Rocket,
   Trash,
   Timer,
-  FolderKanban,
   BarChart,
   Eye,
   Plus,
+  Pencil,
 } from "lucide-react";
 
 export default function Templates() {
@@ -23,29 +23,27 @@ export default function Templates() {
   }, []);
 
   const handleLaunch = async (id) => {
-  try {
-    await axios.post(`http://localhost:5000/api/templates/${id}/launch`);
-    alert("✅ Template launched!");
-  } catch (err) {
-    console.error("🚨 Launch failed", err.response?.data || err.message);
-    alert("❌ Launch failed: " + (err.response?.data?.details || err.message));
-  }
-};
-
+    try {
+      await axios.post(`http://localhost:5000/api/templates/${id}/launch`);
+      alert("✅ Template launched!");
+    } catch (err) {
+      console.error("🚨 Launch failed", err.response?.data || err.message);
+      alert("❌ Launch failed: " + (err.response?.data?.details || err.message));
+    }
+  };
 
   const handleDelete = async (id) => {
-  if (!window.confirm("Are you sure you want to delete this template?")) return;
+    if (!window.confirm("Are you sure you want to delete this template?")) return;
 
-  try {
-    await axios.delete(`/api/templates/${id}`);
-    toast.success("Template deleted");
-    // Optionally refetch the list or remove from local state
-  } catch (err) {
-    console.error("Delete failed", err);
-    toast.error("Failed to delete template");
-  }
-};
-
+    try {
+      await axios.delete(`/api/templates/${id}`);
+      toast.success("Template deleted");
+      setTemplates(templates.filter((t) => t._id !== id)); // locally remove
+    } catch (err) {
+      console.error("Delete failed", err);
+      toast.error("Failed to delete template");
+    }
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -62,24 +60,26 @@ export default function Templates() {
         {templates.map((template) => (
           <div
             key={template._id}
-            className="bg-white shadow-lg rounded-xl p-6 border border-gray-100 hover:shadow-xl transition"
+            className="relative bg-white shadow-lg rounded-xl p-6 border border-gray-100 hover:shadow-xl transition"
           >
+            {/* Edit Button in top right */}
+            <Link
+              to={`/templates/edit/${template._id}`}
+              className="absolute top-3 right-3 bg-yellow-400 hover:bg-yellow-500 text-white p-1.5 rounded-full shadow-md transition-transform hover:scale-105"
+              title="Edit Template"
+            >
+              <Pencil size={18} />
+            </Link>
+
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold text-indigo-700">
                 {template.title}
               </h3>
-              <span className="text-xs text-gray-500">
-                {template.workspace || "No Group"}
-              </span>
             </div>
 
             <p className="text-gray-600 mb-4">{template.description}</p>
 
             <div className="space-y-2 text-sm text-gray-700">
-              <div className="flex items-center gap-2">
-                <FolderKanban size={16} /> Workspace:{" "}
-                <strong>{template.workspace || "None"}</strong>
-              </div>
               <div className="flex items-center gap-2">
                 <BarChart size={16} /> Usage Count:{" "}
                 <strong>{template.usageCount || 0}</strong>
@@ -104,15 +104,15 @@ export default function Templates() {
               <Link to={`/template/${template._id}`} className="flex-1">
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full">
                   <Eye size={18} className="mr-2" />
-                  View Details
+                  View
                 </Button>
               </Link>
 
               <Button
                 onClick={() => handleDelete(template._id)}
                 className="bg-red-600 hover:bg-red-700 text-white flex-1"
-              >
-                <Trash size={30} />
+              > Delete
+                
               </Button>
             </div>
           </div>

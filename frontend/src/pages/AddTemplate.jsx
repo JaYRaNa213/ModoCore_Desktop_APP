@@ -1,3 +1,12 @@
+
+
+
+
+
+
+
+
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -14,7 +23,7 @@ export default function AddTemplate() {
   const [description, setDescription] = useState("");
   const [apps, setApps] = useState([""]);
   const [websites, setWebsites] = useState([""]);
-  const [workspace, setWorkspace] = useState("");
+  // const [workspace, setWorkspace] = useState("");
   const [schedule, setSchedule] = useState("");
   const [showAppTips, setShowAppTips] = useState(false);
   const [showWebTips, setShowWebTips] = useState(false);
@@ -56,7 +65,7 @@ export default function AddTemplate() {
     const newTemplate = {
       title: title.trim(),
       description: description.trim(),
-      workspace: workspace.trim(),
+      // workspace: workspace.trim(),
       schedule: schedule.trim(),
       apps: filteredApps,
       websites: filteredWebsites,
@@ -118,27 +127,7 @@ export default function AddTemplate() {
               />
             </div>
 
-            {/* Workspace */}
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">
-                Workspace Group
-              </label>
-              <select
-                value={workspace}
-                onChange={(e) => setWorkspace(e.target.value)}
-                className="w-full p-2 border rounded-md focus:outline-indigo-500 text-sm"
-              >
-                <option value="">-- Select workspace --</option>
-                <option value="Coding">💻 Coding</option>
-                <option value="Meeting">📞 Meeting</option>
-                <option value="Design">🎨 Design</option>
-                <option value="Writing">✍️ Writing</option>
-                <option value="Custom">🔧 Custom</option>
-              </select>
-              <p className="text-xs text-gray-500">
-                Optional grouping for better organization.
-              </p>
-            </div>
+            
 
             {/* Schedule */}
             <div className="space-y-1">

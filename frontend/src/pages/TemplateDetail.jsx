@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "../components/ui/Button";
-import { Rocket, ArrowLeft } from "lucide-react";
+import { Pencil, Rocket, ArrowLeft } from "lucide-react";
 
 export default function TemplateDetail() {
   const { id } = useParams();
@@ -34,18 +34,27 @@ export default function TemplateDetail() {
     }
   };
 
-  if (!template) return <div className="p-6 text-gray-600">Loading template...</div>;
+  if (!template)
+    return <div className="p-6 text-gray-600">Loading template...</div>;
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-800">📝 Template Preview</h1>
-        <button
-          onClick={() => navigate(-1)}
-          className="text-sm text-blue-500 hover:underline flex items-center gap-1"
-        >
-          <ArrowLeft size={16} /> Back
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => navigate(`/templates/edit/${id}`)}
+            className="text-sm text-indigo-600 hover:underline flex items-center gap-1"
+          >
+            <Pencil size={16} /> Edit
+          </button>
+          <button
+            onClick={() => navigate(-1)}
+            className="text-sm text-blue-500 hover:underline flex items-center gap-1"
+          >
+            <ArrowLeft size={16} /> Back
+          </button>
+        </div>
       </div>
 
       <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-100">
@@ -78,9 +87,9 @@ export default function TemplateDetail() {
         </div>
 
         <div className="mt-6 space-y-2 text-sm text-gray-700">
-          <p>
+          {/* <p>
             <strong>📁 Workspace:</strong> {template.workspace || "Not assigned"}
-          </p>
+          </p> */}
           <p>
             <strong>📊 Usage Count:</strong> {template.usageCount || 0}
           </p>
