@@ -22,14 +22,15 @@ export default function Templates() {
   }, []);
 
   const handleLaunch = async (id) => {
-    try {
-      await axios.post(`http://localhost:5000/api/templates/${id}/launch`);
-      alert("Template launched!");
-    } catch (err) {
-      console.error("Launch failed", err);
-      alert("Failed to launch");
-    }
-  };
+  try {
+    await axios.post(`http://localhost:5000/api/templates/${id}/launch`);
+    alert("✅ Template launched!");
+  } catch (err) {
+    console.error("🚨 Launch failed", err.response?.data || err.message);
+    alert("❌ Launch failed: " + (err.response?.data?.details || err.message));
+  }
+};
+
 
   const handleDelete = async (id) => {
     const confirm = window.confirm("Delete this template?");

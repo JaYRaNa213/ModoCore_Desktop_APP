@@ -70,32 +70,20 @@ export const runTemplateNow = async (req, res) => {
 };
 
 export const launchTemplate = async (req, res) => {
-  const { id } = req.params;
-  const template = await Template.findById(id);
-  if (!template) return res.status(404).json({ error: "Template not found" });
-
   try {
-    await doLaunch(template);
-    res.json({ message: "Launched" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to launch" });
-  }
-};
+    const { id } = req.params; // ✅ make sure this comes from the route
+    const template = await Template.findById(id);
+    if (!template) {
+      return res.status(404).json({ error: "Template not found" });
+    }
 
-export const launchTemplateById = async (req, res) => {
-  try {
-    const template = await Template.findById(req.params.id);
-    if (!template) return res.status(404).json({ error: "Template not found" });
-
-    await launchTemplate({
-      apps: template.apps || [],
-      websites: template.websites || []
-    });
+    await doLaunch(template); // this handles launching apps + websites
+    template.usageCount += 1;
+    await template.save();
 
     res.json({ message: "Template launched" });
-  } catch (error) {
-    console.error("Launch error:", error); // 👈 Check terminal logs
-    res.status(500).json({ error: "Internal server error", details: error.message });
+  } catch (err) {
+    console.error("🚨 Launch Error:", err.message);
+    res.status(500).json({ error: "Launch failed", details: err.message });
   }
 };
