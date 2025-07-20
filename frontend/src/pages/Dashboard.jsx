@@ -369,7 +369,7 @@ export default function Dashboard() {
                         {/* Action Buttons */}
                         <div className="flex gap-2 pt-2">
                           <button className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
-                            Use Template
+                            Launch
                           </button>
                           <button className="px-4 py-2 bg-white/10 border border-white/20 text-white rounded-lg hover:bg-white/20 transition-all duration-300">
                             Edit

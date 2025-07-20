@@ -293,7 +293,7 @@ export default function AddTemplate() {
               disabled={loading}
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
             >
-              {loading ? "Creating..." : "🚀 Create Template"}
+              {loading ? "Creating..." : " Create Template"}
             </Button>
           </form>
         </CardContent>
