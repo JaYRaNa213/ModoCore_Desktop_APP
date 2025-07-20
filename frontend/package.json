@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "electron .",
-    "dist": "electron-builder --win"
+    "dist": "electron-builder --win",
+    "electron": "electron ."
   },
   "build": {
     "appId": "com.contextswap.app",
@@ -51,7 +52,7 @@
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
     "autoprefixer": "^10.4.21",
-    "electron": "^37.2.1",
+    "electron": "^37.2.3",
     "electron-builder": "^24.13.1",
     "eslint": "^9.30.1",
     "eslint-plugin-react-hooks": "^5.2.0",
