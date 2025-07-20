@@ -17,8 +17,10 @@ import Notifications from "./pages/Notifications";
 import AddTemplate from "./pages/AddTemplate";
 import Automations from "./pages/Automations";
 import AutomationLogs from "./pages/AutomationLogs";
-import AdminPanel from "./pages/AdminPanel";
+// import AdminPanel from "./pages/AdminPanel";
 import Logs from "./pages/Logs"; // ✅ Import
+
+import EditTemplate from "./pages/EditTemplate"; 
 
 export default function App() {
   return (
@@ -48,9 +50,10 @@ export default function App() {
                 
               }
             />
+            <Route path="/templates/edit/:id" element={<EditTemplate />} />
             <Route path="/automations" element={<Automations />} />
               <Route path="/automation-logs" element={<AutomationLogs />} />
-              <Route path="/admin-panel" element={<AdminPanel />} />
+              {/* <Route path="/admin-panel" element={<AdminPanel />} /> */}
 
             {/* 🧾 Auth Pages */}
             <Route path="/login" element={<Login />} />

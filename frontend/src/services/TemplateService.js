@@ -27,3 +27,8 @@ export const getTopTemplates = async (limit = 3) => {
   const res = await axios.get(`${API}?limit=${limit}`);
   return res.data.slice(0, limit);
 };
+
+export const updateTemplate = async (id, data) => {
+  const res = await axios.put(`${API}/${id}`, data);
+  return res.data;
+};

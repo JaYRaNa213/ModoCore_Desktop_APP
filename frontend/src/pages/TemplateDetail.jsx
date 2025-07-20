@@ -49,7 +49,7 @@ export default function TemplateDetail() {
             <Pencil size={16} /> Edit
           </button>
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate(`/templates/edit/${template._id}`)}
             className="text-sm text-blue-500 hover:underline flex items-center gap-1"
           >
             <ArrowLeft size={16} /> Back

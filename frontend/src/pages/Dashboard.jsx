@@ -23,6 +23,7 @@ import {
   Filter,
 } from "lucide-react";
 import { Card, CardContent } from "../components/ui/Card";
+import { useNavigate } from "react-router-dom";
 
 
 const handleLaunch = async (id) => {
@@ -36,6 +37,8 @@ const handleLaunch = async (id) => {
   };
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+
   const [topTemplates, setTopTemplates] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterActive, setFilterActive] = useState(false);
@@ -240,9 +243,13 @@ export default function Dashboard() {
                           className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 px-4 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
                             Launch
                           </button>
-                          <button className="px-4 py-2 bg-white/10 border border-white/20 text-white rounded-lg hover:bg-white/20 transition-all duration-300">
-                            Edit
-                          </button>
+                          <button 
+  onClick={() => navigate(`/templates/edit/${template._id}`)}
+  className="px-4 py-2 bg-white/10 border border-white/20 text-white rounded-lg hover:bg-white/20 transition-all duration-300"
+>
+  Edit
+</button>
+
                         </div>
                       </CardContent>
                     </Card>

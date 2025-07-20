@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getTemplateById, updateTemplate } from "../services/TemplateService";
-import TemplateForm from "../components/TemplateForm";
+import AddTemplate from "./AddTemplate";
 import { LoaderCircle, ArrowLeft } from "lucide-react";
+
 
 export default function EditTemplate() {
   const { id } = useParams();
@@ -72,7 +73,7 @@ export default function EditTemplate() {
         </button>
       </div>
 
-      <TemplateForm initialData={template} onSubmit={handleUpdate} mode="edit" />
+      <AddTemplate initialData={template} onSubmit={handleUpdate} mode="edit" />
     </div>
   );
 }
