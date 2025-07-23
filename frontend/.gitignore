@@ -5,8 +5,9 @@ yarn-debug.log*
 yarn-error.log*
 
 # Environment variables
-.env*
-!.env.example
+.env
+.env.*
+!*.example
 
 # Build outputs
 dist/
@@ -21,6 +22,7 @@ release/
 *.blockmap
 *.zip
 *.tar.gz
+OnlyOneClick Setup*.exe
 
 # Vite
 .vite/
@@ -41,6 +43,3 @@ Thumbs.db
 # Electron-builder cache & config
 .cache/
 *.local/
-
-# Misc
-OnlyOneClick Setup*.exe

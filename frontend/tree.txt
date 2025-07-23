@@ -2,6 +2,13 @@
 ├── .env.development
 ├── .env.production
 ├── .gitignore
+├── dist
+│   ├── assets
+│   │   ├── index-CfYnall-.css
+│   │   └── index-DED7kiKt.js
+│   ├── index.html
+│   ├── preload.js
+│   └── vite.svg
 ├── electron.cjs
 ├── eslint.config.js
 ├── index.html
@@ -11,6 +18,89 @@
 ├── public
 │   └── vite.svg
 ├── README.md
+├── release
+│   ├── builder-debug.yml
+│   ├── builder-effective-config.yaml
+│   ├── latest.yml
+│   ├── OnlyOneClick Setup 1.0.0.exe
+│   ├── OnlyOneClick Setup 1.0.0.exe.blockmap
+│   └── win-unpacked
+│       ├── chrome_100_percent.pak
+│       ├── chrome_200_percent.pak
+│       ├── d3dcompiler_47.dll
+│       ├── ffmpeg.dll
+│       ├── icudtl.dat
+│       ├── libEGL.dll
+│       ├── libGLESv2.dll
+│       ├── LICENSE.electron.txt
+│       ├── LICENSES.chromium.html
+│       ├── locales
+│       │   ├── af.pak
+│       │   ├── am.pak
+│       │   ├── ar.pak
+│       │   ├── bg.pak
+│       │   ├── bn.pak
+│       │   ├── ca.pak
+│       │   ├── cs.pak
+│       │   ├── da.pak
+│       │   ├── de.pak
+│       │   ├── el.pak
+│       │   ├── en-GB.pak
+│       │   ├── en-US.pak
+│       │   ├── es-419.pak
+│       │   ├── es.pak
+│       │   ├── et.pak
+│       │   ├── fa.pak
+│       │   ├── fi.pak
+│       │   ├── fil.pak
+│       │   ├── fr.pak
+│       │   ├── gu.pak
+│       │   ├── he.pak
+│       │   ├── hi.pak
+│       │   ├── hr.pak
+│       │   ├── hu.pak
+│       │   ├── id.pak
+│       │   ├── it.pak
+│       │   ├── ja.pak
+│       │   ├── kn.pak
+│       │   ├── ko.pak
+│       │   ├── lt.pak
+│       │   ├── lv.pak
+│       │   ├── ml.pak
+│       │   ├── mr.pak
+│       │   ├── ms.pak
+│       │   ├── nb.pak
+│       │   ├── nl.pak
+│       │   ├── pl.pak
+│       │   ├── pt-BR.pak
+│       │   ├── pt-PT.pak
+│       │   ├── ro.pak
+│       │   ├── ru.pak
+│       │   ├── sk.pak
+│       │   ├── sl.pak
+│       │   ├── sr.pak
+│       │   ├── sv.pak
+│       │   ├── sw.pak
+│       │   ├── ta.pak
+│       │   ├── te.pak
+│       │   ├── th.pak
+│       │   ├── tr.pak
+│       │   ├── uk.pak
+│       │   ├── ur.pak
+│       │   ├── vi.pak
+│       │   ├── zh-CN.pak
+│       │   └── zh-TW.pak
+│       ├── OnlyOneClick.exe
+│       ├── resources
+│       │   ├── app-update.yml
+│       │   ├── app.asar
+│       │   └── elevate.exe
+│       ├── resources.pak
+│       ├── snapshot_blob.bin
+│       ├── v8_context_snapshot.bin
+│       ├── vk_swiftshader.dll
+│       ├── vk_swiftshader_icd.json
+│       └── vulkan-1.dll
 ├── src
 │   ├── App.css
 │   ├── App.jsx

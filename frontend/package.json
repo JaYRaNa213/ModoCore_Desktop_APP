@@ -29,7 +29,6 @@
       "electron.cjs",
       "preload.js",
       "package.json",
-      
       "node_modules/**/*"
     ],
     "directories": {
@@ -67,6 +66,7 @@
     "@vitejs/plugin-react": "^4.6.0",
     "autoprefixer": "^10.4.21",
     "concurrently": "^9.2.0",
+    "cross-env": "^7.0.3",
     "electron": "^37.2.3",
     "electron-builder": "^24.13.3",
     "eslint": "^9.30.1",
