@@ -1,0 +1,26 @@
+// backend/app.js
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+
+import templateRoutes from "./routes/template.routes.js";
+import userRoutes from "./routes/user.routes.js";
+import automationRoutes from "./routes/automation.routes.js";
+import logRoutes from "./routes/log.routes.js";
+dotenv.config();
+
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.use("/api/templates", templateRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/automation", automationRoutes);
+app.use("/api/automation-logs", logRoutes);
+
+
+export default app;

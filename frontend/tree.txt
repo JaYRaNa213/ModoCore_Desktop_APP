@@ -1,0 +1,72 @@
+├── .env
+├── .gitignore
+├── electron.cjs
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── preload.js
+├── public
+│   └── vite.svg
+├── README.md
+├── src
+│   ├── App.css
+│   ├── App.jsx
+│   ├── assets
+│   │   └── react.svg
+│   ├── auth
+│   │   ├── AuthContext.jsx
+│   │   ├── Login.jsx
+│   │   ├── PrivateRoute.jsx
+│   │   └── Register.jsx
+│   ├── components
+│   │   ├── AutomationForm.jsx
+│   │   ├── CronHelperModal.jsx
+│   │   ├── Header.jsx
+│   │   ├── LogTable.jsx
+│   │   ├── Sidebar.jsx
+│   │   └── ui
+│   │       ├── Button.jsx
+│   │       ├── Card.jsx
+│   │       ├── Input.jsx
+│   │       ├── Modal.jsx
+│   │       ├── Textarea.jsx
+│   │       └── ToggleSwitch.jsx
+│   ├── context
+│   │   └── AppContext.jsx
+│   ├── data
+│   ├── hooks
+│   │   ├── useFetchLogs.js
+│   │   ├── useLocalStorage.js
+│   │   └── usePreviousAppWebsites.js
+│   ├── index.css
+│   ├── main.jsx
+│   ├── pages
+│   │   ├── AddTemplate.jsx
+│   │   ├── admin
+│   │   │   └── AdminPanel.jsx
+│   │   ├── Analytics.jsx
+│   │   ├── AutomationLogs.jsx
+│   │   ├── Automations.jsx
+│   │   ├── Dashboard.jsx
+│   │   ├── EditTemplate.jsx
+│   │   ├── LaunchHistory.jsx
+│   │   ├── Logs.jsx
+│   │   ├── NotFound.jsx
+│   │   ├── Notifications.jsx
+│   │   ├── Profile.jsx
+│   │   ├── ScheduledTemplates.jsx
+│   │   ├── Settings.jsx
+│   │   ├── TemplateCard.jsx
+│   │   ├── TemplateDetail.jsx
+│   │   └── Templates.jsx
+│   ├── services
+│   │   ├── analyticsService.js
+│   │   ├── automationService.js
+│   │   └── TemplateService.js
+│   └── utils
+│       └── validators.js
+├── tailwind.config.js
+├── tree.cjs
+├── tree.txt
+└── vite.config.js

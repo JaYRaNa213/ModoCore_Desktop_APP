@@ -1,0 +1,30 @@
+├── .env
+├── .gitignore
+├── app.js
+├── config
+│   └── db.js
+├── controllers
+│   ├── auth.controller.js
+│   ├── template.controller.js
+│   └── user.controller.js
+├── middlewares
+│   ├── auth.middleware.js
+│   └── error.middleware.js
+├── models
+│   ├── template.model.js
+│   └── user.model.js
+├── package-lock.json
+├── package.json
+├── README.md
+├── routes
+│   ├── auth.routes.js
+│   ├── template.routes.js
+│   └── user.routes.js
+├── server.js
+├── services
+│   └── template.service.js
+├── tree.cjs
+└── utils
+    ├── jwt.js
+    ├── launchApps.js
+    └── logger.js
