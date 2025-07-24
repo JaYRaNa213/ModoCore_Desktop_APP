@@ -24,6 +24,10 @@ import {
   Sparkles,
   Award,
   Activity,
+  Target,
+  Rocket,
+  Clock,
+  BarChart3,
 } from "lucide-react";
 import { Card, CardContent } from "../components/ui/Card";
 import { useNavigate } from "react-router-dom";
@@ -95,19 +99,23 @@ export default function Dashboard() {
                     <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent">
                       Digital Workspace
                     </h1>
-                    <p className="text-slate-400 text-sm">Switch your entire setup in 1 click</p>
+                    <p className="text-slate-400 text-sm">
+                      Switch your entire setup in 1 click
+                    </p>
                   </div>
                 </div>
                 <p className="text-lg text-slate-300 max-w-2xl">
-                  Create, manage and launch your perfect productivity templates with ease.
-                  Build your digital workspace that works for you.
+                  Create, manage and launch your perfect productivity templates
+                  with ease. Build your digital workspace that works for you.
                 </p>
               </div>
-              
+
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 backdrop-blur-xl border border-purple-500/30 px-4 py-2 rounded-full">
                   <Sparkles className="w-4 h-4 text-purple-400" />
-                  <span className="text-sm text-purple-300 font-medium">AI Enhanced</span>
+                  <span className="text-sm text-purple-300 font-medium">
+                    AI Enhanced
+                  </span>
                 </div>
                 <span className="bg-gradient-to-r from-amber-400 to-orange-500 text-black px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                   BETA v1.0.0
@@ -122,14 +130,18 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Templates Count */}
             <div className="group relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/30 to-indigo-600/30 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-500"></div>
-              <Card className="relative bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl overflow-hidden hover:bg-gray-900/70 transition-all duration-300 group-hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 rounded-2xl blur opacity-50 group-hover:opacity-75 transition duration-500"></div>
+              <Card className="relative bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 group-hover:scale-105 border-0 shadow-xl">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-slate-400 text-sm font-medium">Your Templates</p>
-                      <p className="text-3xl font-bold text-white mt-1">{userTemplatesCount}</p>
-                      <p className="text-green-400 text-sm mt-1 flex items-center gap-1">
+                      <p className="text-gray-500 text-sm font-medium">
+                        Your Templates
+                      </p>
+                      <p className="text-3xl font-bold text-gray-900 mt-1">
+                        {userTemplatesCount}
+                      </p>
+                      <p className="text-green-600 text-sm mt-1 flex items-center gap-1">
                         <TrendingUp className="w-3 h-3" />
                         +12% this month
                       </p>
@@ -144,14 +156,18 @@ export default function Dashboard() {
 
             {/* Total Usage */}
             <div className="group relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/30 to-cyan-600/30 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-500"></div>
-              <Card className="relative bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl overflow-hidden hover:bg-gray-900/70 transition-all duration-300 group-hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 rounded-2xl blur opacity-50 group-hover:opacity-75 transition duration-500"></div>
+              <Card className="relative bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 group-hover:scale-105 border-0 shadow-xl">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-slate-400 text-sm font-medium">Total Launches</p>
-                      <p className="text-3xl font-bold text-white mt-1">{totalUsage}</p>
-                      <p className="text-blue-400 text-sm mt-1 flex items-center gap-1">
+                      <p className="text-gray-500 text-sm font-medium">
+                        Total Launches
+                      </p>
+                      <p className="text-3xl font-bold text-gray-900 mt-1">
+                        {totalUsage}
+                      </p>
+                      <p className="text-blue-600 text-sm mt-1 flex items-center gap-1">
                         <Activity className="w-3 h-3" />
                         {Math.floor(totalUsage / 30)} per day avg
                       </p>
@@ -166,14 +182,18 @@ export default function Dashboard() {
 
             {/* Success Rate */}
             <div className="group relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/30 to-green-600/30 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-500"></div>
-              <Card className="relative bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl overflow-hidden hover:bg-gray-900/70 transition-all duration-300 group-hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-green-600/20 rounded-2xl blur opacity-50 group-hover:opacity-75 transition duration-500"></div>
+              <Card className="relative bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 group-hover:scale-105 border-0 shadow-xl">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-slate-400 text-sm font-medium">Success Rate</p>
-                      <p className="text-3xl font-bold text-white mt-1">99.2%</p>
-                      <p className="text-emerald-400 text-sm mt-1 flex items-center gap-1">
+                      <p className="text-gray-500 text-sm font-medium">
+                        Success Rate
+                      </p>
+                      <p className="text-3xl font-bold text-gray-900 mt-1">
+                        99.2%
+                      </p>
+                      <p className="text-emerald-600 text-sm mt-1 flex items-center gap-1">
                         <Award className="w-3 h-3" />
                         Excellent performance
                       </p>
@@ -197,25 +217,25 @@ export default function Dashboard() {
                   placeholder="Search your templates..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                  className="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 shadow-lg"
                 />
               </div>
               <button
                 onClick={() => setFilterActive(!filterActive)}
-                className={`flex items-center gap-2 px-6 py-4 rounded-2xl font-medium transition-all duration-300 whitespace-nowrap ${
-                  filterActive 
-                    ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg" 
-                    : "bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 text-white hover:bg-gray-900/70"
+                className={`flex items-center gap-2 px-6 py-4 rounded-2xl font-medium transition-all duration-300 whitespace-nowrap shadow-lg ${
+                  filterActive
+                    ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-xl"
+                    : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
                 }`}
               >
                 <Filter className="w-4 h-4" />
                 Filter
               </button>
             </div>
-            
+
             <Link
               to="/add-template"
-              className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-8 py-4 rounded-2xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
             >
               <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
               Add Template
@@ -228,20 +248,38 @@ export default function Dashboard() {
               <div className="flex items-center gap-3">
                 <Flame className="w-7 h-7 text-orange-400" />
                 <div>
-                  <h2 className="text-2xl font-bold text-white">Your Templates</h2>
-                  <p className="text-slate-400 text-sm">Manage and launch your workspace setups</p>
+                  <h2 className="text-2xl font-bold text-white">
+                    Your Templates
+                  </h2>
+                  <p className="text-slate-400 text-sm">
+                    Manage and launch your workspace setups
+                  </p>
                 </div>
               </div>
+              <Link
+                to="/templates"
+                className="text-purple-400 hover:text-purple-300 font-medium transition-colors duration-200 flex items-center gap-2"
+              >
+                View All
+                <Eye className="w-4 h-4" />
+              </Link>
             </div>
 
             {/* Templates Grid */}
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl p-6 animate-pulse">
-                    <div className="w-12 h-12 bg-gray-700 rounded-xl mb-4"></div>
-                    <div className="h-4 bg-gray-700 rounded mb-2"></div>
-                    <div className="h-3 bg-gray-700 rounded w-2/3"></div>
+                  <div
+                    key={i}
+                    className="bg-white rounded-2xl p-6 animate-pulse shadow-xl"
+                  >
+                    <div className="w-12 h-12 bg-gray-300 rounded-xl mb-4"></div>
+                    <div className="h-4 bg-gray-300 rounded mb-2"></div>
+                    <div className="h-3 bg-gray-300 rounded w-2/3 mb-4"></div>
+                    <div className="flex gap-2">
+                      <div className="h-10 bg-gray-300 rounded flex-1"></div>
+                      <div className="h-10 bg-gray-300 rounded w-20"></div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -249,70 +287,103 @@ export default function Dashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {topTemplates.length > 0 ? (
                   topTemplates
-                    .filter(template => 
-                      template.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                      template.description?.toLowerCase().includes(searchTerm.toLowerCase())
+                    .filter(
+                      (template) =>
+                        template.title
+                          ?.toLowerCase()
+                          .includes(searchTerm.toLowerCase()) ||
+                        template.description
+                          ?.toLowerCase()
+                          .includes(searchTerm.toLowerCase())
                     )
                     .map((template, index) => (
-                      <div key={template._id} className="group relative">
+                      <div
+                        key={template._id || index}
+                        className="group relative"
+                      >
                         <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
-                        <Card className="relative bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl overflow-hidden hover:bg-gray-900/70 transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">
+
+                        <Card className="relative bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 group-hover:scale-105 border-0 shadow-xl">
                           <CardContent className="p-6 space-y-4">
                             {/* Template Header */}
-                            <div className="flex items-center justify-between">
-                              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                                <BookOpen className="w-6 h-6 text-white" />
+                            <div className="flex items-center gap-3">
+                              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                                <Target className="w-6 h-6 text-white" />
                               </div>
-                              <div className="flex items-center gap-2">
-                                <div className="flex items-center gap-1 text-amber-400">
-                                  <Star className="w-4 h-4 fill-current" />
-                                  <span className="text-sm font-medium">4.8</span>
+                              <div className="flex-1 min-w-0">
+                                <h3 className="text-lg font-bold text-gray-900 group-hover:text-purple-700 transition-colors truncate">
+                                  {template.title}
+                                </h3>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <div className="flex items-center gap-1 text-amber-500">
+                                    <Star className="w-3 h-3 fill-current" />
+                                    <span className="font-medium">4.8</span>
+                                  </div>
+                                  <span className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-lg text-xs font-medium">
+                                    Active
+                                  </span>
                                 </div>
-                                <span className="px-2 py-1 bg-emerald-600/20 text-emerald-400 rounded-lg text-xs font-medium border border-emerald-600/30">
-                                  Active
-                                </span>
                               </div>
                             </div>
 
-                            {/* Template Content */}
-                            <div className="space-y-2">
-                              <h3 className="text-xl font-bold text-white group-hover:text-purple-300 transition-colors">
-                                {template.title || `Template ${index + 1}`}
-                              </h3>
-                              <p className="text-slate-300 text-sm line-clamp-2 leading-relaxed">
-                                {template.description || "A powerful template to boost your productivity and streamline your workflow with automated launches."}
-                              </p>
-                            </div>
+                            {/* Template Description */}
+                            <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                              {template.description ||
+                                "A powerful template to boost your productivity and streamline your workflow."}
+                            </p>
 
                             {/* Template Stats */}
-                            <div className="flex items-center justify-between text-sm pt-2">
-                              <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-1 text-slate-400">
-                                  <Eye className="w-4 h-4" />
-                                  <span>{template.usageCount || Math.floor(Math.random() * 100) + 10}</span>
+                            <div className="grid grid-cols-2 gap-4 py-3 border-t border-gray-100">
+                              <div className="flex items-center gap-2 text-sm">
+                                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                  <BarChart3 className="w-4 h-4 text-blue-600" />
                                 </div>
-                                <div className="flex items-center gap-1 text-slate-400">
-                                  <Download className="w-4 h-4" />
-                                  <span>{Math.floor((template.usageCount || 50) * 0.8)}</span>
+                                <div>
+                                  <p className="text-gray-500 text-xs">Usage</p>
+                                  <p className="text-gray-900 font-semibold">
+                                    {template.usageCount || 0}
+                                  </p>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-2 text-sm">
+                                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                                  <Clock className="w-4 h-4 text-purple-600" />
+                                </div>
+                                <div>
+                                  <p className="text-gray-500 text-xs">
+                                    Last used
+                                  </p>
+                                  <p className="text-gray-900 font-semibold text-xs">
+                                    2 days ago
+                                  </p>
                                 </div>
                               </div>
                             </div>
 
                             {/* Action Buttons */}
-                            <div className="flex gap-3 pt-3">
-                              <button 
+                            <div className="flex gap-3 pt-4">
+                              <button
                                 onClick={() => handleLaunch(template._id)}
-                                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 group/btn"
+                                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 group/launch shadow-lg"
                               >
-                                <Play className="w-4 h-4 group-hover/btn:scale-110 transition-transform duration-300" />
+                                <Rocket className="w-4 h-4 group-hover/launch:scale-110 transition-transform duration-300" />
                                 Launch
                               </button>
-                              <button 
-                                onClick={() => navigate(`/templates/edit/${template._id}`)}
-                                className="px-4 py-3 bg-gray-800/50 border border-gray-700/50 text-white rounded-xl hover:bg-gray-700/50 hover:border-gray-600/50 transition-all duration-300 group/edit"
+
+                              <Link
+                                to={`/template/${template._id}`}
+                                className="px-4 py-3 bg-gray-100 hover:bg-gray-200 border border-gray-200 text-gray-700 rounded-xl transition-all duration-300 group/view"
                               >
-                                <Edit3 className="w-4 h-4 group-hover/edit:rotate-12 transition-transform duration-300" />
-                              </button>
+                                <Eye className="w-4 h-4 group-hover/view:scale-110 transition-transform duration-300" />
+                              </Link>
+
+                              <Link
+                                to={`/templates/edit/${template._id}`}
+                                className="px-4 py-3 bg-gray-100 hover:bg-gray-200 border border-gray-200 text-gray-700 rounded-xl transition-all duration-300 group/edit"
+                              >
+                                <Edit3 className="w-4 h-4 group-hover/edit:scale-110 transition-transform duration-300" />
+                              </Link>
                             </div>
                           </CardContent>
                         </Card>
@@ -320,14 +391,17 @@ export default function Dashboard() {
                     ))
                 ) : (
                   <div className="col-span-full">
-                    <Card className="bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl">
-                      <CardContent className="p-12 text-center">
+                    <Card className="bg-white rounded-2xl p-12 text-center shadow-xl">
+                      <CardContent>
                         <div className="w-20 h-20 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 opacity-70">
                           <LayoutTemplate className="w-10 h-10 text-white" />
                         </div>
-                        <h3 className="text-2xl font-bold text-white mb-2">No templates yet</h3>
-                        <p className="text-slate-400 mb-8 max-w-md mx-auto leading-relaxed">
-                          Get started by creating your first template. Build your perfect productivity workspace in just one click.
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                          No templates yet
+                        </h3>
+                        <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                          Get started by creating your first template. Build
+                          your perfect productivity workspace.
                         </p>
                         <Link
                           to="/add-template"
@@ -345,51 +419,62 @@ export default function Dashboard() {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-gray-900/30 backdrop-blur-xl border border-gray-800/50 rounded-2xl p-6">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <Zap className="w-5 h-5 text-purple-400" />
-              Quick Actions
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Link
-                to="/templates"
-                className="group flex items-center gap-3 p-4 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 rounded-xl transition-all duration-300 hover:scale-105"
-              >
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center">
-                  <BookOpen className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="font-medium text-white">Browse Templates</p>
-                  <p className="text-sm text-slate-400">Explore all templates</p>
-                </div>
-              </Link>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Link
+              to="/templates"
+              className="group relative bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+            >
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                <LayoutTemplate className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">
+                All Templates
+              </h3>
+              <p className="text-gray-600 text-sm">
+                View and manage all your templates
+              </p>
+            </Link>
 
-              <Link
-                to="/automations"
-                className="group flex items-center gap-3 p-4 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 rounded-xl transition-all duration-300 hover:scale-105"
-              >
-                <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="font-medium text-white">Automations</p>
-                  <p className="text-sm text-slate-400">Manage workflows</p>
-                </div>
-              </Link>
+            <Link
+              to="/analytics"
+              className="group relative bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+            >
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-green-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                <BarChart3 className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">
+                Analytics
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Track usage and performance
+              </p>
+            </Link>
 
-              <Link
-                to="/settings"
-                className="group flex items-center gap-3 p-4 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 rounded-xl transition-all duration-300 hover:scale-105"
-              >
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center">
-                  <Settings className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <p className="font-medium text-white">Settings</p>
-                  <p className="text-sm text-slate-400">Customize workspace</p>
-                </div>
-              </Link>
-            </div>
+            <Link
+              to="/automations"
+              className="group relative bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+            >
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                <Bot className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">
+                Automations
+              </h3>
+              <p className="text-gray-600 text-sm">Set up automatic launches</p>
+            </Link>
+
+            <Link
+              to="/settings"
+              className="group relative bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+            >
+              <div className="w-12 h-12 bg-gradient-to-br from-orange-600 to-red-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                <Settings className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Settings</h3>
+              <p className="text-gray-600 text-sm">
+                Customize your preferences
+              </p>
+            </Link>
           </div>
         </div>
       </div>
