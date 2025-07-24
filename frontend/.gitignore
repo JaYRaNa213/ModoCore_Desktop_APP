@@ -22,7 +22,7 @@ release/
 *.blockmap
 *.zip
 *.tar.gz
-OnlyOneClick Setup*.exe
+ContextSwap Setup*.exe
 
 # Vite
 .vite/
