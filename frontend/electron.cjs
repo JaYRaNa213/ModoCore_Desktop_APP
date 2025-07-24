@@ -1,7 +1,7 @@
 const { app, BrowserWindow, dialog } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const path = require('path');
-
+const { dialog } = require("electron");
 const isDev = !app.isPackaged;
 
 const createWindow = () => {
@@ -40,6 +40,18 @@ function setupAutoUpdater() {
         if (result.response === 0) autoUpdater.quitAndInstall();
       });
   });
+  autoUpdater.on("update-downloaded", () => {
+  dialog.showMessageBox({
+    type: "info",
+    title: "Update Ready",
+    message: "A new version has been downloaded. Restart the app to apply the update.",
+    buttons: ["Restart Now", "Later"]
+  }).then(result => {
+    if (result.response === 0) {
+      autoUpdater.quitAndInstall();
+    }
+  });
+});
 
   autoUpdater.on('checking-for-update', () => {
     console.log('🔄 Checking for update...');
