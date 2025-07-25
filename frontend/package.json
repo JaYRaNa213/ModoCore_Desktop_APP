@@ -23,7 +23,7 @@
   },
   "build": {
     "appId": "com.contextswap.app",
-    "productName": "OnlyOneClick",
+    "productName": "contextSwap",
     "files": [
       "dist/**/*",
       "electron.cjs",
