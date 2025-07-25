@@ -454,7 +454,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style >{`
         .animation-delay-2000 {
           animation-delay: 2s;
         }
