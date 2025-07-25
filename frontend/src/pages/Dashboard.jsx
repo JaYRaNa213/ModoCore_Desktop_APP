@@ -272,7 +272,16 @@ export default function Dashboard() {
                       >
                         <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
 
-                        <Card className="relative bg-neutral-800 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 group-hover:scale-105 border border-neutral-700 shadow-lg">
+
+
+
+
+{/* ////////////////////////////////////////////////////////// */}
+
+
+
+                        <Card className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 group-hover:scale-105 border border-neutral-700 shadow-lg">
+
   <CardContent className="p-6 space-y-4">
     {/* Template Header */}
     <div className="flex items-center gap-3">
