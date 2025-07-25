@@ -5,26 +5,46 @@
 │   └── db.js
 ├── controllers
 │   ├── auth.controller.js
+│   ├── automation.controller.js
+│   ├── log.controller.js
+│   ├── setting.controller.js
 │   ├── template.controller.js
 │   └── user.controller.js
 ├── middlewares
 │   ├── auth.middleware.js
 │   └── error.middleware.js
 ├── models
+│   ├── automation.model.js
+│   ├── automationLogs.model.js
+│   ├── preferences.model.js
 │   ├── template.model.js
 │   └── user.model.js
 ├── package-lock.json
 ├── package.json
 ├── README.md
 ├── routes
+│   ├── admin.routes.js
 │   ├── auth.routes.js
+│   ├── automation.routes.js
+│   ├── log.routes.js
+│   ├── setting.routes.js
 │   ├── template.routes.js
 │   └── user.routes.js
+├── scheduler
+│   └── automation.scheduler.js
 ├── server.js
 ├── services
+│   ├── launchApps.js
+│   ├── scheduler.service.js
 │   └── template.service.js
 ├── tree.cjs
-└── utils
-    ├── jwt.js
-    ├── launchApps.js
-    └── logger.js
+├── tree.txt
+├── utils
+│   ├── email.js
+│   ├── jwt.js
+│   ├── launchApps.js
+│   ├── launcher.util.js
+│   ├── logger.js
+│   └── systemCheck.js
+└── validators
+    └── auth.validator.js

@@ -103,22 +103,31 @@ export const deleteTemplate = async (req, res, next) => {
 };
 
 
-// controllers/template.controller.js
 export const EditTemplate = async (req, res, next) => {
   try {
+    const { id } = req.params;
     const { title, description, apps, websites, schedule } = req.body;
 
-    const template = await Template.findByIdAndUpdate(
-      req.params.id,
-      { title, description, apps, websites, schedule },
-      { new: true, runValidators: true }
-    );
-
+    const template = await Template.findById(id);
     if (!template) return res.status(404).json({ message: "Template not found" });
-    res.json(template);
+
+    // Ensure the user owns the template
+    if (template.userId.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized: Not your template" });
+    }
+
+    // Update fields
+    template.title = title || template.title;
+    template.description = description || template.description;
+    template.apps = apps || template.apps;
+    template.websites = websites || template.websites;
+    template.schedule = schedule || template.schedule;
+
+    await template.save();
+
+    res.json({ message: "Template updated successfully", template });
   } catch (err) {
     console.error("❌ Update Template Error:", err.message);
     next(err);
   }
 };
-

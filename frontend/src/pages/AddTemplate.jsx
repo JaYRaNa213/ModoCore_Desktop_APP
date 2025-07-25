@@ -212,10 +212,18 @@ export default function AddTemplate() {
                 onChange={(e) => setSchedule(e.target.value)}
               />
               <div className="mt-3 p-3 bg-purple-600/10 border border-purple-600/20 rounded-lg">
-                <p className="text-sm text-purple-300 flex items-center gap-2">
-                  <Info className="w-4 h-4" />
-                  <code className="bg-purple-600/20 px-2 py-1 rounded text-xs">0 9 * * 1-5</code> = every weekday at 9 AM
-                </p>
+                <p className="text-sm text-slate-400 mt-1">
+  Example: <code>0 12 * * *</code> (daily at noon) &nbsp;
+  <a
+    href="https://crontab.guru"
+    target="_blank"
+    rel="noreferrer"
+    className="underline text-blue-400"
+  >
+    Need help?
+  </a>
+</p>
+
               </div>
             </div>
 

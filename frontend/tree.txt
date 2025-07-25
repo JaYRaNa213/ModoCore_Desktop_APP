@@ -4,8 +4,8 @@
 ├── .gitignore
 ├── dist
 │   ├── assets
-│   │   ├── index-CfYnall-.css
-│   │   └── index-DED7kiKt.js
+│   │   ├── index-BlhWAgG2.js
+│   │   └── index-D58a3Qw_.css
 │   ├── index.html
 │   ├── preload.js
 │   └── vite.svg
@@ -24,6 +24,8 @@
 │   ├── latest.yml
 │   ├── OnlyOneClick Setup 1.0.0.exe
 │   ├── OnlyOneClick Setup 1.0.0.exe.blockmap
+│   ├── OnlyOneClick Setup 1.0.2.exe
+│   ├── OnlyOneClick Setup 1.0.2.exe.blockmap
 │   └── win-unpacked
 │       ├── chrome_100_percent.pak
 │       ├── chrome_200_percent.pak
@@ -126,7 +128,6 @@
 │   │       └── ToggleSwitch.jsx
 │   ├── context
 │   │   └── AppContext.jsx
-│   ├── data
 │   ├── hooks
 │   │   ├── useFetchLogs.js
 │   │   ├── useLocalStorage.js
@@ -149,6 +150,7 @@
 │   │   ├── Profile.jsx
 │   │   ├── ScheduledTemplates.jsx
 │   │   ├── Settings.jsx
+│   │   ├── StatCard.jsx
 │   │   ├── TemplateCard.jsx
 │   │   ├── TemplateDetail.jsx
 │   │   └── Templates.jsx

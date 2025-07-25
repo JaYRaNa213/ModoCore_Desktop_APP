@@ -1,5 +1,6 @@
 // routes/template.routes.js
 import express from "express";
+import { authMiddleware}from "../middlewares/auth.middleware.js";
 import {
   createTemplate,
   getAllTemplates,
@@ -17,7 +18,7 @@ router.get("/", getAllTemplates);
 router.get("/:id", getTemplateById);
 router.post("/:id/use", incrementUsage);
 router.post("/:id/launch", launchTemplate);
-router.delete("/:id", deleteTemplate); 
-router.put('/:id', EditTemplate); 
+router.delete("/:id", deleteTemplate);
+router.put('/:id', authMiddleware, EditTemplate);
 
 export default router;
