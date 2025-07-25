@@ -172,40 +172,43 @@ export default function Dashboard() {
       </div>
 
       {/* Search and Actions */}
-      <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
-        <div className="flex flex-col sm:flex-row gap-4 items-center flex-1 max-w-2xl">
-          <div className="relative flex-1 w-full">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-            <input
-              type="text"
-              placeholder="Search your templates..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 shadow-lg"
-            />
-          </div>
+     <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+  {/* Search + Filter */}
+  <div className="flex flex-col sm:flex-row gap-4 items-center flex-1 max-w-2xl">
+    <div className="relative flex-1 w-full">
+      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+      <input
+        type="text"
+        placeholder="Search your templates..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="w-full pl-12 pr-4 py-4 bg-neutral-900 border border-neutral-700 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300 shadow-md"
+      />
+    </div>
 
-          <button
-            onClick={() => setFilterActive(!filterActive)}
-            className={`flex items-center gap-2 px-6 py-4 rounded-2xl font-medium transition-all duration-300 whitespace-nowrap shadow-lg ${
-              filterActive
-                ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-xl"
-                : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
-            }`}
-          >
-            <Filter className="w-4 h-4" />
-            Filter
-          </button>
-        </div>
+    <button
+      onClick={() => setFilterActive(!filterActive)}
+      className={`flex items-center gap-2 px-6 py-4 rounded-2xl font-medium transition-all duration-300 whitespace-nowrap shadow-md ${
+        filterActive
+          ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg"
+          : "bg-neutral-900 border border-neutral-700 text-gray-300 hover:bg-neutral-800"
+      }`}
+    >
+      <Filter className="w-4 h-4" />
+      Filter
+    </button>
+  </div>
 
-        <Link
-          to="/add-template"
-          className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-8 py-4 rounded-2xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-        >
-          <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-          Add Template
-        </Link>
-      </div>
+  {/* Add Template Button */}
+  <Link
+    to="/add-template"
+    className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+  >
+    <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+    Add Template
+  </Link>
+</div>
+
     
 
           {/* Templates Section */}
