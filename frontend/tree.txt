@@ -4,8 +4,8 @@
 ├── .gitignore
 ├── dist
 │   ├── assets
-│   │   ├── index-BlhWAgG2.js
-│   │   └── index-D58a3Qw_.css
+│   │   ├── index-CnRrgvkw.js
+│   │   └── index-GtVvBgpa.css
 │   ├── index.html
 │   ├── preload.js
 │   └── vite.svg
@@ -16,19 +16,21 @@
 ├── package.json
 ├── preload.js
 ├── public
+│   ├── icon.ico
 │   └── vite.svg
 ├── README.md
 ├── release
 │   ├── builder-debug.yml
 │   ├── builder-effective-config.yaml
+│   ├── contextSwap Setup 1.0.0.exe
+│   ├── contextSwap Setup 1.0.0.exe.blockmap
+│   ├── contextSwap Setup 1.0.1.exe
+│   ├── contextSwap Setup 1.0.1.exe.blockmap
 │   ├── latest.yml
-│   ├── OnlyOneClick Setup 1.0.0.exe
-│   ├── OnlyOneClick Setup 1.0.0.exe.blockmap
-│   ├── OnlyOneClick Setup 1.0.2.exe
-│   ├── OnlyOneClick Setup 1.0.2.exe.blockmap
 │   └── win-unpacked
 │       ├── chrome_100_percent.pak
 │       ├── chrome_200_percent.pak
+│       ├── contextSwap.exe
 │       ├── d3dcompiler_47.dll
 │       ├── ffmpeg.dll
 │       ├── icudtl.dat
@@ -92,7 +94,6 @@
 │       │   ├── vi.pak
 │       │   ├── zh-CN.pak
 │       │   └── zh-TW.pak
-│       ├── OnlyOneClick.exe
 │       ├── resources
 │       │   ├── app-update.yml
 │       │   ├── app.asar
@@ -107,6 +108,7 @@
 │   ├── App.css
 │   ├── App.jsx
 │   ├── assets
+│   │   ├── app-icon.ico
 │   │   └── react.svg
 │   ├── auth
 │   │   ├── AuthContext.jsx
