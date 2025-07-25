@@ -1,4 +1,3 @@
-// vite.config.js
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from 'tailwindcss';
@@ -14,7 +13,11 @@ export default defineConfig({
       targets: [
         {
           src: 'preload.js',
-          dest: '', // ✅ Copies to dist/
+          dest: '',
+        },
+        {
+          src: 'public/icon.ico',
+          dest: '', // ✅ This ensures it's available as dist/icon.ico
         },
       ],
     }),

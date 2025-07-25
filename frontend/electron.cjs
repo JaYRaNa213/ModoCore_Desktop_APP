@@ -8,7 +8,10 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1280,
     height: 800,
-    icon: path.join(__dirname, 'public/icon.ico'),
+    icon: isDev
+  ? path.join(__dirname, 'public/icon.ico')
+  : path.join(__dirname, 'dist/icon.ico'),
+
     frame: false, // Remove top native window frame (Edit/View/File etc.)
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -16,6 +19,17 @@ function createWindow() {
       contextIsolation: true,
     },
   });
+
+  
+
+if (isDev) {
+  process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+}
+
+ 
+
+
+
 
   if (isDev) {
     win.loadURL('http://localhost:5173');
