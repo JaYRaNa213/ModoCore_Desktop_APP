@@ -1,41 +1,32 @@
-name: Build and Release Electron App
+name: Release Electron App
 
 on:
   push:
     tags:
-      - 'v*' # e.g. v1.0.0
+      - 'v*' # Only runs when you push a version tag like v1.0.0
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: windows-latest
 
     defaults:
       run:
-        working-directory: frontend
+        working-directory: ./frontend
+
+    env:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
     steps:
-      - name: 🧾 Checkout Code
-        uses: actions/checkout@v3
+      - name: 📦 Checkout Repo
+        uses: actions/checkout@v4
 
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v3
+      - name: 🧰 Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: 'npm'
-          cache-dependency-path: frontend/package-lock.json
+          node-version: 20
 
-      - name: 📦 Install Dependencies
-        run: npm ci
+      - name: 📥 Install dependencies
+        run: npm install
 
-      - name: 🛠 Build App
-        run: npm run dist
-
-      - name: 🚀 Publish Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: frontend/dist/*.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: ✅ Done
-        run: echo "Release published!"
+      - name: 🚀 Build and Release
+        run: npm run release
