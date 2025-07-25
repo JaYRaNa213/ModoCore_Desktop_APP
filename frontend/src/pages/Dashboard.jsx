@@ -27,9 +27,12 @@ import {
   Target,
   Rocket,
   Clock,
+  
   BarChart3,
 } from "lucide-react";
+// import { StatCard } from "../components/StatCard";
 import { Card, CardContent } from "../components/ui/Card";
+import StatCard from "./StatCard";
 import { useNavigate } from "react-router-dom";
 
 const handleLaunch = async (id) => {
@@ -125,122 +128,85 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-          {/* Stats Dashboard */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Templates Count */}
-            <div className="group relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 rounded-2xl blur opacity-50 group-hover:opacity-75 transition duration-500"></div>
-              <Card className="relative bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 group-hover:scale-105 border-0 shadow-xl">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-gray-500 text-sm font-medium">
-                        Your Templates
-                      </p>
-                      <p className="text-3xl font-bold text-gray-900 mt-1">
-                        {userTemplatesCount}
-                      </p>
-                      <p className="text-green-600 text-sm mt-1 flex items-center gap-1">
-                        <TrendingUp className="w-3 h-3" />
-                        +12% this month
-                      </p>
-                    </div>
-                    <div className="w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-                      <LayoutTemplate className="w-7 h-7 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
 
-            {/* Total Usage */}
-            <div className="group relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 rounded-2xl blur opacity-50 group-hover:opacity-75 transition duration-500"></div>
-              <Card className="relative bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 group-hover:scale-105 border-0 shadow-xl">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-gray-500 text-sm font-medium">
-                        Total Launches
-                      </p>
-                      <p className="text-3xl font-bold text-gray-900 mt-1">
-                        {totalUsage}
-                      </p>
-                      <p className="text-blue-600 text-sm mt-1 flex items-center gap-1">
-                        <Activity className="w-3 h-3" />
-                        {Math.floor(totalUsage / 30)} per day avg
-                      </p>
-                    </div>
-                    <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg">
-                      <Zap className="w-7 h-7 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
 
-            {/* Success Rate */}
-            <div className="group relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-green-600/20 rounded-2xl blur opacity-50 group-hover:opacity-75 transition duration-500"></div>
-              <Card className="relative bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 group-hover:scale-105 border-0 shadow-xl">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-gray-500 text-sm font-medium">
-                        Success Rate
-                      </p>
-                      <p className="text-3xl font-bold text-gray-900 mt-1">
-                        99.2%
-                      </p>
-                      <p className="text-emerald-600 text-sm mt-1 flex items-center gap-1">
-                        <Award className="w-3 h-3" />
-                        Excellent performance
-                      </p>
-                    </div>
-                    <div className="w-14 h-14 bg-gradient-to-br from-emerald-600 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
-                      <Star className="w-7 h-7 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+
+<div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Templates Count */}
+        {/* <StatCard
+          title="Your Templates"
+          value={userTemplatesCount}
+          color="purple"
+          changeText="+12% this month"
+          icon={<LayoutTemplate className="w-7 h-7 text-white" />}
+          iconBg="from-purple-600 to-indigo-600"
+          textColor="text-green-600"
+          trendIcon={<TrendingUp className="w-3 h-3" />}
+        /> */}
+
+        {/* Total Usage */}
+        {/* <StatCard
+          title="Total Launches"
+          value={totalUsage}
+          changeText={`${Math.floor(totalUsage / 30)} per day avg`}
+          color="blue"
+          icon={<Zap className="w-7 h-7 text-white" />}
+          iconBg="from-blue-600 to-cyan-600"
+          textColor="text-blue-600"
+          trendIcon={<Activity className="w-3 h-3" />}
+        /> */}
+
+        {/* Success Rate */}
+        {/* <StatCard
+          title="Success Rate"
+          value="99.2%"
+          changeText="Excellent performance"
+          color="emerald"
+          icon={<Star className="w-7 h-7 text-white" />}
+          iconBg="from-emerald-600 to-green-600"
+          textColor="text-emerald-600"
+          trendIcon={<Award className="w-3 h-3" />}
+        /> */}
+      </div>
+
+      {/* Search and Actions */}
+      <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+        <div className="flex flex-col sm:flex-row gap-4 items-center flex-1 max-w-2xl">
+          <div className="relative flex-1 w-full">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search your templates..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 shadow-lg"
+            />
           </div>
 
-          {/* Search and Actions */}
-          <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
-            <div className="flex flex-col sm:flex-row gap-4 items-center flex-1 max-w-2xl">
-              <div className="relative flex-1 w-full">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Search your templates..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 shadow-lg"
-                />
-              </div>
-              <button
-                onClick={() => setFilterActive(!filterActive)}
-                className={`flex items-center gap-2 px-6 py-4 rounded-2xl font-medium transition-all duration-300 whitespace-nowrap shadow-lg ${
-                  filterActive
-                    ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-xl"
-                    : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
-                }`}
-              >
-                <Filter className="w-4 h-4" />
-                Filter
-              </button>
-            </div>
+          <button
+            onClick={() => setFilterActive(!filterActive)}
+            className={`flex items-center gap-2 px-6 py-4 rounded-2xl font-medium transition-all duration-300 whitespace-nowrap shadow-lg ${
+              filterActive
+                ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-xl"
+                : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+            }`}
+          >
+            <Filter className="w-4 h-4" />
+            Filter
+          </button>
+        </div>
 
-            <Link
-              to="/add-template"
-              className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-8 py-4 rounded-2xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-            >
-              <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-              Add Template
-            </Link>
-          </div>
+        <Link
+          to="/add-template"
+          className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-8 py-4 rounded-2xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+        >
+          <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+          Add Template
+        </Link>
+      </div>
+    
 
           {/* Templates Section */}
           <div className="space-y-6">
@@ -303,90 +269,85 @@ export default function Dashboard() {
                       >
                         <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
 
-                        <Card className="relative bg-white rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 group-hover:scale-105 border-0 shadow-xl">
-                          <CardContent className="p-6 space-y-4">
-                            {/* Template Header */}
-                            <div className="flex items-center gap-3">
-                              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                                <Target className="w-6 h-6 text-white" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <h3 className="text-lg font-bold text-gray-900 group-hover:text-purple-700 transition-colors truncate">
-                                  {template.title}
-                                </h3>
-                                <div className="flex items-center gap-2 text-sm">
-                                  <div className="flex items-center gap-1 text-amber-500">
-                                    <Star className="w-3 h-3 fill-current" />
-                                    <span className="font-medium">4.8</span>
-                                  </div>
-                                  <span className="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-lg text-xs font-medium">
-                                    Active
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
+                        <Card className="relative bg-neutral-800 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 group-hover:scale-105 border border-neutral-700 shadow-lg">
+  <CardContent className="p-6 space-y-4">
+    {/* Template Header */}
+    <div className="flex items-center gap-3">
+      <div className="w-12 h-12 bg-gradient-to-br from-purple-700 via-indigo-700 to-black rounded-xl flex items-center justify-center shadow-lg">
+        <Target className="w-6 h-6 text-white" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <h3 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors truncate">
+          {template.title}
+        </h3>
+        <div className="flex items-center gap-2 text-sm">
+          <div className="flex items-center gap-1 text-yellow-400">
+            <Star className="w-3 h-3 fill-current" />
+            <span className="font-medium">4.8</span>
+          </div>
+          <span className="px-2 py-1 bg-emerald-800 text-emerald-100 rounded-lg text-xs font-medium">
+            Active
+          </span>
+        </div>
+      </div>
+    </div>
 
-                            {/* Template Description */}
-                            <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
-                              {template.description ||
-                                "A powerful template to boost your productivity and streamline your workflow."}
-                            </p>
+    {/* Template Description */}
+    <p className="text-neutral-300 text-sm leading-relaxed line-clamp-2">
+      {template.description ||
+        "A powerful template to boost your productivity and streamline your workflow."}
+    </p>
 
-                            {/* Template Stats */}
-                            <div className="grid grid-cols-2 gap-4 py-3 border-t border-gray-100">
-                              <div className="flex items-center gap-2 text-sm">
-                                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                                  <BarChart3 className="w-4 h-4 text-blue-600" />
-                                </div>
-                                <div>
-                                  <p className="text-gray-500 text-xs">Usage</p>
-                                  <p className="text-gray-900 font-semibold">
-                                    {template.usageCount || 0}
-                                  </p>
-                                </div>
-                              </div>
+    {/* Template Stats */}
+    <div className="grid grid-cols-2 gap-4 py-3 border-t border-neutral-700">
+      <div className="flex items-center gap-2 text-sm">
+        <div className="w-8 h-8 bg-blue-900 rounded-lg flex items-center justify-center">
+          <BarChart3 className="w-4 h-4 text-blue-400" />
+        </div>
+        <div>
+          <p className="text-neutral-400 text-xs">Usage</p>
+          <p className="text-white font-semibold">{template.usageCount || 0}</p>
+        </div>
+      </div>
 
-                              <div className="flex items-center gap-2 text-sm">
-                                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                                  <Clock className="w-4 h-4 text-purple-600" />
-                                </div>
-                                <div>
-                                  <p className="text-gray-500 text-xs">
-                                    Last used
-                                  </p>
-                                  <p className="text-gray-900 font-semibold text-xs">
-                                    2 days ago
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
+      <div className="flex items-center gap-2 text-sm">
+        <div className="w-8 h-8 bg-purple-900 rounded-lg flex items-center justify-center">
+          <Clock className="w-4 h-4 text-purple-300" />
+        </div>
+        <div>
+          <p className="text-neutral-400 text-xs">Last used</p>
+          <p className="text-white font-semibold text-xs">2 days ago</p>
+        </div>
+      </div>
+    </div>
 
-                            {/* Action Buttons */}
-                            <div className="flex gap-3 pt-4">
-                              <button
-                                onClick={() => handleLaunch(template._id)}
-                                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 group/launch shadow-lg"
-                              >
-                                <Rocket className="w-4 h-4 group-hover/launch:scale-110 transition-transform duration-300" />
-                                Launch
-                              </button>
+    {/* Action Buttons */}
+    <div className="flex gap-3 pt-4">
+      <button
+        onClick={() => handleLaunch(template._id)}
+        className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 group/launch shadow-lg"
+      >
+        <Rocket className="w-4 h-4 group-hover/launch:scale-110 transition-transform duration-300" />
+        Launch
+      </button>
 
-                              <Link
-                                to={`/template/${template._id}`}
-                                className="px-4 py-3 bg-gray-100 hover:bg-gray-200 border border-gray-200 text-gray-700 rounded-xl transition-all duration-300 group/view"
-                              >
-                                <Eye className="w-4 h-4 group-hover/view:scale-110 transition-transform duration-300" />
-                              </Link>
+      <Link
+        to={`/template/${template._id}`}
+        className="px-4 py-3 bg-neutral-700 hover:bg-neutral-600 border border-neutral-600 text-neutral-200 rounded-xl transition-all duration-300 group/view"
+      >
+        <Eye className="w-4 h-4 group-hover/view:scale-110 transition-transform duration-300" />
+      </Link>
 
-                              <Link
-                                to={`/templates/edit/${template._id}`}
-                                className="px-4 py-3 bg-gray-100 hover:bg-gray-200 border border-gray-200 text-gray-700 rounded-xl transition-all duration-300 group/edit"
-                              >
-                                <Edit3 className="w-4 h-4 group-hover/edit:scale-110 transition-transform duration-300" />
-                              </Link>
-                            </div>
-                          </CardContent>
-                        </Card>
+      <Link
+        to={`/templates/edit/${template._id}`}
+        className="px-4 py-3 bg-neutral-700 hover:bg-neutral-600 border border-neutral-600 text-neutral-200 rounded-xl transition-all duration-300 group/edit"
+      >
+        <Edit3 className="w-4 h-4 group-hover/edit:scale-110 transition-transform duration-300" />
+      </Link>
+    </div>
+  </CardContent>
+</Card>
+
                       </div>
                     ))
                 ) : (
@@ -419,63 +380,65 @@ export default function Dashboard() {
           </div>
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Link
-              to="/templates"
-              className="group relative bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
-            >
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
-                <LayoutTemplate className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">
-                All Templates
-              </h3>
-              <p className="text-gray-600 text-sm">
-                View and manage all your templates
-              </p>
-            </Link>
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+  <Link
+    to="/templates"
+    className="group relative bg-[#1f1f1f] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03]"
+  >
+    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mb-4 shadow-md">
+      <LayoutTemplate className="w-6 h-6 text-white" />
+    </div>
+    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">
+      All Templates
+    </h3>
+    <p className="text-gray-400 text-sm">
+      View and manage all your templates
+    </p>
+  </Link>
 
-            <Link
-              to="/analytics"
-              className="group relative bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
-            >
-              <div className="w-12 h-12 bg-gradient-to-br from-emerald-600 to-green-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
-                <BarChart3 className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">
-                Analytics
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Track usage and performance
-              </p>
-            </Link>
+  <Link
+    to="/analytics"
+    className="group relative bg-[#1f1f1f] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03]"
+  >
+    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-500 rounded-xl flex items-center justify-center mb-4 shadow-md">
+      <BarChart3 className="w-6 h-6 text-white" />
+    </div>
+    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">
+      Analytics
+    </h3>
+    <p className="text-gray-400 text-sm">
+      Track usage and performance
+    </p>
+  </Link>
 
-            <Link
-              to="/automations"
-              className="group relative bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
-            >
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
-                <Bot className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">
-                Automations
-              </h3>
-              <p className="text-gray-600 text-sm">Set up automatic launches</p>
-            </Link>
+  <Link
+    to="/automations"
+    className="group relative bg-[#1f1f1f] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03]"
+  >
+    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl flex items-center justify-center mb-4 shadow-md">
+      <Bot className="w-6 h-6 text-white" />
+    </div>
+    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">
+      Automations
+    </h3>
+    <p className="text-gray-400 text-sm">Set up automatic launches</p>
+  </Link>
 
-            <Link
-              to="/settings"
-              className="group relative bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
-            >
-              <div className="w-12 h-12 bg-gradient-to-br from-orange-600 to-red-600 rounded-xl flex items-center justify-center mb-4 shadow-lg">
-                <Settings className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Settings</h3>
-              <p className="text-gray-600 text-sm">
-                Customize your preferences
-              </p>
-            </Link>
-          </div>
+  <Link
+    to="/settings"
+    className="group relative bg-[#1f1f1f] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03]"
+  >
+    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center mb-4 shadow-md">
+      <Settings className="w-6 h-6 text-white" />
+    </div>
+    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-red-400 transition-colors">
+      Settings
+    </h3>
+    <p className="text-gray-400 text-sm">
+      Customize your preferences
+    </p>
+  </Link>
+</div>
         </div>
       </div>
 
