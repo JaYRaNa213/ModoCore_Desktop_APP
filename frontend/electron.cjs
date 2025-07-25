@@ -9,10 +9,9 @@ function createWindow() {
     width: 1280,
     height: 800,
     icon: isDev
-  ? path.join(__dirname, 'public/icon.ico')
-  : path.join(__dirname, 'dist/icon.ico'),
-
-    frame: false, // Remove top native window frame (Edit/View/File etc.)
+      ? path.join(__dirname, 'public', 'icon.ico')
+      : path.join(process.resourcesPath, 'icon.ico'),
+    frame: false, // Custom frame (removes default OS menu)
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -20,24 +19,14 @@ function createWindow() {
     },
   });
 
-  
-
-if (isDev) {
-  process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
-}
-
- 
-
-
-
-
   if (isDev) {
+    process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
     win.loadURL('http://localhost:5173');
-    win.webContents.openDevTools(); // Optional: open dev tools only in dev
+    win.webContents.openDevTools(); // Only in dev
   } else {
-    win.loadFile(path.resolve(__dirname, 'dist/index.html')).catch(console.error);
+    win.loadFile(path.join(__dirname, 'dist', 'index.html')).catch(console.error);
 
-    // Prevent opening devtools in production
+    // Disable devtools in production
     win.webContents.on('devtools-opened', () => {
       win.webContents.closeDevTools();
     });

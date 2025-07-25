@@ -10,17 +10,18 @@
     "email": "jayrana0909@gmail.com"
   },
   "scripts": {
-    "dev": "concurrently \"vite\" \"electron .\"",
-    "build:react": "vite build",
-    "build": "npm run build:react && electron-builder",
-    "electron:dev": "vite && electron .",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "start": "electron .",
-    "dist": "npm run build && electron-builder --win",
-    "release": "npm run dist -- --publish always",
-    "electron": "electron ."
-  },
+  "dev": "concurrently \"vite\" \"electron .\"",
+  "build:react": "vite build",
+  "build": "npm run build:react && electron-builder",
+  "electron:dev": "vite && electron .",
+  "lint": "eslint .",
+  "preview": "vite preview",
+  "start": "electron .",
+  "dist": "electron-builder --win --x64",
+  "release": "electron-builder --win --x64 --publish always",
+  "electron": "electron ."
+}
+,
   "build": {
     "appId": "com.contextswap.app",
     "productName": "ContextSwap",
