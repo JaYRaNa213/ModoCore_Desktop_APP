@@ -24,6 +24,7 @@
   "build": {
     "appId": "com.contextswap.app",
     "productName": "contextSwap",
+    "icon": "assets/app-icon.png",
     "files": [
       "dist/**/*",
       "electron.cjs",
