@@ -32,11 +32,18 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    profileImage: {
+      required: false,
+  type: String,
+  default: "",
+}
+,
     templates: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Template",
       },
+      
     ],
   },
   {

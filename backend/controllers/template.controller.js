@@ -6,7 +6,7 @@ import { launchTemplate as doLaunch } from "../utils/launcher.util.js";
 export const createTemplate = async (req, res, next) => {
   try {
     const { title, description, apps, websites } = req.body; // ✅ include websites
-    const newTemplate = await Template.create({ title, description, apps, websites });
+    const newTemplate = await Template.create({ title, description, apps, websites ,userId: req.user.id,});
     res.status(201).json(newTemplate);
   } catch (err) {
     console.error("❌ Create Template Error:", err.message);
@@ -18,7 +18,7 @@ export const createTemplate = async (req, res, next) => {
 export const getAllTemplates = async (req, res, next) => {
   try {
     const { limit } = req.query;
-    const query = Template.find().sort({ usageCount: -1 });
+    const query = Template.find({ userId: req.user.id }).sort({ usageCount: -1 });
     if (limit) query.limit(Number(limit));
 
     const templates = await query.exec();
@@ -29,17 +29,23 @@ export const getAllTemplates = async (req, res, next) => {
 };
 
 
-// ✅ Get a single template
+// ✅ Get a single template (with ownership check)
 export const getTemplateById = async (req, res, next) => {
   try {
-    const template = await Template.findById(req.params.id);
+    const template = await Template.findOne({
+      _id: req.params.id,
+      userId: req.user.id, // 👈 user-scoped
+    });
+
     if (!template) return res.status(404).json({ message: "Template not found" });
+
     res.json(template);
   } catch (err) {
     console.error("❌ Get Template By ID Error:", err.message);
     next(err);
   }
 };
+
 
 // ✅ Increment usage
 export const incrementUsage = async (req, res, next) => {
@@ -89,18 +95,26 @@ export const launchTemplate = async (req, res) => {
 };
 
 
+
+// ✅ Delete a template (only if owned by user)
 export const deleteTemplate = async (req, res, next) => {
   try {
-    const deleted = await Template.findByIdAndDelete(req.params.id);
+    const deleted = await Template.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user.id, // 👈 verify owner
+    });
+
     if (!deleted) {
       return res.status(404).json({ message: "Template not found" });
     }
+
     res.json({ message: "Template deleted successfully" });
   } catch (err) {
     console.error("❌ Delete Template Error:", err.message);
     next(err);
   }
 };
+
 
 
 export const EditTemplate = async (req, res, next) => {

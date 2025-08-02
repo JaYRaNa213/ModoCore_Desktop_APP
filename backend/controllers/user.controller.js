@@ -2,6 +2,8 @@
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { syncTemplatesToDB } from "../services/sync.service.js";
+
 dotenv.config();
 
 // Utility: Generate JWT token
@@ -11,20 +13,24 @@ const generateToken = (userId) => {
   });
 };
 
-// ✅ @route   POST /api/users/register
+// @desc    Register new user
+// @route   POST /api/users/register
+// @access  Public
 export const registerUser = async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
-    // Check if email already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser)
-      return res.status(400).json({ message: "Email already registered" });
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
 
-    // Create user
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: "Email already registered" });
+    }
+
     const newUser = await User.create({ username, email, password });
 
-    // Return token and user
     res.status(201).json({
       _id: newUser._id,
       username: newUser.username,
@@ -32,20 +38,30 @@ export const registerUser = async (req, res) => {
       token: generateToken(newUser._id),
     });
   } catch (err) {
-    res.status(500).json({ message: "Registration failed", error: err.message });
+    console.error("Registration error:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
-// ✅ @route   POST /api/users/login
+// @desc    Login user
+// @route   POST /api/users/login
+// @access  Public
 export const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, localTemplates = [] } = req.body;
+
+  
 
   try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ message: "Invalid credentials" });
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
 
-    const isMatch = await user.matchPassword(password);
-    if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+    const user = await User.findOne({ email });
+    if (!user || !(await user.matchPassword(password))) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    const syncResult = await syncTemplatesToDB(user._id, localTemplates);
 
     res.status(200).json({
       _id: user._id,
@@ -54,11 +70,14 @@ export const loginUser = async (req, res) => {
       token: generateToken(user._id),
     });
   } catch (err) {
-    res.status(500).json({ message: "Login failed", error: err.message });
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
-// ✅ @route   GET /api/users/profile (protected)
+// @desc    Get user profile
+// @route   GET /api/users/profile
+// @access  Private
 export const getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
@@ -66,6 +85,7 @@ export const getUserProfile = async (req, res) => {
 
     res.status(200).json(user);
   } catch (err) {
-    res.status(500).json({ message: "Profile fetch failed", error: err.message });
+    console.error("Profile fetch error:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };

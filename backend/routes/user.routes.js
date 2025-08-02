@@ -5,13 +5,13 @@ import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-// Register new user
+// ✅ Register a new user
 router.post("/register", registerUser);
 
-// Login existing user
+// ✅ Login existing user
 router.post("/login", loginUser);
 
-// Get current user profile (protected route)
+// ✅ Get current logged-in user profile
 router.get("/me", authMiddleware, getUserProfile);
 
 export default router;

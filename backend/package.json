@@ -20,6 +20,7 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.3",
+    "morgan": "^1.10.1",
     "node-cron": "^4.2.1",
     "open": "^10.2.0"
   }
