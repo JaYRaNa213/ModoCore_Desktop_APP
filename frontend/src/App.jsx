@@ -31,29 +31,72 @@ export default function App() {
         <main className="p-6 overflow-y-auto">
           <Routes>
             {/* 🔓 Public Routes */}
+
             <Route path="/" element={<Dashboard />} />
+
+            {/* <Route
+  path="/"
+  element={
+    <PrivateRoute>
+      <Dashboard />
+    </PrivateRoute>
+  }
+/> */}
+
+            
             <Route path="/templates" element={<Templates />} />
             <Route path="/logs" element={<Logs />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/notifications" element={<Notifications />} />
-            <Route path="/profile" element={<Profile />} />
+            
             {/* <Route path="/workspaces" element={<Workspaces />} /> */}
+
             <Route path="/template/:id" element={<TemplateDetail />} />
 
             {/* 🔒 Only protect the ones you want */}
             <Route
-              path="/add-template"
-              element={
-                
-                  <AddTemplate />
-                
-              }
-            />
-            <Route path="/templates/edit/:id" element={<EditTemplate />} />
-            <Route path="/automations" element={<Automations />} />
-              <Route path="/automation-logs" element={<AutomationLogs />} />
-              {/* <Route path="/admin-panel" element={<AdminPanel />} /> */}
+  path="/add-template"
+  element={
+    <PrivateRoute>
+      <AddTemplate />
+    </PrivateRoute>
+  }
+/>
+
+            <Route
+  path="/templates/edit/:id"
+  element={
+    <PrivateRoute>
+      <EditTemplate />
+    </PrivateRoute>
+  }
+/>
+<Route
+  path="/automations"
+  element={
+    <PrivateRoute>
+      <Automations />
+    </PrivateRoute>
+  }
+/>
+<Route
+  path="/automation-logs"
+  element={
+    <PrivateRoute>
+      <AutomationLogs />
+    </PrivateRoute>
+  }
+/>
+<Route
+  path="/profile"
+  element={
+    <PrivateRoute>
+      <Profile />
+    </PrivateRoute>
+  }
+/>
+
 
             {/* 🧾 Auth Pages */}
             <Route path="/login" element={<Login />} />

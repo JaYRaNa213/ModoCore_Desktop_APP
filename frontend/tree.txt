@@ -1,11 +1,10 @@
 ├── .env
-├── .env.development
-├── .env.production
 ├── .gitignore
 ├── dist
 │   ├── assets
 │   │   ├── index-CnRrgvkw.js
 │   │   └── index-GtVvBgpa.css
+│   ├── icon.ico
 │   ├── index.html
 │   ├── preload.js
 │   └── vite.svg
@@ -22,15 +21,13 @@
 ├── release
 │   ├── builder-debug.yml
 │   ├── builder-effective-config.yaml
-│   ├── contextSwap Setup 1.0.0.exe
-│   ├── contextSwap Setup 1.0.0.exe.blockmap
-│   ├── contextSwap Setup 1.0.1.exe
-│   ├── contextSwap Setup 1.0.1.exe.blockmap
+│   ├── ContextSwap Setup 1.0.0.exe
+│   ├── ContextSwap Setup 1.0.0.exe.blockmap
 │   ├── latest.yml
 │   └── win-unpacked
 │       ├── chrome_100_percent.pak
 │       ├── chrome_200_percent.pak
-│       ├── contextSwap.exe
+│       ├── ContextSwap.exe
 │       ├── d3dcompiler_47.dll
 │       ├── ffmpeg.dll
 │       ├── icudtl.dat
