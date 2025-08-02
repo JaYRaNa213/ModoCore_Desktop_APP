@@ -13,7 +13,7 @@ function createWindow() {
     icon: isDev
       ? path.join(__dirname, "public", "icon.ico")
       : path.join(process.resourcesPath, "icon.ico"),
-    frame: false, // Custom frame (no OS menu bar)
+    frame: true, 
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: false,
