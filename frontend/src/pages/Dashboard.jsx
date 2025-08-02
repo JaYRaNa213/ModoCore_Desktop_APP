@@ -255,17 +255,18 @@ export default function Dashboard() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {topTemplates.length > 0 ? (
+
                   topTemplates
-                    .filter(
-                      (template) =>
-                        template.title
-                          ?.toLowerCase()
-                          .includes(searchTerm.toLowerCase()) ||
-                        template.description
-                          ?.toLowerCase()
-                          .includes(searchTerm.toLowerCase())
-                    )
-                    .map((template, index) => (
+  .sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0)) // Most used first
+  .filter(
+    (template) =>
+      template.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      template.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+  .slice(0, 3) // Show only top 3
+  .map((template, index) => (
+
+
                       <div
                         key={template._id || index}
                         className="group relative"
