@@ -1,17 +1,21 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer } = require("electron");
 
-// Expose only safe APIs
-contextBridge.exposeInMainWorld('electronAPI', {
+contextBridge.exposeInMainWorld("electronAPI", {
   send: (channel, data) => {
-    const validChannels = ['toMain']; // Add more allowed channels here
+    const validChannels = ["toMain"];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);
     }
   },
   receive: (channel, callback) => {
-    const validChannels = ['fromMain']; // Add more allowed channels here
+    const validChannels = ["fromMain"];
     if (validChannels.includes(channel)) {
       ipcRenderer.on(channel, (event, ...args) => callback(...args));
     }
   },
+
+  // ✅ Add window control APIs
+  closeWindow: () => ipcRenderer.send("close-window"),
+  minimizeWindow: () => ipcRenderer.send("minimize-window"),
+  maximizeWindow: () => ipcRenderer.send("maximize-window"),
 });

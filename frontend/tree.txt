@@ -118,13 +118,14 @@
 │   │   ├── Header.jsx
 │   │   ├── LogTable.jsx
 │   │   ├── Sidebar.jsx
-│   │   └── ui
-│   │       ├── Button.jsx
-│   │       ├── Card.jsx
-│   │       ├── Input.jsx
-│   │       ├── Modal.jsx
-│   │       ├── Textarea.jsx
-│   │       └── ToggleSwitch.jsx
+│   │   ├── ui
+│   │   │   ├── Button.jsx
+│   │   │   ├── Card.jsx
+│   │   │   ├── Input.jsx
+│   │   │   ├── Modal.jsx
+│   │   │   ├── Textarea.jsx
+│   │   │   └── ToggleSwitch.jsx
+│   │   └── WindowControls.jsx
 │   ├── context
 │   │   └── AppContext.jsx
 │   ├── hooks
@@ -155,9 +156,11 @@
 │   │   └── Templates.jsx
 │   ├── services
 │   │   ├── analyticsService.js
+│   │   ├── api.js
 │   │   ├── automationService.js
 │   │   └── TemplateService.js
 │   └── utils
+│       ├── guestTemplates.js
 │       └── validators.js
 ├── tailwind.config.js
 ├── tree.cjs
