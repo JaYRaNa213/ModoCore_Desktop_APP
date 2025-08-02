@@ -7,12 +7,21 @@ import AutomationLog from "../models/automationLogs.model.js";
 /**
  * Normalize website URL (adds https:// if missing)
  */
-const normalizeUrl = (url) => {
-  let clean = url.trim().toLowerCase();
-  if (!clean.startsWith("http://") && !clean.startsWith("https://")) {
-    clean = "https://" + clean;
+/**
+ * Normalize all types of URLs or schemes (http, mailto, tel, ftp, custom)
+ */
+const normalizeUrl = (input) => {
+  const trimmed = input.trim();
+
+  // Match valid URI scheme (e.g., http:, mailto:, tel:, spotify:)
+  const hasScheme = /^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(trimmed);
+
+  if (hasScheme) {
+    return trimmed;
   }
-  return clean;
+
+  // If no scheme and it's likely a domain, add https://
+  return "https://" + trimmed;
 };
 
 /**

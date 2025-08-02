@@ -4,6 +4,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { getTopTemplates } from "../services/TemplateService";
 import { getGuestTemplates } from "../utils/guestTemplates";
+import { doLaunch } from "../utils/guestTemplates";
+import { purgeOldGuestTemplates } from "../utils/guestTemplates";
 import { useAuth } from "../auth/AuthContext";
 
 
@@ -39,15 +41,7 @@ import { Card, CardContent } from "../components/ui/Card";
 import StatCard from "./StatCard";
 import { useNavigate } from "react-router-dom";
 
-const handleLaunch = async (id) => {
-  try {
-    await axios.post(`http://localhost:5000/api/templates/${id}/launch`);
-    alert("✅ Template launched!");
-  } catch (err) {
-    console.error("🚨 Launch failed", err.response?.data || err.message);
-    alert("❌ Launch failed: " + (err.response?.data?.details || err.message));
-  }
-};
+
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -56,10 +50,39 @@ export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterActive, setFilterActive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const freshTemplates = purgeOldGuestTemplates();
+
 
   const { user } = useAuth(); // 👈 get current user
 
+  
+  const handleLaunch = async (template) => {
+  try {
+    const hasApps = Array.isArray(template.apps) && template.apps.length > 0;
+    const hasWebsites = Array.isArray(template.websites) && template.websites.length > 0;
+
+    if (!hasApps && !hasWebsites) {
+      alert("⚠️ This template has no apps or websites to launch.");
+      return;
+    }
+
+    if (user && template._id) {
+      // Logged-in user: call backend launch
+      await axios.post(`http://localhost:5000/api/templates/${template._id}/launch`);
+      alert("✅ Template launched!");
+    } else {
+      // Guest user: launch directly from local template
+      await doLaunch(template); // Safe now even if only apps/websites present
+      alert("✅ Guest template launched!");
+    }
+  } catch (err) {
+    console.error("🚨 Launch failed", err.response?.data || err.message);
+    alert("❌ Launch failed: " + (err.response?.data?.details || err.message));
+  }
+};
+
 useEffect(() => {
+  purgeOldGuestTemplates(); 
   const fetchTopTemplates = async () => {
     setIsLoading(true);
     try {
@@ -354,7 +377,7 @@ useEffect(() => {
     {/* Action Buttons */}
     <div className="flex gap-3 pt-4">
       <button
-        onClick={() => handleLaunch(template._id)}
+        onClick={() => handleLaunch(template)}
         className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 group/launch shadow-lg"
       >
         <Rocket className="w-4 h-4 group-hover/launch:scale-110 transition-transform duration-300" />

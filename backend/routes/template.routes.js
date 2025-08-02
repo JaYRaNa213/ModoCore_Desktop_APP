@@ -19,9 +19,9 @@ router.put("/:id", authMiddleware, EditTemplate);
 router.delete("/:id", authMiddleware, deleteTemplate);
 
 // ✅ Public: Fetch and use templates
-router.get("/",authMiddleware, getAllTemplates);
-router.get("/:id",authMiddleware, getTemplateById);
-router.post("/:id/use",authMiddleware, incrementUsage);
-router.post("/:id/launch",authMiddleware, launchTemplate);
+router.get("/", getAllTemplates);
+router.get("/:id", getTemplateById);
+router.post("/:id/use", incrementUsage);
+router.post("/:id/launch", launchTemplate);
 
 export default router;
