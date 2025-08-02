@@ -29,6 +29,8 @@ import {
   Globe,
   Monitor,
 } from "lucide-react";
+import { useAuth } from "../auth/AuthContext";
+import { getGuestTemplates } from "../utils/guestTemplates";
 
 export default function Templates() {
   const [templates, setTemplates] = useState([]);
@@ -37,23 +39,34 @@ export default function Templates() {
   const [viewMode, setViewMode] = useState("grid"); // grid or list
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const { user } = useAuth(); // check if user is logged in
+
 
   useEffect(() => {
-    const fetchTemplates = async () => {
-      try {
-        setIsLoading(true);
+  const fetchTemplates = async () => {
+    setIsLoading(true);
+
+    try {
+      if (user) {
+        // Logged in: fetch from backend
         const response = await axios.get("http://localhost:5000/api/templates");
         setTemplates(response.data);
-      } catch (error) {
-        console.error("Error fetching templates:", error);
-        toast.error("Failed to load templates");
-      } finally {
-        setIsLoading(false);
+      } else {
+        // Guest: fetch from localStorage
+        const guestTemplates = getGuestTemplates();
+        setTemplates(guestTemplates);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching templates:", error);
+      toast.error("Failed to load templates");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    fetchTemplates();
-  }, []);
+  fetchTemplates();
+}, [user]);
+
 
   const handleLaunch = async (id, title) => {
     try {

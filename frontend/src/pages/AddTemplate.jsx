@@ -47,6 +47,9 @@ export default function AddTemplate() {
   const [showWebTips, setShowWebTips] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth(); // check if user is logged in
+
+
 
   const handleAddApp = () => setApps([...apps, ""]);
   const handleAddWebsite = () => setWebsites([...websites, ""]);
@@ -77,7 +80,7 @@ export default function AddTemplate() {
     }
   };
 
-  const { user } = useAuth(); // ✅ get user
+   
 
   const handleSubmit = async (e) => {
   e.preventDefault();

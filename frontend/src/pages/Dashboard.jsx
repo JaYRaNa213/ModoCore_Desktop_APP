@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { getTopTemplates } from "../services/TemplateService";
+import { getGuestTemplates } from "../utils/guestTemplates";
+import { useAuth } from "../auth/AuthContext";
+
+
 import {
   Plus,
   BookOpen,
@@ -53,27 +57,40 @@ export default function Dashboard() {
   const [filterActive, setFilterActive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchTopTemplates = async () => {
-      try {
-        setIsLoading(true);
-        const data = await getTopTemplates(6);
-        if (Array.isArray(data)) {
-          setTopTemplates(data);
-        } else {
-          setTopTemplates([]);
-          console.warn("Expected array but got:", data);
-        }
-      } catch (error) {
-        console.error("Error fetching top templates:", error);
-        setTopTemplates([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const { user } = useAuth(); // 👈 get current user
 
-    fetchTopTemplates();
-  }, []);
+useEffect(() => {
+  const fetchTopTemplates = async () => {
+    setIsLoading(true);
+    try {
+      let data = [];
+
+      if (user) {
+        // Logged-in: get top from backend
+        const backendData = await getTopTemplates(6);
+        data = Array.isArray(backendData) ? backendData : [];
+      } else {
+        // Guest: get from localStorage
+        const guestTemplates = getGuestTemplates();
+        data = guestTemplates.sort((a, b) => {
+          const aTime = new Date(a.createdAt).getTime();
+          const bTime = new Date(b.createdAt).getTime();
+          return bTime - aTime; // latest first
+        }).slice(0, 3); // take top 3
+      }
+
+      setTopTemplates(data);
+    } catch (error) {
+      console.error("Error fetching templates:", error);
+      setTopTemplates([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  fetchTopTemplates();
+}, [user]);
+
 
   const userTemplatesCount = topTemplates.length;
   const totalUsage = topTemplates.reduce((acc, template) => acc + (template.usageCount || 0), 0);

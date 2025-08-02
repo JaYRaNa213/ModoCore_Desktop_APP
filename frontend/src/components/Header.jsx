@@ -185,7 +185,7 @@ export default function Header() {
                     className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                   >
                     <Sparkles className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
-                    Get Started
+                    Register
                   </Link>
                 </div>
               )}

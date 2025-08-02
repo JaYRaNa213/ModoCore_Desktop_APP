@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
+import toast from "react-hot-toast"; 
 
 export default function Register() {
   const { login } = useAuth();
@@ -43,8 +44,12 @@ export default function Register() {
         throw new Error(err.message || "Registration failed");
       }
 
+      // ✅ Show success and go to login
+toast.success("Registration successful! Please log in.");
+navigate("/login");
+
       // Auto-login after registration
-      const loginRes = await fetch("http://localhost:5000/api/auth/login", {
+      const loginRes = await fetch("http://localhost:5000/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,6 +69,17 @@ export default function Register() {
       login(data.user); // store user in context & localStorage
 
       navigate("/");
+
+
+//       toast.success("Registration successful! Please log in.");
+// navigate("/login");
+
+
+
+
+
+
+
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {
