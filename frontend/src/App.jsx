@@ -58,9 +58,9 @@ export default function App() {
             <Route
   path="/add-template"
   element={
-    <PrivateRoute>
+    // <PrivateRoute>
       <AddTemplate />
-    </PrivateRoute>
+    // </PrivateRoute>
   }
 />
 

@@ -24,6 +24,7 @@ import {
   Calendar,
 } from "lucide-react";
 
+
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 import { Textarea } from "../components/ui/Textarea";
@@ -31,6 +32,9 @@ import { Card, CardContent } from "../components/ui/Card";
 
 
 import { createTemplate } from "../services/TemplateService";
+
+import { addGuestTemplate } from "../utils/guestTemplates";
+import { useAuth } from "../auth/AuthContext";
 
 
 export default function AddTemplate() {
@@ -73,43 +77,53 @@ export default function AddTemplate() {
     }
   };
 
+  const { user } = useAuth(); // ✅ get user
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  e.preventDefault();
+  setLoading(true);
 
-    const filteredApps = apps.filter((a) => a.trim() !== "");
-    const filteredWebsites = websites.filter((w) => w.trim() !== "");
+  const filteredApps = apps.filter((a) => a.trim() !== "");
+  const filteredWebsites = websites.filter((w) => w.trim() !== "");
 
-    const newTemplate = {
-      title: title.trim(),
-      description: description.trim(),
-      schedule: schedule.trim(),
-      apps: filteredApps,
-      websites: filteredWebsites,
-    };
-
-    try {
-      if (!newTemplate.title) {
-        toast.error("Template title is required.");
-        setLoading(false);
-        return;
-      }
-
-      if (filteredApps.length === 0 && filteredWebsites.length === 0) {
-        toast.error("Add at least one app or website.");
-        setLoading(false);
-        return;
-      }
-
-      await createTemplate(newTemplate);
-      toast.success("Template created successfully!");
-      navigate("/");
-    } catch (err) {
-      console.error("Error creating template:", err);
-      toast.error("Something went wrong. Please try again.");
-      setLoading(false);
-    }
+  const newTemplate = {
+    title: title.trim(),
+    description: description.trim(),
+    schedule: schedule.trim(),
+    apps: filteredApps,
+    websites: filteredWebsites,
+    createdAt: new Date().toISOString(), // ✅ for guest expiry tracking
   };
+
+  try {
+    if (!newTemplate.title) {
+      toast.error("Template title is required.");
+      setLoading(false);
+      return;
+    }
+
+    if (filteredApps.length === 0 && filteredWebsites.length === 0) {
+      toast.error("Add at least one app or website.");
+      setLoading(false);
+      return;
+    }
+
+    if (user) {
+      await createTemplate(newTemplate); // save to DB
+      toast.success("Template saved to your account!");
+    } else {
+      addGuestTemplate(newTemplate); // ✅ save to localStorage
+      toast.success("Template saved locally for 3 days!");
+    }
+
+    navigate("/");
+  } catch (err) {
+    console.error("Error creating template:", err);
+    toast.error("Something went wrong. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
@@ -455,7 +469,7 @@ export default function AddTemplate() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .animation-delay-2000 {
           animation-delay: 2s;
         }

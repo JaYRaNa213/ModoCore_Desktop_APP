@@ -1,47 +1,37 @@
-import axios from "axios";
-
-// Detect environment
-const isDev = process.env.NODE_ENV === "development";
-
-// Define backend URL based on environment
-const BASE_URL = isDev
-  ? "http://localhost:5000/api/templates" // Your dev API
-  : "http://localhost:5000/api/templates"; // Adjust this for production API if needed
+// services/TemplateService.js
+import api from "./api";
 
 export const createTemplate = async (data) => {
-  const res = await axios.post(BASE_URL, data);
+  const res = await api.post("/templates", data);
   return res.data;
 };
 
 export const getAllTemplates = async () => {
-  const res = await axios.get(BASE_URL);
+  const res = await api.get("/templates");
   return res.data;
 };
 
 export const getTemplateById = async (id) => {
-  const res = await axios.get(`${BASE_URL}/${id}`);
+  const res = await api.get(`/templates/${id}`);
   return res.data;
 };
 
 export const incrementTemplateUsage = async (id) => {
-  const res = await axios.post(`${BASE_URL}/${id}/use`);
+  const res = await api.post(`/templates/${id}/use`);
   return res.data;
 };
 
 export const getTopTemplates = async (limit = 3) => {
-  const res = await axios.get(`${BASE_URL}?limit=${limit}`);
+  const res = await api.get(`/templates?limit=${limit}`);
   return res.data.slice(0, limit);
 };
 
-
 export const deleteTemplate = async (id) => {
-  const res = await axios.delete(`${BASE_URL}/${id}`);
+  const res = await api.delete(`/templates/${id}`);
   return res.data;
 };
 
-
-
 export const updateTemplate = async (id, data) => {
-  const res = await axios.put(`${BASE_URL}/${id}`, data);
+  const res = await api.put(`/templates/${id}`, data);
   return res.data;
 };

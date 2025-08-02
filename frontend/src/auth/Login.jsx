@@ -1,7 +1,7 @@
-// src/auth/Login.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import api from "../services/api"; // make sure path is correct
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -17,22 +17,23 @@ export default function Login() {
     setError(""); // reset error on submit
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+      const res = await api.post("http://localhost:5000/api/users/login", form);
+      const data = res.data;
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Login failed");
+      // Save token to localStorage
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
 
-      // Store full user object in context
+      // Store user info in context
       login(data.user);
 
-      // Redirect after login
+      // Redirect
       navigate("/");
     } catch (err) {
-      setError(err.message);
+      const message =
+        err.response?.data?.message || "Login failed. Please try again.";
+      setError(message);
     }
   };
 

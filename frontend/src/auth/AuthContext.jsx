@@ -4,8 +4,8 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem("contextswap-user");
-    return stored ? JSON.parse(stored) : null;
+    const storedUser = localStorage.getItem("contextswap-user");
+    return storedUser ? JSON.parse(storedUser) : null;
   });
 
   const [token, setToken] = useState(() => {
@@ -27,8 +27,36 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    // Future enhancement: validate token/session
-  }, []);
+    // Optional: validate token with backend (if needed)
+    const validateSession = async () => {
+      if (token) {
+        try {
+          // Optionally call: await axios.get("/auth/validate-token", { headers: { Authorization: `Bearer ${token}` } });
+          // If invalid: logout();
+        } catch (err) {
+          console.error("Token validation failed:", err);
+          logout();
+        }
+      }
+    };
+
+    validateSession();
+  }, [token]);
+
+  useEffect(() => {
+    // Auto-sync changes back to localStorage
+    if (user) {
+      localStorage.setItem("contextswap-user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("contextswap-user");
+    }
+
+    if (token) {
+      localStorage.setItem("contextswap-token", token);
+    } else {
+      localStorage.removeItem("contextswap-token");
+    }
+  }, [user, token]);
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout }}>

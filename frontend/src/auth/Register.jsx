@@ -1,17 +1,26 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../auth/AuthContext"; // adjust path if needed
+import { useAuth } from "../auth/AuthContext";
 
 export default function Register() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,21 +29,26 @@ export default function Register() {
 
     try {
       // Register user
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      const registerRes = await fetch("http://localhost:5000/api/users/register", {
+
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(form),
       });
 
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.message || "Registration failed");
+      if (!registerRes.ok) {
+        const err = await registerRes.json();
+        throw new Error(err.message || "Registration failed");
       }
 
-      // Auto-login after successful register
+      // Auto-login after registration
       const loginRes = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           email: form.email,
           password: form.password,
@@ -42,12 +56,13 @@ export default function Register() {
       });
 
       if (!loginRes.ok) {
-        const errData = await loginRes.json();
-        throw new Error(errData.message || "Auto-login failed");
+        const err = await loginRes.json();
+        throw new Error(err.message || "Login failed");
       }
 
       const data = await loginRes.json();
-      login(data.user); // store user in context (already includes token in localStorage)
+      login(data.user); // store user in context & localStorage
+
       navigate("/");
     } catch (err) {
       setError(err.message || "Something went wrong");
@@ -62,11 +77,13 @@ export default function Register() {
         <h2 className="text-3xl font-bold text-center mb-6 text-indigo-400">
           Create Account
         </h2>
+
         {error && (
           <div className="bg-red-500 text-white px-4 py-2 mb-4 rounded">
             {error}
           </div>
         )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
@@ -103,6 +120,7 @@ export default function Register() {
             {loading ? "Creating..." : "Sign Up"}
           </button>
         </form>
+
         <p className="mt-4 text-sm text-gray-400 text-center">
           Already have an account?{" "}
           <Link
