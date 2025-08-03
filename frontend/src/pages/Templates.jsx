@@ -30,7 +30,12 @@ import {
   Monitor,
 } from "lucide-react";
 import { useAuth } from "../auth/AuthContext";
-import { getGuestTemplates } from "../utils/guestTemplates";
+import { doLaunch } from "../utils/guestTemplates";
+import { getGuestTemplates,saveGuestTemplates } from "../utils/guestTemplates";
+import { purgeOldGuestTemplates } from "../utils/guestTemplates";
+
+import { deleteGuestTemplate } from "../utils/guestTemplates"; 
+
 
 export default function Templates() {
   const [templates, setTemplates] = useState([]);
@@ -39,8 +44,8 @@ export default function Templates() {
   const [viewMode, setViewMode] = useState("grid"); // grid or list
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
-  const { user } = useAuth(); // check if user is logged in
-
+  const { user } = useAuth(); 
+  
 
   useEffect(() => {
   const fetchTemplates = async () => {
@@ -68,33 +73,63 @@ export default function Templates() {
 }, [user]);
 
 
-  const handleLaunch = async (id, title) => {
-    try {
-      await axios.post(`http://localhost:5000/api/templates/${id}/launch`);
-      toast.success(`✅ ${title} launched successfully!`);
-      
-      // Update usage count locally
-      setTemplates(prev => prev.map(t => 
-        t._id === id ? { ...t, usageCount: (t.usageCount || 0) + 1 } : t
-      ));
-    } catch (err) {
-      console.error("🚨 Launch failed", err.response?.data || err.message);
-      toast.error("❌ Launch failed: " + (err.response?.data?.details || err.message));
+  
+  const handleLaunch = async (template) => {
+  try {
+    const hasApps = Array.isArray(template.apps) && template.apps.length > 0;
+    const hasWebsites = Array.isArray(template.websites) && template.websites.length > 0;
+
+    if (!hasApps && !hasWebsites) {
+      alert("⚠️ This template has no apps or websites to launch.");
+      return;
     }
-  };
 
-  const handleDelete = async (id, title) => {
-    if (!window.confirm(`Are you sure you want to delete "${title}"?`)) return;
+    if (user && template._id) {
+      // Logged-in user: call backend launch
+      await axios.post(`http://localhost:5000/api/templates/${template._id}/launch`);
+      alert("✅ Template launched!");
+    } else {
+      // Guest user: launch directly from local template
+      await doLaunch(template); // Safe now even if only apps/websites present
+      alert("✅ Guest template launched!");
+    }
+  } catch (err) {
+    console.error("🚨 Launch failed", err.response?.data || err.message);
+    alert("❌ Launch failed: " + (err.response?.data?.details || err.message));
+  }
+};
 
-    try {
-      await axios.delete(`http://localhost:5000/api/templates/${id}`);
+
+const handleDelete = async (id, title) => {
+  if (!window.confirm(`Are you sure you want to delete "${title}"?`)) return;
+
+  try {
+    if (user) {
+      const token = localStorage.getItem("contextswap-token");
+      const res = await axios.delete(`http://localhost:5000/api/templates/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Deleted from server:", res.data);
       toast.success("Template deleted successfully");
-      setTemplates(templates.filter((t) => t._id !== id));
-    } catch (err) {
-      console.error("Delete failed", err);
-      toast.error("Failed to delete template");
+    } else {
+      deleteGuestTemplate(id);
+      toast.success("Template deleted locally");
     }
-  };
+
+    // ✅ Fix: Handle both MongoDB (_id) and guest (id)
+    setTemplates(prev =>
+      prev.filter(template => template._id !== id && template.id !== id)
+    );
+  } catch (err) {
+    console.error("Delete failed:", err.response?.data || err.message);
+    toast.error("Failed to delete template");
+  }
+};
+
+
+
 
   const filteredTemplates = templates.filter(template =>
     template.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -388,12 +423,12 @@ export default function Templates() {
                       {/* Action Buttons */}
                       <div className="flex gap-3 pt-4">
                         <button
-                          onClick={() => handleLaunch(template._id, template.title)}
-                          className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 group/launch"
-                        >
-                          <Rocket className="w-4 h-4 group-hover/launch:scale-110 transition-transform duration-300" />
-                          Launch
-                        </button>
+        onClick={() => handleLaunch(template)}
+        className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 group/launch shadow-lg"
+      >
+        <Rocket className="w-4 h-4 group-hover/launch:scale-110 transition-transform duration-300" />
+        Launch
+      </button>
 
                         <Link
                           to={`/template/${template._id}`}

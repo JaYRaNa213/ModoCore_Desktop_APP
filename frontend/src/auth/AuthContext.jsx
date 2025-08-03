@@ -4,9 +4,15 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("contextswap-user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+  const storedUser = localStorage.getItem("contextswap-user");
+  try {
+    return storedUser && storedUser !== "undefined" ? JSON.parse(storedUser) : null;
+  } catch (err) {
+    console.error("Failed to parse stored user:", err);
+    return null;
+  }
+});
+
 
   const [token, setToken] = useState(() => {
     return localStorage.getItem("contextswap-token") || null;

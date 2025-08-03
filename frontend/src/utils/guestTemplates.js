@@ -60,3 +60,8 @@ export function doLaunch(template) {
   });
 }
 
+export function deleteGuestTemplate(id) {
+  const templates = getGuestTemplates();
+  const updated = templates.filter(t => t._id !== id);
+  saveGuestTemplates(updated); // make sure this updates localStorage
+}

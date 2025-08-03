@@ -3,36 +3,89 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button } from "../components/ui/Button";
 import { Pencil, Rocket, ArrowLeft } from "lucide-react";
+import { getGuestTemplates } from "../utils/guestTemplates";
+import { doLaunch } from "../utils/guestTemplates";
+import { purgeOldGuestTemplates } from "../utils/guestTemplates";
+import { useAuth } from "../auth/AuthContext";
+
 
 export default function TemplateDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [template, setTemplate] = useState(null);
+  const guestTemplates = getGuestTemplates();
+  const found = guestTemplates.find(t => t._id === id); // for guest
 
-  useEffect(() => {
-    const fetchTemplate = async () => {
-      try {
+  // const res = await axios.get(`/api/templates/${id}`); // for logged in
+
+  const { user } = useAuth(); 
+  
+
+  // useEffect(() => {
+  //   const fetchTemplate = async () => {
+  //     try {
+  //       const res = await axios.get(`http://localhost:5000/api/templates/${id}`);
+  //       setTemplate(res.data);
+  //     } catch (err) {
+  //       console.error("Error loading template:", err);
+  //       alert("Template not found");
+  //       navigate("/templates");
+  //     }
+  //   };
+
+  //   fetchTemplate();
+  // }, [id, navigate]);
+
+  
+    useEffect(() => {
+  const fetchTemplate = async () => {
+    try {
+      if (user) {
+        // Logged-in: fetch from backend
         const res = await axios.get(`http://localhost:5000/api/templates/${id}`);
         setTemplate(res.data);
-      } catch (err) {
-        console.error("Error loading template:", err);
-        alert("Template not found");
-        navigate("/templates");
+      } else {
+        // Guest: find from localStorage
+        const guestTemplates = getGuestTemplates();
+        const found = guestTemplates.find((t) => t._id === id);
+        if (!found) throw new Error("Template not found in guest templates");
+        setTemplate(found);
       }
-    };
-
-    fetchTemplate();
-  }, [id, navigate]);
-
-  const handleLaunch = async () => {
-    try {
-      await axios.post(`http://localhost:5000/api/templates/${id}/launch`);
-      alert("Template launched!");
     } catch (err) {
-      console.error("Launch failed", err);
-      alert("Failed to launch template.");
+      console.error("Error loading template:", err);
+      alert("Template not found.");
+      navigate("/templates");
     }
   };
+
+  fetchTemplate();
+}, [id, user, navigate]);
+
+
+  const handleLaunch = async (template) => {
+  try {
+    const hasApps = Array.isArray(template.apps) && template.apps.length > 0;
+    const hasWebsites = Array.isArray(template.websites) && template.websites.length > 0;
+
+    if (!hasApps && !hasWebsites) {
+      alert("⚠️ This template has no apps or websites to launch.");
+      return;
+    }
+
+    if (user && template._id) {
+      
+      await axios.post(`http://localhost:5000/api/templates/${template._id}/launch`);
+      alert("✅ Template launched!");
+    } else {
+      
+      await doLaunch(template); 
+      alert("✅ Guest template launched!");
+    }
+  } catch (err) {
+    console.error("🚨 Launch failed", err.response?.data || err.message);
+    alert("❌ Launch failed: " + (err.response?.data?.details || err.message));
+  }
+};
 
   if (!template)
     return <div className="p-6 text-gray-600">Loading template...</div>;
@@ -101,12 +154,13 @@ export default function TemplateDetail() {
         </div>
 
         <Button
-          onClick={handleLaunch}
-          className="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-2"
-        >
-          <Rocket size={18} />
-          Launch This Template
-        </Button>
+  onClick={() => handleLaunch(template)}
+  className="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-2"
+>
+  <Rocket size={18} />
+  Launch This Template
+</Button>
+
       </div>
     </div>
   );
