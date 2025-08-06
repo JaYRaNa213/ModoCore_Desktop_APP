@@ -55,14 +55,24 @@ export default function Register() {
       });
 
       if (!loginRes.ok) {
-        const err = await loginRes.json();
-        throw new Error(err.message || "Login failed after registration");
-      }
+  const err = await loginRes.json();
+  throw new Error(err.message || "Login failed after registration");
+}
 
-      const data = await loginRes.json();
-      login(data.user, data.token); // Set user and token in context
+const data = await loginRes.json();
+login(data.user, data.token); // ✅ This sets user context
+navigate("/");
 
-      navigate("/");
+
+  //     if (!loginRes.ok) {
+  //       const err = await loginRes.json();
+  //       throw new Error(err.message || "Login failed after registration");
+  //     }
+
+  //     const data = await loginRes.json();
+  //     login(data.user, data.token); // Set user and token in context
+
+      // navigate("/");
 
     } catch (err) {
       setError(err.message || "Something went wrong");

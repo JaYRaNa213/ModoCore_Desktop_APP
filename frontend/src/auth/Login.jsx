@@ -1,13 +1,25 @@
+
+import { useEffect } from "react";
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import api from "../services/api";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const { login } = useAuth();
+  const { login, user } = useAuth();
+
   const navigate = useNavigate();
+  
+useEffect(() => {
+  if (user) {
+    navigate("/");
+  }
+}, [user, navigate]);
+
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -68,14 +80,15 @@ export default function Login() {
           </button>
         </form>
         <p className="text-sm text-neutral-400 mt-4 text-center">
-          Don’t have an account?{" "}
-          <a
-            href="/register"
-            className="text-indigo-400 hover:underline font-medium"
-          >
-            Register
-          </a>
-        </p>
+  Don’t have an account?{" "}
+  <Link
+    to="/register"
+    className="text-indigo-400 hover:underline font-medium"
+  >
+    Register
+  </Link>
+</p>
+        
       </div>
     </div>
   );

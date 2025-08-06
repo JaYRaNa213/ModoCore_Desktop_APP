@@ -4,31 +4,20 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import {
   LogOut,
-  User,
-  Settings,
-  ChevronDown,
   Menu,
   X,
   Zap,
-  Crown,
   Bell,
   Home,
   Target,
   Plus,
   BarChart3,
-  Sparkles,
 } from "lucide-react";
 
 export default function Header() {
   const { user, logout, loading } = useAuth();
   const location = useLocation();
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const handleLogout = () => {
-    logout();
-    setIsUserMenuOpen(false);
-  };
 
   const navLinks = [
     { path: "/", label: "Dashboard", icon: Home },
@@ -39,7 +28,7 @@ export default function Header() {
 
   const isActivePath = (path) => location.pathname === path;
 
-  if (loading) return null; // Prevent render during auth loading
+  if (loading) return null;
 
   return (
     <>
@@ -91,85 +80,16 @@ export default function Header() {
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full animate-pulse"></div>
               </button>
 
+              {/* Auth Section */}
               {user ? (
-                // User Menu
-                <div className="relative">
-                  <button
-                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className="flex items-center gap-3 p-2 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 rounded-xl transition-all duration-300 group"
-                  >
-                    <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                      <User className="w-4 h-4 text-white" />
-                    </div>
-                    <div className="hidden sm:block text-left">
-                      <p className="text-sm font-medium text-white">{user.username}</p>
-                      <p className="text-xs text-gray-400">Pro Member</p>
-                    </div>
-                    <ChevronDown
-                      className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
-                        isUserMenuOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  {isUserMenuOpen && (
-                    <>
-                      <div
-                        className="fixed inset-0 z-10"
-                        onClick={() => setIsUserMenuOpen(false)}
-                      ></div>
-                      <div className="absolute right-0 top-full mt-2 w-64 bg-gray-900/95 backdrop-blur-xl border border-gray-800/50 rounded-2xl shadow-2xl z-20 overflow-hidden">
-                        <div className="p-4 border-b border-gray-800/50">
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-xl flex items-center justify-center">
-                              <User className="w-6 h-6 text-white" />
-                            </div>
-                            <div>
-                              <p className="font-semibold text-white">{user.username}</p>
-                              <p className="text-sm text-gray-400">jay@example.com</p>
-                              <div className="flex items-center gap-1 mt-1">
-                                <Crown className="w-3 h-3 text-amber-400" />
-                                <span className="text-xs text-amber-400 font-medium">Pro Member</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="p-2">
-                          <Link
-                            to="/profile"
-                            onClick={() => setIsUserMenuOpen(false)}
-                            className="flex items-center gap-3 w-full p-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/50 transition-all duration-300 group"
-                          >
-                            <User className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
-                            <span>Profile Settings</span>
-                          </Link>
-
-                          <Link
-                            to="/settings"
-                            onClick={() => setIsUserMenuOpen(false)}
-                            className="flex items-center gap-3 w-full p-3 rounded-xl text-gray-300 hover:text-white hover:bg-gray-800/50 transition-all duration-300 group"
-                          >
-                            <Settings className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
-                            <span>Preferences</span>
-                          </Link>
-
-                          <div className="border-t border-gray-800/50 my-2"></div>
-
-                          <button
-                            onClick={handleLogout}
-                            className="flex items-center gap-3 w-full p-3 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-600/10 transition-all duration-300 group"
-                          >
-                            <LogOut className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
-                            <span>Sign Out</span>
-                          </button>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
+                <button
+                  onClick={logout}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-xl shadow hover:shadow-lg transition-all duration-300"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign Out
+                </button>
               ) : (
-                // Login/Register
                 <div className="flex items-center gap-3">
                   <Link
                     to="/login"
@@ -181,7 +101,6 @@ export default function Header() {
                     to="/register"
                     className="flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
                   >
-                    <Sparkles className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
                     Register
                   </Link>
                 </div>
@@ -218,18 +137,31 @@ export default function Header() {
                     <span>{label}</span>
                   </Link>
                 ))}
+
+                {user && (
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="flex items-center gap-3 w-full p-3 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-600/10 transition-all duration-300 group"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    <span>Sign Out</span>
+                  </button>
+                )}
               </nav>
             </div>
           </div>
         )}
       </header>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Overlay */}
       {isMobileMenuOpen && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
-        ></div>
+        />
       )}
     </>
   );
