@@ -1,6 +1,7 @@
 // launcher.util.js
 import open from "open";
 import { existsSync } from "fs";
+import { spawn } from "child_process";
 import path from "path";
 import AutomationLog from "../models/automationLogs.model.js";
 
@@ -31,18 +32,22 @@ const launchApp = async (rawApp) => {
   const app = rawApp.trim();
   if (!app) return;
 
-  try {
-    const isExePath = app.endsWith(".exe") && existsSync(app);
-    const isFullPath = path.isAbsolute(app) && existsSync(app);
+  const isExePath = app.endsWith(".exe") && existsSync(app);
 
-    if (isExePath || isFullPath) {
-      await open(app, { wait: false });
-    } else {
-      await open(app); // CLI name
+  if (isExePath) {
+    try {
+      spawn(app, [], {
+        detached: true,
+        stdio: "ignore",
+        shell: true, // ✅ important for .exe support on Windows
+      }).unref();
+      console.log(`✅ Launched: ${app}`);
+    } catch (err) {
+      console.error(`❌ Failed to launch app: ${app}`, err.message);
     }
-  } catch (err) {
-    console.error(`❌ Failed to launch app: ${app}`, err.message);
-    throw err;
+  } else {
+    // fallback to open if it's a CLI app
+    await open(app);
   }
 };
 

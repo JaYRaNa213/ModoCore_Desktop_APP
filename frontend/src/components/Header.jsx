@@ -12,7 +12,6 @@ import {
   Zap,
   Crown,
   Bell,
-  Search,
   Home,
   Target,
   Plus,
@@ -21,7 +20,7 @@ import {
 } from "lucide-react";
 
 export default function Header() {
-  const { user, logout } = useAuth();
+  const { user, logout, loading } = useAuth();
   const location = useLocation();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -38,9 +37,9 @@ export default function Header() {
     { path: "/leaderboard", label: "Leaderboard", icon: BarChart3 },
   ];
 
-  const isActivePath = (path) => {
-    return location.pathname === path;
-  };
+  const isActivePath = (path) => location.pathname === path;
+
+  if (loading) return null; // Prevent render during auth loading
 
   return (
     <>
@@ -49,10 +48,7 @@ export default function Header() {
           <div className="flex items-center justify-between h-16">
             {/* Logo Section */}
             <div className="flex items-center gap-8">
-              <Link
-                to="/"
-                className="flex items-center gap-3 group"
-              >
+              <Link to="/" className="flex items-center gap-3 group">
                 <div className="w-10 h-10 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
                   <Zap className="w-6 h-6 text-white" />
                 </div>
@@ -76,9 +72,11 @@ export default function Header() {
                         : "text-gray-300 hover:text-white hover:bg-gray-800/50"
                     }`}
                   >
-                    <Icon className={`w-4 h-4 transition-transform duration-300 ${
-                      isActivePath(path) ? "" : "group-hover:scale-110"
-                    }`} />
+                    <Icon
+                      className={`w-4 h-4 transition-transform duration-300 ${
+                        isActivePath(path) ? "" : "group-hover:scale-110"
+                      }`}
+                    />
                     <span>{label}</span>
                   </Link>
                 ))}
@@ -87,8 +85,6 @@ export default function Header() {
 
             {/* Right Section */}
             <div className="flex items-center gap-4">
-              {/*Button (Desktop) */}
-              
               {/* Notifications */}
               <button className="relative p-2 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 rounded-xl text-gray-300 hover:text-white transition-all duration-300 group">
                 <Bell className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
@@ -96,7 +92,7 @@ export default function Header() {
               </button>
 
               {user ? (
-                /* User Menu */
+                // User Menu
                 <div className="relative">
                   <button
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
@@ -109,12 +105,13 @@ export default function Header() {
                       <p className="text-sm font-medium text-white">{user.username}</p>
                       <p className="text-xs text-gray-400">Pro Member</p>
                     </div>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
-                      isUserMenuOpen ? "rotate-180" : ""
-                    }`} />
+                    <ChevronDown
+                      className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${
+                        isUserMenuOpen ? "rotate-180" : ""
+                      }`}
+                    />
                   </button>
 
-                  {/* User Dropdown */}
                   {isUserMenuOpen && (
                     <>
                       <div
@@ -137,7 +134,7 @@ export default function Header() {
                             </div>
                           </div>
                         </div>
-                        
+
                         <div className="p-2">
                           <Link
                             to="/profile"
@@ -147,7 +144,7 @@ export default function Header() {
                             <User className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
                             <span>Profile Settings</span>
                           </Link>
-                          
+
                           <Link
                             to="/settings"
                             onClick={() => setIsUserMenuOpen(false)}
@@ -156,9 +153,9 @@ export default function Header() {
                             <Settings className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
                             <span>Preferences</span>
                           </Link>
-                          
+
                           <div className="border-t border-gray-800/50 my-2"></div>
-                          
+
                           <button
                             onClick={handleLogout}
                             className="flex items-center gap-3 w-full p-3 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-600/10 transition-all duration-300 group"
@@ -172,7 +169,7 @@ export default function Header() {
                   )}
                 </div>
               ) : (
-                /* Auth Links */
+                // Login/Register
                 <div className="flex items-center gap-3">
                   <Link
                     to="/login"
@@ -195,11 +192,7 @@ export default function Header() {
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="lg:hidden p-2 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 rounded-xl text-gray-300 hover:text-white transition-all duration-300"
               >
-                {isMobileMenuOpen ? (
-                  <X className="w-5 h-5" />
-                ) : (
-                  <Menu className="w-5 h-5" />
-                )}
+                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
             </div>
           </div>
@@ -225,9 +218,6 @@ export default function Header() {
                     <span>{label}</span>
                   </Link>
                 ))}
-                
-          
-                
               </nav>
             </div>
           </div>

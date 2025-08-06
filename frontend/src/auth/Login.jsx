@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "./AuthContext";
-import api from "../services/api"; // make sure path is correct
+import { useAuth } from "../auth/AuthContext";
+import api from "../services/api";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -14,21 +14,16 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(""); // reset error on submit
+    setError("");
 
     try {
       const res = await api.post("http://localhost:5000/api/users/login", form);
       const data = res.data;
 
-      // Save token to localStorage
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-      }
+      // Save user & token in context
+      login(data.user, data.token);
 
-      // Store user info in context
-      login(data.user);
-
-      // Redirect
+      // Redirect to dashboard
       navigate("/");
     } catch (err) {
       const message =

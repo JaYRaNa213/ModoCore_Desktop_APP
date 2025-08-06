@@ -3,27 +3,36 @@ import { createContext, useContext, useEffect, useState } from "react";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
-  const storedUser = localStorage.getItem("contextswap-user");
-  try {
-    return storedUser && storedUser !== "undefined" ? JSON.parse(storedUser) : null;
-  } catch (err) {
-    console.error("Failed to parse stored user:", err);
-    return null;
-  }
-});
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true); // <-- NEW
 
+  useEffect(() => {
+    // Load user and token from localStorage on mount
+    const storedUser = localStorage.getItem("contextswap-user");
+    const storedToken = localStorage.getItem("contextswap-token");
 
-  const [token, setToken] = useState(() => {
-    return localStorage.getItem("contextswap-token") || null;
-  });
+    try {
+      if (storedUser && storedUser !== "undefined") {
+        setUser(JSON.parse(storedUser));
+      }
+      if (storedToken) {
+        setToken(storedToken);
+      }
+    } catch (err) {
+      console.error("Failed to parse auth data:", err);
+    } finally {
+      setLoading(false); // <-- Mark loading complete
+    }
+  }, []);
 
   const login = (userData, authToken) => {
-    setUser(userData);
-    setToken(authToken);
-    localStorage.setItem("contextswap-user", JSON.stringify(userData));
-    localStorage.setItem("contextswap-token", authToken);
-  };
+  setUser(userData);
+  setToken(authToken);
+  localStorage.setItem("contextswap-user", JSON.stringify(userData));
+  localStorage.setItem("contextswap-token", authToken);
+};
+
 
   const logout = () => {
     setUser(null);
@@ -32,13 +41,12 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("contextswap-token");
   };
 
+  // Optional token validation
   useEffect(() => {
-    // Optional: validate token with backend (if needed)
     const validateSession = async () => {
       if (token) {
         try {
-          // Optionally call: await axios.get("/auth/validate-token", { headers: { Authorization: `Bearer ${token}` } });
-          // If invalid: logout();
+          // await axios.get("/auth/validate-token", { headers: { Authorization: `Bearer ${token}` } });
         } catch (err) {
           console.error("Token validation failed:", err);
           logout();
@@ -49,23 +57,8 @@ export function AuthProvider({ children }) {
     validateSession();
   }, [token]);
 
-  useEffect(() => {
-    // Auto-sync changes back to localStorage
-    if (user) {
-      localStorage.setItem("contextswap-user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("contextswap-user");
-    }
-
-    if (token) {
-      localStorage.setItem("contextswap-token", token);
-    } else {
-      localStorage.removeItem("contextswap-token");
-    }
-  }, [user, token]);
-
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

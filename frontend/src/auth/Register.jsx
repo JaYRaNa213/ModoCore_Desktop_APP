@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
-import toast from "react-hot-toast"; 
+import toast from "react-hot-toast";
 
 export default function Register() {
   const { login } = useAuth();
@@ -31,11 +31,8 @@ export default function Register() {
     try {
       // Register user
       const registerRes = await fetch("http://localhost:5000/api/users/register", {
-
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
 
@@ -44,16 +41,13 @@ export default function Register() {
         throw new Error(err.message || "Registration failed");
       }
 
-      // ✅ Show success and go to login
-toast.success("Registration successful! Please log in.");
-navigate("/login");
+      // Optional toast
+      toast.success("Registration successful!");
 
-      // Auto-login after registration
+      // Auto-login
       const loginRes = await fetch("http://localhost:5000/api/users/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: form.email,
           password: form.password,
@@ -62,23 +56,13 @@ navigate("/login");
 
       if (!loginRes.ok) {
         const err = await loginRes.json();
-        throw new Error(err.message || "Login failed");
+        throw new Error(err.message || "Login failed after registration");
       }
 
       const data = await loginRes.json();
-      login(data.user); // store user in context & localStorage
+      login(data.user, data.token); // Set user and token in context
 
       navigate("/");
-
-
-//       toast.success("Registration successful! Please log in.");
-// navigate("/login");
-
-
-
-
-
-
 
     } catch (err) {
       setError(err.message || "Something went wrong");
@@ -139,10 +123,7 @@ navigate("/login");
 
         <p className="mt-4 text-sm text-gray-400 text-center">
           Already have an account?{" "}
-          <Link
-            to="/login"
-            className="text-indigo-400 hover:underline font-medium"
-          >
+          <Link to="/login" className="text-indigo-400 hover:underline font-medium">
             Log in
           </Link>
         </p>
