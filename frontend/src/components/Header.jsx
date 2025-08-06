@@ -1,6 +1,5 @@
-// src/components/Header.jsx
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom"; // ✅ Add useNavigate
 import { useAuth } from "../auth/AuthContext";
 import {
   LogOut,
@@ -17,6 +16,7 @@ import {
 export default function Header() {
   const { user, logout, loading } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate(); // ✅ Fix: added
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
@@ -45,7 +45,9 @@ export default function Header() {
                   <h1 className="text-xl font-bold bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent group-hover:from-purple-300 group-hover:via-white group-hover:to-purple-300 transition-all duration-300">
                     ContextSwap
                   </h1>
-                  <p className="text-xs text-gray-400 -mt-1">Workspace Templates</p>
+                  <p className="text-xs text-gray-400 -mt-1">
+                    Workspace Templates
+                  </p>
                 </div>
               </Link>
 
@@ -83,7 +85,10 @@ export default function Header() {
               {/* Auth Section */}
               {user ? (
                 <button
-                  onClick={logout}
+                  onClick={() => {
+                    logout();
+                    navigate("/login"); // ✅ Redirect after logout
+                  }}
                   className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-xl shadow hover:shadow-lg transition-all duration-300"
                 >
                   <LogOut className="w-4 h-4" />
@@ -111,7 +116,11 @@ export default function Header() {
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="lg:hidden p-2 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 rounded-xl text-gray-300 hover:text-white transition-all duration-300"
               >
-                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {isMobileMenuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
               </button>
             </div>
           </div>
@@ -143,6 +152,7 @@ export default function Header() {
                     onClick={() => {
                       logout();
                       setIsMobileMenuOpen(false);
+                      navigate("/login"); // ✅ Fix logout redirect
                     }}
                     className="flex items-center gap-3 w-full p-3 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-600/10 transition-all duration-300 group"
                   >

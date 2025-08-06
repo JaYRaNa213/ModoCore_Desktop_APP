@@ -41,27 +41,32 @@ export default function Register() {
         throw new Error(err.message || "Registration failed");
       }
 
-      // Optional toast
       toast.success("Registration successful!");
+navigate("/login"); // 👈 Go to login manually
 
-      // Auto-login
-      const loginRes = await fetch("http://localhost:5000/api/users/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: form.email,
-          password: form.password,
-        }),
-      });
+      // Optional toast
+      // toast.success("Registration successful!");
 
-      if (!loginRes.ok) {
-  const err = await loginRes.json();
-  throw new Error(err.message || "Login failed after registration");
-}
+      // // Auto-login
+      // const loginRes = await fetch("http://localhost:5000/api/users/login", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({
+      //     email: form.email,
+      //     password: form.password,
+      //   }),
+      // });
+      
 
-const data = await loginRes.json();
-login(data.user, data.token); // ✅ This sets user context
-navigate("/");
+
+//       if (!loginRes.ok) {
+//   const err = await loginRes.json();
+//   throw new Error(err.message || "Login failed after registration");
+// }
+
+// const data = await loginRes.json();
+// login(data.user, data.token); // ✅ This sets user context
+// navigate("/");
 
 
   //     if (!loginRes.ok) {

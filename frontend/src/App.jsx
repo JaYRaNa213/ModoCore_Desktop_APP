@@ -1,4 +1,3 @@
-// src/App.jsx
 import { Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Templates from "./pages/Templates";
@@ -22,88 +21,60 @@ import WindowControls from "./components/WindowControls";
 
 export default function App() {
   return (
-    <div className="flex h-screen bg-neutral-900 text-white overflow-hidden">
-      {/* Sidebar */}
-      <Sidebar />
+    <Routes>
+      {/* 🔓 Public Routes without layout (Login & Register) */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
-      {/* Right panel */}
-      <div className="relative flex flex-col flex-1">
-        {/* Top window controls (close/min/max) */}
-        <WindowControls />
+      {/* 🧱 Main Layout Routes (With Header + Sidebar) */}
+      <Route
+        path="*"
+        element={
+          <div className="flex h-screen bg-neutral-900 text-white overflow-hidden">
+            {/* Sidebar */}
+            <Sidebar />
 
-        {/* Header bar (below window controls) */}
-        <Header />
+            {/* Right panel */}
+            <div className="relative flex flex-col flex-1">
+              {/* Window controls */}
+              <WindowControls />
 
-        {/* Main content area */}
-        <main className="flex-1 overflow-y-auto p-6">
-          <Routes>
-            {/* 🔓 Public */}
-              {/* <Route
-  path="/"
-  element={
-    <PrivateRoute>
-      <Dashboard />
-    </PrivateRoute>
-  }
-/> */}
+              {/* Header */}
+              <Header />
 
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/templates" element={<Templates />} />
-            <Route path="/logs" element={<Logs />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/notifications" element={<Notifications />} />
-            <Route path="/template/:id" element={<TemplateDetail />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+              {/* Main content */}
+              <main className="flex-1 overflow-y-auto p-6">
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/templates" element={<Templates />} />
+                  <Route path="/logs" element={<Logs />} />
+                  <Route path="/analytics" element={<Analytics />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/notifications" element={<Notifications />} />
+                  <Route path="/template/:id" element={<TemplateDetail />} />
+                  <Route path="/add-template" element={<AddTemplate />} />
+                  <Route path="/templates/edit/:id" element={<EditTemplate />} />
+                  <Route path="/automations" element={<Automations />} />
+                  <Route path="/automation-logs" element={<AutomationLogs />} />
 
-            {/* 🔒 Protected */}
-            <Route
-              path="/add-template"
-              element={
-                // <PrivateRoute>
-                  <AddTemplate />
-                // </PrivateRoute>
-              }
-            />
-            <Route
-              path="/templates/edit/:id"
-              element={
-                // <PrivateRoute>
-                  <EditTemplate />
-                // </PrivateRoute>
-              }
-            />
-            <Route
-              path="/automations"
-              element={
-                // <PrivateRoute>
-                  <Automations />
-                // </PrivateRoute>
-              }
-            />
-            <Route
-              path="/automation-logs"
-              element={
-                // <PrivateRoute>
-                  <AutomationLogs />
-                // </PrivateRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                // <PrivateRoute>
-                  <Profile />
-                // </PrivateRoute>
-              }
-            />
+                  {/* Protected */}
+                  <Route
+                    path="/profile"
+                    element={
+                      <PrivateRoute>
+                        <Profile />
+                      </PrivateRoute>
+                    }
+                  />
 
-            {/* 🚫 Not Found */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-      </div>
-    </div>
+                  {/* 404 */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
+            </div>
+          </div>
+        }
+      />
+    </Routes>
   );
 }

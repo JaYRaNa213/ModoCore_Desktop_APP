@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
     } catch (err) {
       console.error("AuthContext: Failed to load from localStorage", err);
     } finally {
-      setLoading(false);
+      setLoading(false); // only done after localStorage checked
     }
   }, []);
 
@@ -42,7 +42,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout, loading }}>
-      {children}
+      {!loading && children} {/* Prevent early render */}
     </AuthContext.Provider>
   );
 }

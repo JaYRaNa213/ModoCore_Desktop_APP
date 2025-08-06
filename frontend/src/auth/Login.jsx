@@ -1,45 +1,36 @@
-
-import { useEffect } from "react";
-
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import api from "../services/api";
-import { Link } from "react-router-dom";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const { login, user } = useAuth();
-
   const navigate = useNavigate();
-  
-useEffect(() => {
-  if (user) {
-    navigate("/");
-  }
-}, [user, navigate]);
 
+  useEffect(() => {
+    if (user) {
+      navigate("/"); // Redirect if already logged in
+    }
+  }, [user, navigate]);
 
   const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      const res = await api.post("http://localhost:5000/api/users/login", form);
+      const res = await api.post("/api/users/login", form); // assuming baseURL is set in api.js
       const data = res.data;
 
-      // Save user & token in context
-      login(data.user, data.token);
-
-      // Redirect to dashboard
-      navigate("/");
+      login(data.user, data.token); // set user and token in context
+      navigate("/"); // redirect after login
     } catch (err) {
       const message =
-        err.response?.data?.message || "Login failed. Please try again.";
+        err?.response?.data?.message || "Login failed. Please try again.";
       setError(message);
     }
   };
@@ -80,15 +71,14 @@ useEffect(() => {
           </button>
         </form>
         <p className="text-sm text-neutral-400 mt-4 text-center">
-  Don’t have an account?{" "}
-  <Link
-    to="/register"
-    className="text-indigo-400 hover:underline font-medium"
-  >
-    Register
-  </Link>
-</p>
-        
+          Don’t have an account?{" "}
+          <Link
+            to="/register"
+            className="text-indigo-400 hover:underline font-medium"
+          >
+            Register
+          </Link>
+        </p>
       </div>
     </div>
   );
