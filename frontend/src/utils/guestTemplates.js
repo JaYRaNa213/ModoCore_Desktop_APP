@@ -8,12 +8,13 @@ export const getGuestTemplates = () => {
 export const saveGuestTemplates = (templates) => {
   localStorage.setItem(GUEST_KEY, JSON.stringify(templates));
 };
-
 export const addGuestTemplate = (template) => {
   const all = getGuestTemplates();
+  template._id = template._id || Date.now().toString(); // Assign unique ID if not present
   template.createdAt = new Date().toISOString();
   saveGuestTemplates([...all, template]);
 };
+
 
 export const purgeOldGuestTemplates = () => {
   const now = Date.now();

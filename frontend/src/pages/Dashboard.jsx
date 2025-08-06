@@ -50,7 +50,7 @@ export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterActive, setFilterActive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const freshTemplates = purgeOldGuestTemplates();
+  // const freshTemplates = purgeOldGuestTemplates();
 
 
   const { user } = useAuth(); // 👈 get current user
@@ -82,7 +82,7 @@ export default function Dashboard() {
 };
 
 useEffect(() => {
-  purgeOldGuestTemplates(); 
+ if (!user) purgeOldGuestTemplates();
   const fetchTopTemplates = async () => {
     setIsLoading(true);
     try {
@@ -384,15 +384,13 @@ useEffect(() => {
         Launch
       </button>
 
-      <Link
-        to={`/template/${template._id}`}
+     <Link to={`/template/${template._id}`} 
         className="px-4 py-3 bg-neutral-700 hover:bg-neutral-600 border border-neutral-600 text-neutral-200 rounded-xl transition-all duration-300 group/view"
       >
         <Eye className="w-4 h-4 group-hover/view:scale-110 transition-transform duration-300" />
       </Link>
 
-      <Link
-        to={`/templates/edit/${template._id}`}
+      <Link to={`/templates/edit/${template._id}`} 
         className="px-4 py-3 bg-neutral-700 hover:bg-neutral-600 border border-neutral-600 text-neutral-200 rounded-xl transition-all duration-300 group/edit"
       >
         <Edit3 className="w-4 h-4 group-hover/edit:scale-110 transition-transform duration-300" />

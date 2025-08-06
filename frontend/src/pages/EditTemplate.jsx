@@ -35,29 +35,46 @@ export default function EditTemplate() {
   const [newWebsite, setNewWebsite] = useState("");
 
   useEffect(() => {
-    if (!id) {
+  if (!id) {
+    setNotFound(true);
+    setLoading(false);
+    toast.error("Invalid template ID");
+    return;
+  }
+
+  const fetchTemplate = async () => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      const user = storedUser ? JSON.parse(storedUser) : null;
+
+      let data;
+      if (user) {
+        // Logged-in user: fetch from backend
+        data = await getTemplateById(id);
+      } else {
+        // Guest user: fetch from localStorage
+        const allTemplates = JSON.parse(localStorage.getItem("guestTemplates") || "[]");
+        data = allTemplates.find((t) => t._id === id);
+        if (!data) throw new Error("Not found");
+      }
+
+      setTemplate(data);
+      setTitle(data.title);
+      setDescription(data.description);
+      setApps(data.apps || []);
+      setWebsites(data.websites || []);
+      setSchedule(data.schedule || "");
+      setLoading(false);
+    } catch (error) {
       setNotFound(true);
       setLoading(false);
-      toast.error("Invalid template ID");
-      return;
+      toast.error("Template not found.");
     }
+  };
 
-    getTemplateById(id)
-      .then((data) => {
-        setTemplate(data);
-        setTitle(data.title);
-        setDescription(data.description);
-        setApps(data.apps || []);
-        setWebsites(data.websites || []);
-        setSchedule(data.schedule || "");
-        setLoading(false);
-      })
-      .catch(() => {
-        setNotFound(true);
-        setLoading(false);
-        toast.error("Template not found.");
-      });
-  }, [id]);
+  fetchTemplate();
+}, [id]);
+
 
   const handleAddApp = () => {
     if (!newApp.trim()) {
@@ -96,23 +113,44 @@ export default function EditTemplate() {
     setWebsites(websites.filter(website => website !== websiteToRemove));
     toast.success("Website removed");
   };
-
-  const handleSave = async () => {
-    const updated = {
-      title,
-      description,
-      apps,
-      websites,
-      schedule: schedule || null,
-    };
-    try {
-      await updateTemplate(id, updated);
-      toast.success("Template updated successfully!");
-      navigate("/templates");
-    } catch (err) {
-      toast.error("Failed to update template");
-    }
+const handleSave = async () => {
+  const updated = {
+    ...template,
+    title,
+    description,
+    apps,
+    websites,
+    schedule: schedule || null,
+    updatedAt: new Date().toISOString(),
   };
+
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+
+  try {
+    if (user) {
+      // Save to backend
+      await updateTemplate(id, updated);
+    } else {
+      // Save to localStorage
+      const all = JSON.parse(localStorage.getItem("guestTemplates") || "[]");
+      const index = all.findIndex((t) => t._id === id);
+      if (index !== -1) {
+        all[index] = updated;
+        localStorage.setItem("guestTemplates", JSON.stringify(all));
+      } else {
+        toast.error("Guest template not found in local storage");
+        return;
+      }
+    }
+
+    toast.success("Template updated successfully!");
+    navigate("/templates");
+  } catch (err) {
+    toast.error("Failed to update template");
+  }
+};
+
 
   if (loading) {
     return (
