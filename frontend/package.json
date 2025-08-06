@@ -6,8 +6,8 @@
   "main": "electron.cjs",
   "description": "ContextSwap – Smart workspace switcher for productivity modes",
   "author": {
-    "name": "Jay Rana",
-    "email": "jayrana0909@gmail.com"
+    "name": "Jay Rana"
+  
   },
   "scripts": {
   "dev": "concurrently \"vite\" \"electron .\"",

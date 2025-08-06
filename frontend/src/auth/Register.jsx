@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import toast from "react-hot-toast";
+import api from "../services/api"; // ✅ make sure this exists
 
 export default function Register() {
   const { login } = useAuth();
@@ -23,64 +24,28 @@ export default function Register() {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      // Register user
-      const registerRes = await fetch("http://localhost:5000/api/users/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+      const res = await api.post("http://localhost:5000/api/users/register", form);
+      const data = res.data;
 
-      if (!registerRes.ok) {
-        const err = await registerRes.json();
-        throw new Error(err.message || "Registration failed");
-      }
+      const newUser = {
+        _id: data._id,
+        username: data.username,
+        email: data.email,
+        profileImage: data.profileImage || "",
+      };
 
+      login(newUser, data.token); // ✅ Save user/token to context + localStorage
       toast.success("Registration successful!");
-navigate("/login"); // 👈 Go to login manually
-
-      // Optional toast
-      // toast.success("Registration successful!");
-
-      // // Auto-login
-      // const loginRes = await fetch("http://localhost:5000/api/users/login", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({
-      //     email: form.email,
-      //     password: form.password,
-      //   }),
-      // });
-      
-
-
-//       if (!loginRes.ok) {
-//   const err = await loginRes.json();
-//   throw new Error(err.message || "Login failed after registration");
-// }
-
-// const data = await loginRes.json();
-// login(data.user, data.token); // ✅ This sets user context
-// navigate("/");
-
-
-  //     if (!loginRes.ok) {
-  //       const err = await loginRes.json();
-  //       throw new Error(err.message || "Login failed after registration");
-  //     }
-
-  //     const data = await loginRes.json();
-  //     login(data.user, data.token); // Set user and token in context
-
-      // navigate("/");
-
+      navigate("/"); // ✅ Go to dashboard or homepage
     } catch (err) {
-      setError(err.message || "Something went wrong");
+      const message = err.response?.data?.message || "Registration failed. Please try again.";
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -99,7 +64,7 @@ navigate("/login"); // 👈 Go to login manually
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleRegister} className="space-y-4">
           <input
             type="text"
             name="username"

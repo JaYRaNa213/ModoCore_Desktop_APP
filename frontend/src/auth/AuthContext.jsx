@@ -7,38 +7,42 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem("contextswap-user");
-      const storedToken = localStorage.getItem("contextswap-token");
+ // AuthContext.js (Fixed version)
+useEffect(() => {
+  try {
+    const storedUser = localStorage.getItem("user");
+    const storedToken = localStorage.getItem("token");
 
-      if (storedUser && storedUser !== "undefined") {
-        setUser(JSON.parse(storedUser));
-      }
-
-      if (storedToken) {
-        setToken(storedToken);
-      }
-    } catch (err) {
-      console.error("AuthContext: Failed to load from localStorage", err);
-    } finally {
-      setLoading(false); // only done after localStorage checked
+    if (storedUser && storedUser !== "undefined") {
+      setUser(JSON.parse(storedUser));
     }
-  }, []);
 
-  const login = (userData, authToken) => {
-    setUser(userData);
-    setToken(authToken);
-    localStorage.setItem("contextswap-user", JSON.stringify(userData));
-    localStorage.setItem("contextswap-token", authToken);
-  };
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  } catch (err) {
+    console.error("AuthContext: Failed to load from localStorage", err);
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem("contextswap-user");
-    localStorage.removeItem("contextswap-token");
-  };
+const login = (userData, authToken) => {
+  console.log("🔐 Saving login:", userData);
+  setUser(userData);
+  setToken(authToken);
+  localStorage.setItem("user", JSON.stringify(userData));
+  localStorage.setItem("token", authToken);
+};
+
+const logout = () => {
+  console.log("Logout → clearing user and token");
+  setUser(null);
+  setToken(null);
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
+};
+
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout, loading }}>

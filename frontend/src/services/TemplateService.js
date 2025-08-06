@@ -1,37 +1,86 @@
 // services/TemplateService.js
 import api from "./api";
+import {
+  getGuestTemplates,
+  addGuestTemplate,
+  saveGuestTemplates,
+  deleteGuestTemplate,
+} from "../utils/guestTemplates";
 
-export const createTemplate = async (data) => {
-  const res = await api.post("/templates", data);
-  return res.data;
+// ✅ Get all templates
+export const getAllTemplates = async (user) => {
+  if (user) {
+    const res = await api.get("/templates");
+    return res.data;
+  } else {
+    return getGuestTemplates();
+  }
 };
 
-export const getAllTemplates = async () => {
-  const res = await api.get("/templates");
-  return res.data;
+// ✅ Get top N templates (sorted by usageCount)
+export const getTopTemplates = async (user, limit = 3) => {
+  const all = await getAllTemplates(user);
+  return all.sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0)).slice(0, limit);
 };
 
-export const getTemplateById = async (id) => {
-  const res = await api.get(`/templates/${id}`);
-  return res.data;
+// ✅ Create template
+export const createTemplate = async (data, user) => {
+  if (user) {
+    const res = await api.post("/templates", data);
+    return res.data;
+  } else {
+    const guestTemplate = { ...data, _id: crypto.randomUUID(), usageCount: 0, createdAt: new Date().toISOString() };
+    addGuestTemplate(guestTemplate);
+    return guestTemplate;
+  }
 };
 
-export const incrementTemplateUsage = async (id) => {
-  const res = await api.post(`/templates/${id}/use`);
-  return res.data;
+// ✅ Get template by ID
+export const getTemplateById = async (id, user) => {
+  if (user) {
+    const res = await api.get(`/templates/${id}`);
+    return res.data;
+  } else {
+    const all = getGuestTemplates();
+    return all.find((t) => t._id === id);
+  }
 };
 
-export const getTopTemplates = async (limit = 3) => {
-  const res = await api.get(`/templates?limit=${limit}`);
-  return res.data.slice(0, limit);
+// ✅ Update template
+export const updateTemplate = async (id, data, user) => {
+  if (user) {
+    const res = await api.put(`/templates/${id}`, data);
+    return res.data;
+  } else {
+    const all = getGuestTemplates();
+    const updated = all.map((t) => (t._id === id ? { ...t, ...data } : t));
+    saveGuestTemplates(updated);
+    return updated.find((t) => t._id === id);
+  }
 };
 
-export const deleteTemplate = async (id) => {
-  const res = await api.delete(`/templates/${id}`);
-  return res.data;
+// ✅ Delete template
+export const deleteTemplate = async (id, user) => {
+  if (user) {
+    const res = await api.delete(`/templates/${id}`);
+    return res.data;
+  } else {
+    deleteGuestTemplate(id);
+    return { message: "Deleted locally" };
+  }
 };
 
-export const updateTemplate = async (id, data) => {
-  const res = await api.put(`/templates/${id}`, data);
-  return res.data;
+// ✅ Increment usage count
+export const incrementTemplateUsage = async (id, user) => {
+  if (user) {
+    const res = await api.post(`/templates/${id}/use`);
+    return res.data;
+  } else {
+    const all = getGuestTemplates();
+    const updated = all.map((t) =>
+      t._id === id ? { ...t, usageCount: (t.usageCount || 0) + 1 } : t
+    );
+    saveGuestTemplates(updated);
+    return updated.find((t) => t._id === id);
+  }
 };

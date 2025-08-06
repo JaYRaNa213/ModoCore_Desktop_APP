@@ -25,6 +25,9 @@ export default function Header() {
     { path: "/add-template", label: "Create", icon: Plus },
     { path: "/leaderboard", label: "Leaderboard", icon: BarChart3 },
   ];
+  console.log("Header → loading:", loading);
+console.log("Header → user:", user);
+
 
   const isActivePath = (path) => location.pathname === path;
 

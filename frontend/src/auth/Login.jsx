@@ -23,7 +23,7 @@ export default function Login() {
     setError("");
 
     try {
-      const res = await api.post("/api/users/login", form); // assuming baseURL is set in api.js
+      const res = await api.post("/users/login", form); // assuming baseURL is set in api.js
       const data = res.data;
 
       login(data.user, data.token); // set user and token in context

@@ -25,6 +25,11 @@ export const purgeOldGuestTemplates = () => {
 };
 
 
+export const getGuestTemplateById = (id) => {
+  return getGuestTemplates().find(t => t._id === id);
+};
+
+
 
 
 const normalizeUrl = (url) => {
