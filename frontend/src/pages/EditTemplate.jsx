@@ -53,7 +53,13 @@ export default function EditTemplate() {
         data = await getTemplateById(id);
       } else {
         // Guest user: fetch from localStorage
-        const allTemplates = JSON.parse(localStorage.getItem("guestTemplates") || "[]");
+        let allTemplates = [];
+try {
+  allTemplates = JSON.parse(localStorage.getItem("guestTemplates")) || [];
+} catch {
+  allTemplates = [];
+}
+
         data = allTemplates.find((t) => t._id === id);
         if (!data) throw new Error("Not found");
       }
@@ -261,7 +267,8 @@ const handleSave = async () => {
                 <input
                   value={newApp}
                   onChange={(e) => setNewApp(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleAddApp()}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddApp()}
+
                   className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-800/50 backdrop-blur-xl border border-gray-700/50 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 shadow-lg"
                   placeholder="C:\Program Files\YourApp\app.exe"
                 />
@@ -313,7 +320,8 @@ const handleSave = async () => {
                 <input
                   value={newWebsite}
                   onChange={(e) => setNewWebsite(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleAddWebsite()}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAddWebsite()}
+
                   className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-800/50 backdrop-blur-xl border border-gray-700/50 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 shadow-lg"
                   placeholder="https://example.com"
                 />
@@ -369,12 +377,18 @@ const handleSave = async () => {
           {/* Save Button */}
           <div className="flex justify-end">
             <button
-              onClick={handleSave}
-              className="flex items-center gap-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-            >
-              <Save className="w-5 h-5" />
-              Save Changes
-            </button>
+  disabled={saving}
+  onClick={handleSave}
+  className={`flex items-center gap-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-8 py-4 rounded-xl font-semibold shadow-lg transform transition-all duration-300 ${
+    saving
+      ? 'opacity-50 cursor-not-allowed'
+      : 'hover:from-green-700 hover:to-emerald-700 hover:shadow-xl hover:scale-105'
+  }`}
+>
+  <Save className="w-5 h-5" />
+  {saving ? "Saving..." : "Save Changes"}
+</button>
+
           </div>
         </div>
       </div>
