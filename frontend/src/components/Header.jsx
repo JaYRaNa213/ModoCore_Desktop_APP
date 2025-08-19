@@ -23,7 +23,7 @@ export default function Header() {
     { path: "/", label: "Dashboard", icon: Home },
     { path: "/templates", label: "Templates", icon: Target },
     { path: "/add-template", label: "Create", icon: Plus },
-    { path: "/leaderboard", label: "Leaderboard", icon: BarChart3 },
+    // { path: "/leaderboard", label: "Leaderboard", icon: BarChart3 },
   ];
   console.log("Header → loading:", loading);
 console.log("Header → user:", user);

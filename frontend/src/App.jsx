@@ -49,15 +49,15 @@ export default function App() {
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/templates" element={<Templates />} />
-                  <Route path="/logs" element={<Logs />} />
-                  <Route path="/analytics" element={<Analytics />} />
-                  <Route path="/settings" element={<Settings />} />
+                  {/* <Route path="/logs" element={<Logs />} /> */}
+                  {/* <Route path="/analytics" element={<Analytics />} /> */}
+                  {/* <Route path="/settings" element={<Settings />} /> */}
                   <Route path="/notifications" element={<Notifications />} />
                   <Route path="/template/:id" element={<TemplateDetail />} />
                   <Route path="/add-template" element={<AddTemplate />} />
                   <Route path="/templates/edit/:id" element={<EditTemplate />} />
-                  <Route path="/automations" element={<Automations />} />
-                  <Route path="/automation-logs" element={<AutomationLogs />} />
+                  {/* <Route path="/automations" element={<Automations />} /> */}
+                  {/* <Route path="/automation-logs" element={<AutomationLogs />} /> */}
 
                   {/* Protected */}
                   <Route

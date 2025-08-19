@@ -17,13 +17,13 @@ import clsx from "clsx";
 const links = [
   { name: "Dashboard", path: "/", icon: <LayoutDashboard size={18} /> },
   { name: "Templates", path: "/templates", icon: <ListTodo size={18} /> },
-  { name: "Analytics", path: "/analytics", icon: <BarChart3 size={18} /> },
-  { name: "Automations", path: "/automations", icon: <Bot size={18} /> },
-  { name: "Logs", path: "/logs", icon: <Clock size={18} /> },
+  // { name: "Analytics", path: "/analytics", icon: <BarChart3 size={18} /> },
+  // { name: "Automations", path: "/automations", icon: <Bot size={18} /> },
+  // { name: "Logs", path: "/logs", icon: <Clock size={18} /> },
   
   { name: "Notifications", path: "/notifications", icon: <Bell size={18} /> },
   { name: "Profile", path: "/profile", icon: <User size={18} /> },
-  { name: "Settings", path: "/settings", icon: <Settings size={18} /> },
+  // { name: "Settings", path: "/settings", icon: <Settings size={18} /> },
 ];
 
 export default function Sidebar() {

@@ -448,14 +448,15 @@ useEffect(() => {
   </Link>
 
   <Link
-    to="/analytics"
+    // to="/analytics"
     className="group relative bg-[#1f1f1f] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03]"
   >
     <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-500 rounded-xl flex items-center justify-center mb-4 shadow-md">
       <BarChart3 className="w-6 h-6 text-white" />
     </div>
     <h3 className="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">
-      Analytics
+      Analytics 
+      (coming soon)
     </h3>
     <p className="text-gray-400 text-sm">
       Track usage and performance
@@ -463,27 +464,27 @@ useEffect(() => {
   </Link>
 
   <Link
-    to="/automations"
+    // to="/automations"
     className="group relative bg-[#1f1f1f] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03]"
   >
     <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl flex items-center justify-center mb-4 shadow-md">
       <Bot className="w-6 h-6 text-white" />
     </div>
     <h3 className="text-lg font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">
-      Automations
+      Automations (coming soon)
     </h3>
     <p className="text-gray-400 text-sm">Set up automatic launches</p>
   </Link>
 
   <Link
-    to="/settings"
+    // to="/settings"
     className="group relative bg-[#1f1f1f] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03]"
   >
     <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center mb-4 shadow-md">
       <Settings className="w-6 h-6 text-white" />
     </div>
     <h3 className="text-lg font-bold text-white mb-2 group-hover:text-red-400 transition-colors">
-      Settings
+      Settings (coming soon)
     </h3>
     <p className="text-gray-400 text-sm">
       Customize your preferences
