@@ -2,8 +2,8 @@
 ├── .gitignore
 ├── dist
 │   ├── assets
-│   │   ├── index-CnRrgvkw.js
-│   │   └── index-GtVvBgpa.css
+│   │   ├── index-B4gH2CKm.js
+│   │   └── index-CQMXqsQP.css
 │   ├── icon.ico
 │   ├── index.html
 │   ├── preload.js
@@ -21,8 +21,8 @@
 ├── release
 │   ├── builder-debug.yml
 │   ├── builder-effective-config.yaml
-│   ├── ContextSwap Setup 1.0.0.exe
-│   ├── ContextSwap Setup 1.0.0.exe.blockmap
+│   ├── ContextSwap Setup 1.0.2.exe
+│   ├── ContextSwap Setup 1.0.2.exe.blockmap
 │   ├── latest.yml
 │   └── win-unpacked
 │       ├── chrome_100_percent.pak
@@ -108,7 +108,6 @@
 │   │   ├── app-icon.ico
 │   │   └── react.svg
 │   ├── auth
-│   │   ├── AuthContext.jsx
 │   │   ├── Login.jsx
 │   │   ├── PrivateRoute.jsx
 │   │   └── Register.jsx
@@ -127,7 +126,9 @@
 │   │   │   └── ToggleSwitch.jsx
 │   │   └── WindowControls.jsx
 │   ├── context
-│   │   └── AppContext.jsx
+│   │   ├── AppContext.jsx
+│   │   ├── AuthContext.jsx
+│   │   └── TemplateContext.jsx
 │   ├── hooks
 │   │   ├── useFetchLogs.js
 │   │   ├── useLocalStorage.js

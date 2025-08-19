@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
+import { getGuestTemplates, saveGuestTemplates } from "../utils/guestTemplates";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -23,10 +24,20 @@ export default function Login() {
     setError("");
 
     try {
-      const res = await api.post("/users/login", form); // assuming baseURL is set in api.js
+       // Include guest templates in login payload
+    const localTemplates = getGuestTemplates();
+
+      const res = await api.post("/users/login", {
+      ...form,
+      localTemplates
+    });
       const data = res.data;
 
-      login(data.user, data.token); // set user and token in context
+      login(data.user, data.token); 
+
+        // ✅ optional: clear guest templates after sync
+      saveGuestTemplates([]);
+
       navigate("/"); // redirect after login
     } catch (err) {
       const message =

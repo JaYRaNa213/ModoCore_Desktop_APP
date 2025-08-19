@@ -18,6 +18,8 @@ import AutomationLogs from "./pages/AutomationLogs";
 import Logs from "./pages/Logs";
 import EditTemplate from "./pages/EditTemplate";
 import WindowControls from "./components/WindowControls";
+import { purgeOldGuestTemplates } from "./utils/guestTemplates";
+
 
 export default function App() {
   return (
