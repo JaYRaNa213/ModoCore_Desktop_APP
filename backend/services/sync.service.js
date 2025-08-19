@@ -17,7 +17,7 @@ export const syncTemplatesToDB = async (userId, localTemplates = []) => {
     const { title, description, apps, websites, schedule } = tpl;
 
     // Check for duplicate by title + apps (can customize logic)
-    const existing = await Template.findOne({ title, apps });
+    const existing = await Template.findOne({ title, apps, userId });
 
     if (existing) {
       skipped++;
@@ -32,6 +32,7 @@ export const syncTemplatesToDB = async (userId, localTemplates = []) => {
         websites,
         schedule,
         usageCount: 0,
+        userId
         // userId, // Optional if you add user tracking
       });
       added++;

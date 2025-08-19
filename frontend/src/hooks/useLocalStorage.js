@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../auth/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 export const useLocalStorage = (baseKey, initialValue) => {
   const { user } = useAuth();

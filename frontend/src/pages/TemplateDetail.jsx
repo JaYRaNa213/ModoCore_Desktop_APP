@@ -4,7 +4,7 @@ import axios from "axios";
 import { Button } from "../components/ui/Button";
 import { Pencil, Rocket, ArrowLeft } from "lucide-react";
 import { getGuestTemplates, doLaunch, purgeOldGuestTemplates } from "../utils/guestTemplates";
-import { useAuth } from "../auth/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 export default function TemplateDetail() {
   const { id } = useParams();

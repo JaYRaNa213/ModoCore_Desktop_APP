@@ -34,7 +34,7 @@ import { Card, CardContent } from "../components/ui/Card";
 import { createTemplate } from "../services/TemplateService";
 
 import { addGuestTemplate } from "../utils/guestTemplates";
-import { useAuth } from "../auth/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 
 export default function AddTemplate() {
@@ -111,7 +111,7 @@ export default function AddTemplate() {
       return;
     }
 
-    
+
     if (user) {
       await createTemplate(newTemplate); // save to DB
       toast.success("Template saved to your account!");

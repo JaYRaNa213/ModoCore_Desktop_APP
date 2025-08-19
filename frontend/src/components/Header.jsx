@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom"; // ✅ Add useNavigate
-import { useAuth } from "../auth/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import {
   LogOut,
   Menu,

@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useAuth} from "../auth/AuthContext";
+import { useAuth} from "../context/AuthContext";
 import {
   User, Mail, FileText, Camera, Save, ArrowLeft, Settings, Shield, Bell,
   Palette, Globe, Edit3, Check, X, Star, Award, Target, Activity, Calendar,

@@ -29,7 +29,7 @@ import {
   Globe,
   Monitor,
 } from "lucide-react";
-import { useAuth } from "../auth/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { doLaunch } from "../utils/guestTemplates";
 import { getGuestTemplates,saveGuestTemplates } from "../utils/guestTemplates";
 import { purgeOldGuestTemplates } from "../utils/guestTemplates";

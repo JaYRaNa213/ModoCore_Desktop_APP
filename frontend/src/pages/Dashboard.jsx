@@ -6,7 +6,7 @@ import { getTopTemplates } from "../services/TemplateService";
 import { getGuestTemplates } from "../utils/guestTemplates";
 import { doLaunch } from "../utils/guestTemplates";
 import { purgeOldGuestTemplates } from "../utils/guestTemplates";
-import { useAuth } from "../auth/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 
 import {
