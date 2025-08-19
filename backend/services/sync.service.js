@@ -33,7 +33,7 @@ export const syncTemplatesToDB = async (userId, localTemplates = []) => {
         schedule,
         usageCount: 0,
         userId
-        // userId, // Optional if you add user tracking
+        
       });
       added++;
     } catch (err) {
