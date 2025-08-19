@@ -113,7 +113,7 @@ export default function AddTemplate() {
 
 
     if (user) {
-      await createTemplate(newTemplate); // save to DB
+      await createTemplate(newTemplate, user); // save to DB
       toast.success("Template saved to your account!");
     } else {
       addGuestTemplate(newTemplate); // ✅ save to localStorage

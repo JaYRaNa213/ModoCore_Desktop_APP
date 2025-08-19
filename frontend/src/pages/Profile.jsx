@@ -36,12 +36,18 @@ export default function Profile() {
   const handleSelectAvatar = (url) => {
     setSelectedAvatar(url);
 
-    // If user is logged in, update auth context so it reflects in header etc.
     if (user) {
-      login({ ...user, profileImage: url }, localStorage.getItem("token"));
-    }
+  login(
+    { ...user, profileImage: url },  
+    localStorage.getItem("token")
+  );
+  toast.success("Avatar selected!");
+} else {
+  // Guest user – just update the local selectedAvatar state
+  setSelectedAvatar(url);
+  toast.success("Avatar selected!");
+}
 
-    toast.success("Avatar selected!");
   };
 
   return (

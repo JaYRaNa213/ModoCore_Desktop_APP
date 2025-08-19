@@ -99,28 +99,23 @@ useEffect(() => {
   }
 };
 
-
 const handleDelete = async (id, title) => {
   if (!window.confirm(`Are you sure you want to delete "${title}"?`)) return;
 
   try {
     if (user) {
-      const token = localStorage.getItem("contextswap-token");
-      const res = await axios.delete(`http://localhost:5000/api/templates/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("Deleted from server:", res.data);
+      // Logged in user => delete from MongoDB
+      await api.delete(`/templates/${id}`);
       toast.success("Template deleted successfully");
     } else {
+      // Guest => localStorage
       deleteGuestTemplate(id);
       toast.success("Template deleted locally");
     }
 
-    // ✅ Fix: Handle both MongoDB (_id) and guest (id)
+    // Update UI (both cases)
     setTemplates(prev =>
-      prev.filter(template => template._id !== id && template.id !== id)
+      prev.filter(t => t._id !== id && t.id !== id)
     );
   } catch (err) {
     console.error("Delete failed:", err.response?.data || err.message);
