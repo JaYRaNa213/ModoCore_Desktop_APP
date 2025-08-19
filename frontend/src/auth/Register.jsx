@@ -25,31 +25,35 @@ export default function Register() {
   };
 
   const handleRegister = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+  e.preventDefault();
+  setError("");
+  setLoading(true);
 
-    try {
-      const res = await api.post("http://localhost:5000/api/users/register", form);
-      const data = res.data;
+  try {
+    const res = await api.post("/users/register", form);
+    const data = res.data;
 
-      const newUser = {
-        _id: data._id,
-        username: data.username,
-        email: data.email,
-        profileImage: data.profileImage || "",
-      };
+    // data already contains:  _id, username, email, token
+    // so we can simply do:
+    const newUser = {
+      _id: data._id,
+      username: data.username,
+      email: data.email,
+      profileImage: data.profileImage || "",
+    };
 
-      login(newUser, data.token); // ✅ Save user/token to context + localStorage
-      toast.success("Registration successful!");
-      navigate("/"); // ✅ Go to dashboard or homepage
-    } catch (err) {
-      const message = err.response?.data?.message || "Registration failed. Please try again.";
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    login(newUser, data.token);     // ✅ auto-login after register
+    toast.success("Registration successful!");
+    navigate("/");                 // ✅ Redirect to dashboard
+  } catch (err) {
+    const message =
+      err?.response?.data?.message || "Registration failed. Please try again.";
+    setError(message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-900 text-white px-4">

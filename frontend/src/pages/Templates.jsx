@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import api from "../services/api";
 import {
   Rocket,
   Trash2,
@@ -44,20 +45,19 @@ export default function Templates() {
   const [viewMode, setViewMode] = useState("grid"); // grid or list
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
-  const { user } = useAuth(); 
-  
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
+useEffect(() => {
+  if (loading) return;      // 🔸 wait for auth context to be ready
+
   const fetchTemplates = async () => {
     setIsLoading(true);
-
     try {
       if (user) {
-        // Logged in: fetch from backend
-        const response = await axios.get("http://localhost:5000/api/templates");
+        const response = await api.get("/templates");
         setTemplates(response.data);
       } else {
-        // Guest: fetch from localStorage
+        // Guest
         const guestTemplates = getGuestTemplates();
         setTemplates(guestTemplates);
       }
@@ -70,7 +70,7 @@ export default function Templates() {
   };
 
   fetchTemplates();
-}, [user]);
+}, [user, loading]);
 
 
   
@@ -174,7 +174,9 @@ const handleDelete = async (id, title) => {
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 bg-purple-600/20 backdrop-blur-xl border border-purple-500/30 px-4 py-2 rounded-full">
                   <Sparkles className="w-4 h-4 text-purple-400" />
-                  <span className="text-sm text-purple-300 font-medium">{templates.length} Templates</span>
+                  <span className="text-sm text-purple-300 font-medium">
+                    {templates.length} Templates
+                  </span>
                 </div>
                 <Link
                   to="/add-template"
@@ -194,8 +196,12 @@ const handleDelete = async (id, title) => {
             <div className="bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl p-6 hover:bg-gray-900/70 transition-all duration-300">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-400 text-sm font-medium">Total Templates</p>
-                  <p className="text-2xl font-bold text-white mt-1">{templates.length}</p>
+                  <p className="text-slate-400 text-sm font-medium">
+                    Total Templates
+                  </p>
+                  <p className="text-2xl font-bold text-white mt-1">
+                    {templates.length}
+                  </p>
                 </div>
                 <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-xl flex items-center justify-center">
                   <Target className="w-6 h-6 text-white" />
@@ -206,8 +212,12 @@ const handleDelete = async (id, title) => {
             <div className="bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl p-6 hover:bg-gray-900/70 transition-all duration-300">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-400 text-sm font-medium">Total Launches</p>
-                  <p className="text-2xl font-bold text-white mt-1">{totalUsage}</p>
+                  <p className="text-slate-400 text-sm font-medium">
+                    Total Launches
+                  </p>
+                  <p className="text-2xl font-bold text-white mt-1">
+                    {totalUsage}
+                  </p>
                 </div>
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center">
                   <Zap className="w-6 h-6 text-white" />
@@ -218,8 +228,12 @@ const handleDelete = async (id, title) => {
             <div className="bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl p-6 hover:bg-gray-900/70 transition-all duration-300">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-400 text-sm font-medium">Average Usage</p>
-                  <p className="text-2xl font-bold text-white mt-1">{averageUsage}</p>
+                  <p className="text-slate-400 text-sm font-medium">
+                    Average Usage
+                  </p>
+                  <p className="text-2xl font-bold text-white mt-1">
+                    {averageUsage}
+                  </p>
                 </div>
                 <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl flex items-center justify-center">
                   <TrendingUp className="w-6 h-6 text-white" />
@@ -230,7 +244,9 @@ const handleDelete = async (id, title) => {
             <div className="bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl p-6 hover:bg-gray-900/70 transition-all duration-300">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-400 text-sm font-medium">Success Rate</p>
+                  <p className="text-slate-400 text-sm font-medium">
+                    Success Rate
+                  </p>
                   <p className="text-2xl font-bold text-white mt-1">98%</p>
                 </div>
                 <div className="w-12 h-12 bg-gradient-to-br from-orange-600 to-red-600 rounded-xl flex items-center justify-center">
@@ -257,8 +273,8 @@ const handleDelete = async (id, title) => {
                 <button
                   onClick={() => setFilterActive(!filterActive)}
                   className={`flex items-center gap-2 px-4 py-4 rounded-2xl font-medium transition-all duration-300 ${
-                    filterActive 
-                      ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg" 
+                    filterActive
+                      ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg"
                       : "bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 text-white hover:bg-gray-900/70"
                   }`}
                 >
@@ -271,8 +287,8 @@ const handleDelete = async (id, title) => {
               <button
                 onClick={() => setViewMode("grid")}
                 className={`flex items-center gap-2 px-4 py-3 rounded-xl font-medium transition-all duration-300 ${
-                  viewMode === "grid" 
-                    ? "bg-purple-600 text-white shadow-lg" 
+                  viewMode === "grid"
+                    ? "bg-purple-600 text-white shadow-lg"
                     : "text-gray-400 hover:text-white"
                 }`}
               >
@@ -282,8 +298,8 @@ const handleDelete = async (id, title) => {
               <button
                 onClick={() => setViewMode("list")}
                 className={`flex items-center gap-2 px-4 py-3 rounded-xl font-medium transition-all duration-300 ${
-                  viewMode === "list" 
-                    ? "bg-purple-600 text-white shadow-lg" 
+                  viewMode === "list"
+                    ? "bg-purple-600 text-white shadow-lg"
                     : "text-gray-400 hover:text-white"
                 }`}
               >
@@ -295,9 +311,18 @@ const handleDelete = async (id, title) => {
 
           {/* Templates Grid/List */}
           {isLoading ? (
-            <div className={`grid ${viewMode === "grid" ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"} gap-6`}>
+            <div
+              className={`grid ${
+                viewMode === "grid"
+                  ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                  : "grid-cols-1"
+              } gap-6`}
+            >
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl p-6 animate-pulse">
+                <div
+                  key={i}
+                  className="bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl p-6 animate-pulse"
+                >
                   <div className="w-12 h-12 bg-gray-700 rounded-xl mb-4"></div>
                   <div className="h-4 bg-gray-700 rounded mb-2"></div>
                   <div className="h-3 bg-gray-700 rounded w-2/3 mb-4"></div>
@@ -317,10 +342,9 @@ const handleDelete = async (id, title) => {
                 {searchTerm ? "No templates found" : "No templates yet"}
               </h3>
               <p className="text-slate-400 mb-8 max-w-md mx-auto">
-                {searchTerm 
+                {searchTerm
                   ? `No templates match "${searchTerm}". Try a different search term.`
-                  : "Get started by creating your first template. Build your perfect productivity workspace."
-                }
+                  : "Get started by creating your first template. Build your perfect productivity workspace."}
               </p>
               {!searchTerm && (
                 <Link
@@ -333,11 +357,17 @@ const handleDelete = async (id, title) => {
               )}
             </div>
           ) : (
-            <div className={`grid ${viewMode === "grid" ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"} gap-6`}>
+            <div
+              className={`grid ${
+                viewMode === "grid"
+                  ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                  : "grid-cols-1"
+              } gap-6`}
+            >
               {filteredTemplates.map((template) => (
                 <div key={template._id} className="group relative">
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
-                  
+
                   <div className="relative bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl overflow-hidden hover:bg-gray-900/70 transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">
                     {/* Edit Button */}
                     <Link
@@ -372,7 +402,8 @@ const handleDelete = async (id, title) => {
 
                       {/* Template Description */}
                       <p className="text-slate-300 text-sm leading-relaxed line-clamp-2">
-                        {template.description || "A powerful template to boost your productivity and streamline your workflow."}
+                        {template.description ||
+                          "A powerful template to boost your productivity and streamline your workflow."}
                       </p>
 
                       {/* Template Stats */}
@@ -383,18 +414,24 @@ const handleDelete = async (id, title) => {
                           </div>
                           <div>
                             <p className="text-slate-400 text-xs">Usage</p>
-                            <p className="text-white font-semibold">{template.usageCount || 0}</p>
+                            <p className="text-white font-semibold">
+                              {template.usageCount || 0}
+                            </p>
                           </div>
                         </div>
-                        
+
                         {template.schedule && (
                           <div className="flex items-center gap-2 text-sm">
                             <div className="w-8 h-8 bg-purple-600/20 rounded-lg flex items-center justify-center">
                               <Calendar className="w-4 h-4 text-purple-400" />
                             </div>
                             <div>
-                              <p className="text-slate-400 text-xs">Scheduled</p>
-                              <p className="text-white font-semibold text-xs truncate">{template.schedule}</p>
+                              <p className="text-slate-400 text-xs">
+                                Scheduled
+                              </p>
+                              <p className="text-white font-semibold text-xs truncate">
+                                {template.schedule}
+                              </p>
                             </div>
                           </div>
                         )}
@@ -406,7 +443,8 @@ const handleDelete = async (id, title) => {
                           <div className="flex items-center gap-2 text-sm">
                             <Monitor className="w-4 h-4 text-green-400" />
                             <span className="text-slate-400">
-                              {template.apps.length} app{template.apps.length !== 1 ? 's' : ''}
+                              {template.apps.length} app
+                              {template.apps.length !== 1 ? "s" : ""}
                             </span>
                           </div>
                         )}
@@ -414,7 +452,8 @@ const handleDelete = async (id, title) => {
                           <div className="flex items-center gap-2 text-sm">
                             <Globe className="w-4 h-4 text-orange-400" />
                             <span className="text-slate-400">
-                              {template.websites.length} website{template.websites.length !== 1 ? 's' : ''}
+                              {template.websites.length} website
+                              {template.websites.length !== 1 ? "s" : ""}
                             </span>
                           </div>
                         )}
@@ -423,12 +462,12 @@ const handleDelete = async (id, title) => {
                       {/* Action Buttons */}
                       <div className="flex gap-3 pt-4">
                         <button
-        onClick={() => handleLaunch(template)}
-        className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 group/launch shadow-lg"
-      >
-        <Rocket className="w-4 h-4 group-hover/launch:scale-110 transition-transform duration-300" />
-        Launch
-      </button>
+                          onClick={() => handleLaunch(template)}
+                          className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-700 to-indigo-700 hover:from-purple-800 hover:to-indigo-800 text-white py-3 px-4 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 group/launch shadow-lg"
+                        >
+                          <Rocket className="w-4 h-4 group-hover/launch:scale-110 transition-transform duration-300" />
+                          Launch
+                        </button>
 
                         <Link
                           to={`/template/${template._id}`}
@@ -438,7 +477,9 @@ const handleDelete = async (id, title) => {
                         </Link>
 
                         <button
-                          onClick={() => handleDelete(template._id, template.title)}
+                          onClick={() =>
+                            handleDelete(template._id, template.title)
+                          }
                           className="px-4 py-3 bg-red-600/20 border border-red-600/30 text-red-400 rounded-xl hover:bg-red-600/30 hover:border-red-600/50 transition-all duration-300 group/delete"
                         >
                           <Trash2 className="w-4 h-4 group-hover/delete:scale-110 transition-transform duration-300" />
@@ -453,7 +494,7 @@ const handleDelete = async (id, title) => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .animation-delay-2000 {
           animation-delay: 2s;
         }
