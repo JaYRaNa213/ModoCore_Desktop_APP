@@ -1,7 +1,7 @@
 
-
-<div align="center">
 # 🖥️ ContextSwap Desktop App 
+<div align="center">
+
 ****ContextSwap** is a productivity-focused desktop application built with **Electron**, **React**, and **TailwindCSS**. It’s designed to help users switch between different work contexts—like Coding, Studying, Meetings, etc.—with ease and efficiency. The app supports extensibility, templating, and will soon be integrated with a powerful backend.**
 
  [Live Demo : ContextSwap Desktop App Download](https://contextswap-8lun.onrender.com/)     
@@ -129,6 +129,7 @@ Would you like me to include `.exe` download links or usage instructions too?
 
 
 Ask ChatGPT
+
 
 
 
