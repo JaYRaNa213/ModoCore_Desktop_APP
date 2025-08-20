@@ -1,25 +1,12 @@
-# 🖥️ ContextSwap Desktop App 
+
 
 <div align="center">
-
-![Real Estate AI Bot](https://img.shields.io/badge/AI-Powered-blue?style=for-the-badge&logo=openai)
-![Voice Assistant](https://img.shields.io/badge/Voice-Assistant-green?style=for-the-badge&logo=microphone)
-![Real Estate](https://img.shields.io/badge/Real%20Estate-Automation-orange?style=for-the-badge&logo=home)
-
+# 🖥️ ContextSwap Desktop App 
 ****ContextSwap** is a productivity-focused desktop application built with **Electron**, **React**, and **TailwindCSS**. It’s designed to help users switch between different work contexts—like Coding, Studying, Meetings, etc.—with ease and efficiency. The app supports extensibility, templating, and will soon be integrated with a powerful backend.**
 
  [Live Demo : ContextSwap Desktop App Download](https://contextswap-8lun.onrender.com/)     
 
 </div>
-
- 
- 
- 
- # 🖥️ ContextSwap Desktop App   
-
-**ContextSwap** is a productivity-focused desktop application built with **Electron**, **React**, and **TailwindCSS**. It’s designed to help users switch between different work contexts—like Coding, Studying, Meetings, etc.—with ease and efficiency. The app supports extensibility, templating, and will soon be integrated with a powerful backend.
-
-
 ---
 
 ## 🔧 Tech Stack
@@ -142,5 +129,6 @@ Would you like me to include `.exe` download links or usage instructions too?
 
 
 Ask ChatGPT
+
 
 
