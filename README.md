@@ -9,6 +9,9 @@
 </div>
 ---
 
+<img src="./img/swap.png" alt="contextSwap" width="900" />
+
+
 ## 🔧 Tech Stack
 
 | Layer         | Technologies Used                     |
@@ -129,6 +132,7 @@ Would you like me to include `.exe` download links or usage instructions too?
 
 
 Ask ChatGPT
+
 
 
 
