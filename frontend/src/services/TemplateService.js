@@ -1,4 +1,4 @@
-// services/TemplateService.js
+// src/services/TemplateService.js
 import api from "./api";
 import {
   getGuestTemplates,
@@ -42,9 +42,10 @@ export const getTemplateById = async (id, user) => {
     return res.data;
   } else {
     const all = getGuestTemplates();
-    return all.find((t) => t._id === id);
+    return all.find((t) => t._id === id || t.id === id); // ✅ check both
   }
 };
+
 
 // ✅ Update template
 export const updateTemplate = async (id, data, user) => {

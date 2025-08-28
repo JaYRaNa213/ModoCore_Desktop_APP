@@ -16,148 +16,134 @@ import {
   Monitor,
   Globe
 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 export default function EditTemplate() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+
   const [template, setTemplate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [saving, setSaving] = useState(false);
 
+  // form fields
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [apps, setApps] = useState([]);
   const [websites, setWebsites] = useState([]);
   const [schedule, setSchedule] = useState("");
 
-  // Input states
+  // input helpers
   const [newApp, setNewApp] = useState("");
   const [newWebsite, setNewWebsite] = useState("");
 
   useEffect(() => {
-  if (!id) {
-    setNotFound(true);
-    setLoading(false);
-    toast.error("Invalid template ID");
-    return;
-  }
-
-  const fetchTemplate = async () => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      const user = storedUser ? JSON.parse(storedUser) : null;
-
-      let data;
-      if (user) {
-        // Logged-in user: fetch from backend
-        data = await getTemplateById(id);
-      } else {
-        // Guest user: fetch from localStorage
-        let allTemplates = [];
-try {
-  allTemplates = JSON.parse(localStorage.getItem("guestTemplates")) || [];
-} catch {
-  allTemplates = [];
-}
-
-        data = allTemplates.find((t) => t._id === id);
-        if (!data) throw new Error("Not found");
-      }
-
-      setTemplate(data);
-      setTitle(data.title);
-      setDescription(data.description);
-      setApps(data.apps || []);
-      setWebsites(data.websites || []);
-      setSchedule(data.schedule || "");
-      setLoading(false);
-    } catch (error) {
+    if (!id) {
       setNotFound(true);
       setLoading(false);
-      toast.error("Template not found.");
+      toast.error("Invalid template ID");
+      return;
     }
-  };
 
-  fetchTemplate();
-}, [id]);
+    // Wait for auth context to be ready if needed
+    if (authLoading) return;
 
+    const fetchTemplate = async () => {
+      setLoading(true);
+      try {
+        // Use service which handles guest vs user
+        const data = await getTemplateById(id, user);
+        if (!data) throw new Error("Not found");
+
+        setTemplate(data);
+        setTitle(data.title || "");
+        setDescription(data.description || "");
+        setApps(Array.isArray(data.apps) ? data.apps : []);
+        setWebsites(Array.isArray(data.websites) ? data.websites : []);
+        setSchedule(data.schedule || "");
+        setNotFound(false);
+      } catch (error) {
+        console.error("EditTemplate -> fetchTemplate error:", error);
+        setNotFound(true);
+        toast.error("Template not found.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTemplate();
+  }, [id, user, authLoading]);
 
   const handleAddApp = () => {
-    if (!newApp.trim()) {
+    const value = newApp.trim();
+    if (!value) {
       toast.error("Please enter an application path");
       return;
     }
-    if (apps.includes(newApp)) {
+    if (apps.includes(value)) {
       toast.error("Application already added");
       return;
     }
-    setApps([...apps, newApp]);
+    setApps(prev => [...prev, value]);
     setNewApp("");
     toast.success("Application added successfully!");
   };
 
   const handleAddWebsite = () => {
-    if (!newWebsite.trim()) {
+    const value = newWebsite.trim();
+    if (!value) {
       toast.error("Please enter a website URL");
       return;
     }
-    if (websites.includes(newWebsite)) {
+    if (websites.includes(value)) {
       toast.error("Website already added");
       return;
     }
-    setWebsites([...websites, newWebsite]);
+    setWebsites(prev => [...prev, value]);
     setNewWebsite("");
     toast.success("Website added successfully!");
   };
 
   const removeApp = (appToRemove) => {
-    setApps(apps.filter(app => app !== appToRemove));
+    setApps(prev => prev.filter(app => app !== appToRemove));
     toast.success("Application removed");
   };
 
   const removeWebsite = (websiteToRemove) => {
-    setWebsites(websites.filter(website => website !== websiteToRemove));
+    setWebsites(prev => prev.filter(website => website !== websiteToRemove));
     toast.success("Website removed");
   };
-const handleSave = async () => {
-  const updated = {
-    ...template,
-    title,
-    description,
-    apps,
-    websites,
-    schedule: schedule || null,
-    updatedAt: new Date().toISOString(),
+
+  const handleSave = async () => {
+    if (!template) return;
+
+    setSaving(true);
+    const updated = {
+      ...template,
+      title,
+      description,
+      apps,
+      websites,
+      schedule: schedule || null,
+      updatedAt: new Date().toISOString(),
+    };
+
+    try {
+      // Pass `user` so service knows whether to hit backend or localStorage
+      await updateTemplate(id, updated, user);
+      toast.success("Template updated successfully!");
+      navigate("/templates");
+    } catch (err) {
+      console.error("EditTemplate -> handleSave error:", err);
+      toast.error("Failed to update template");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
-
-  try {
-    if (user) {
-      // Save to backend
-      await updateTemplate(id, updated);
-    } else {
-      // Save to localStorage
-      const all = JSON.parse(localStorage.getItem("guestTemplates") || "[]");
-      const index = all.findIndex((t) => t._id === id);
-      if (index !== -1) {
-        all[index] = updated;
-        localStorage.setItem("guestTemplates", JSON.stringify(all));
-      } else {
-        toast.error("Guest template not found in local storage");
-        return;
-      }
-    }
-
-    toast.success("Template updated successfully!");
-    navigate("/templates");
-  } catch (err) {
-    toast.error("Failed to update template");
-  }
-};
-
-
+  // Loading / Not found states
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center text-white">
@@ -187,6 +173,7 @@ const handleSave = async () => {
     );
   }
 
+  // Main form
   return (
     <div className="min-h-screen bg-black text-white relative">
       {/* Animated Background */}
@@ -216,7 +203,7 @@ const handleSave = async () => {
               <div className="hidden md:flex items-center gap-4 bg-gray-800/50 backdrop-blur-xl px-4 py-2 rounded-xl border border-gray-700/50">
                 <div className="flex items-center gap-2">
                   <Target className="w-4 h-4 text-purple-400" />
-                  <span className="text-sm text-white">{template.title}</span>
+                  <span className="text-sm text-white truncate">{template.title}</span>
                 </div>
                 <div className="w-px h-4 bg-gray-700" />
                 <div className="flex items-center gap-2">
@@ -259,8 +246,7 @@ const handleSave = async () => {
           {/* Applications Section */}
           <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-300">Applications</label>
-            
-            {/* Add App Input */}
+
             <div className="flex gap-3">
               <div className="flex-1 relative">
                 <Monitor className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-400 w-5 h-5" />
@@ -268,9 +254,8 @@ const handleSave = async () => {
                   value={newApp}
                   onChange={(e) => setNewApp(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleAddApp()}
-
                   className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-800/50 backdrop-blur-xl border border-gray-700/50 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 shadow-lg"
-                  placeholder="C:\Program Files\YourApp\app.exe"
+                  placeholder="C:\\Program Files\\YourApp\\app.exe"
                 />
               </div>
               <button
@@ -288,18 +273,12 @@ const handleSave = async () => {
                 <h4 className="text-sm font-medium text-gray-300 mb-3">Added Applications ({apps.length})</h4>
                 <div className="space-y-2">
                   {apps.map((app, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between bg-gray-700/30 border border-gray-600/30 rounded-lg p-3"
-                    >
+                    <div key={index} className="flex items-center justify-between bg-gray-700/30 border border-gray-600/30 rounded-lg p-3">
                       <div className="flex items-center gap-3 flex-1 min-w-0">
                         <Monitor className="w-4 h-4 text-purple-400 flex-shrink-0" />
                         <span className="text-sm text-white truncate">{app}</span>
                       </div>
-                      <button
-                        onClick={() => removeApp(app)}
-                        className="ml-3 text-gray-400 hover:text-red-400 transition-colors"
-                      >
+                      <button onClick={() => removeApp(app)} className="ml-3 text-gray-400 hover:text-red-400 transition-colors">
                         <X className="w-4 h-4" />
                       </button>
                     </div>
@@ -312,8 +291,7 @@ const handleSave = async () => {
           {/* Websites Section */}
           <div className="space-y-4">
             <label className="block text-sm font-medium text-gray-300">Websites</label>
-            
-            {/* Add Website Input */}
+
             <div className="flex gap-3">
               <div className="flex-1 relative">
                 <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400 w-5 h-5" />
@@ -321,7 +299,6 @@ const handleSave = async () => {
                   value={newWebsite}
                   onChange={(e) => setNewWebsite(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleAddWebsite()}
-
                   className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-800/50 backdrop-blur-xl border border-gray-700/50 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 shadow-lg"
                   placeholder="https://example.com"
                 />
@@ -341,18 +318,12 @@ const handleSave = async () => {
                 <h4 className="text-sm font-medium text-gray-300 mb-3">Added Websites ({websites.length})</h4>
                 <div className="space-y-2">
                   {websites.map((website, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between bg-gray-700/30 border border-gray-600/30 rounded-lg p-3"
-                    >
+                    <div key={index} className="flex items-center justify-between bg-gray-700/30 border border-gray-600/30 rounded-lg p-3">
                       <div className="flex items-center gap-3 flex-1 min-w-0">
                         <Globe className="w-4 h-4 text-green-400 flex-shrink-0" />
                         <span className="text-sm text-white truncate">{website}</span>
                       </div>
-                      <button
-                        onClick={() => removeWebsite(website)}
-                        className="ml-3 text-gray-400 hover:text-red-400 transition-colors"
-                      >
+                      <button onClick={() => removeWebsite(website)} className="ml-3 text-gray-400 hover:text-red-400 transition-colors">
                         <X className="w-4 h-4" />
                       </button>
                     </div>
@@ -377,29 +348,24 @@ const handleSave = async () => {
           {/* Save Button */}
           <div className="flex justify-end">
             <button
-  disabled={saving}
-  onClick={handleSave}
-  className={`flex items-center gap-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-8 py-4 rounded-xl font-semibold shadow-lg transform transition-all duration-300 ${
-    saving
-      ? 'opacity-50 cursor-not-allowed'
-      : 'hover:from-green-700 hover:to-emerald-700 hover:shadow-xl hover:scale-105'
-  }`}
->
-  <Save className="w-5 h-5" />
-  {saving ? "Saving..." : "Save Changes"}
-</button>
-
+              disabled={saving}
+              onClick={handleSave}
+              className={`flex items-center gap-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-8 py-4 rounded-xl font-semibold shadow-lg transform transition-all duration-300 ${
+                saving
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:from-green-700 hover:to-emerald-700 hover:shadow-xl hover:scale-105"
+              }`}
+            >
+              <Save className="w-5 h-5" />
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
           </div>
         </div>
       </div>
 
-      <style >{`
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
+      <style>{`
+        .animation-delay-2000 { animation-delay: 2s; }
+        .animation-delay-4000 { animation-delay: 4s; }
       `}</style>
     </div>
   );
