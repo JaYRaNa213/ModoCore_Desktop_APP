@@ -1,10 +1,14 @@
+// TemplateDetail.jsx
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Button } from "../components/ui/Button";
 import { Pencil, Rocket, ArrowLeft } from "lucide-react";
-import { getGuestTemplates, doLaunch, purgeOldGuestTemplates } from "../utils/guestTemplates";
+import { doLaunch } from "../utils/guestTemplates";
 import { useAuth } from "../context/AuthContext";
+import { getTemplateById } from "../services/TemplateService"; // ✅ use service
+
+import api from "../services/api"; // ✅ use API wrapper (with token)
+import axios from "axios"; // fallback if you want direct calls
 
 export default function TemplateDetail() {
   const { id } = useParams();
@@ -18,18 +22,11 @@ export default function TemplateDetail() {
       try {
         if (!id) throw new Error("No template ID");
 
-        if (user) {
-          // Logged-in user: fetch from backend
-          const res = await axios.get(`http://localhost:5000/api/templates/${id}`);
-          setTemplate(res.data);
-        } else {
-          // Guest user: fetch from localStorage
-          purgeOldGuestTemplates(); // Clean up old ones
-          const guestTemplates = getGuestTemplates();
-          const found = guestTemplates.find((t) => t._id === id);
-          if (!found) throw new Error("Template not found in guest templates");
-          setTemplate(found);
-        }
+        // ✅ use the service (handles user vs guest correctly)
+        const found = await getTemplateById(id, user);
+        if (!found) throw new Error("Template not found");
+
+        setTemplate(found);
       } catch (err) {
         console.error("Error loading template:", err);
         alert("❌ Template not found.");
@@ -42,6 +39,7 @@ export default function TemplateDetail() {
     fetchTemplate();
   }, [id, user, navigate]);
 
+    // ✅ no parameter needed
   const handleLaunch = async () => {
     try {
       const hasApps = Array.isArray(template.apps) && template.apps.length > 0;
@@ -52,36 +50,31 @@ export default function TemplateDetail() {
         return;
       }
 
-      if (user) {
-        // Backend launch for logged-in users
-        await axios.post(`http://localhost:5000/api/templates/${template._id}/launch`);
+      if (user && template._id) {
+        // ✅ use API wrapper (automatically includes token)
+        await api.post(`/templates/${template._id}/launch`);
         alert("✅ Template launched!");
       } else {
-        // Local launch for guests
         await doLaunch(template);
         alert("✅ Guest template launched!");
       }
     } catch (err) {
-      console.error("🚨 Launch failed:", err);
+      console.error("🚨 Launch failed", err.response?.data || err.message);
       alert("❌ Launch failed: " + (err.response?.data?.details || err.message));
     }
   };
 
-  if (loading) {
-    return <div className="p-6 text-gray-500">⏳ Loading template...</div>;
-  }
 
-  if (!template) {
-    return <div className="p-6 text-red-500">⚠️ Template not found.</div>;
-  }
+  if (loading) return <div className="p-6 text-gray-500">⏳ Loading template...</div>;
+  if (!template) return <div className="p-6 text-red-500">⚠️ Template not found.</div>;
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">📝 Template Preview</h1>
+        <h1 className="text-2xl font-bold text-white-800">📝 Template Preview</h1>
         <div className="flex gap-3">
           <button
-            onClick={() => navigate(`/templates/edit/${template._id}`)}
+            onClick={() => navigate(`/templates/edit/${template._id || template.id}`)}
             className="text-sm text-indigo-600 hover:underline flex items-center gap-1"
           >
             <Pencil size={16} /> Edit
@@ -101,11 +94,12 @@ export default function TemplateDetail() {
         </h2>
         <p className="text-gray-600 mb-4">{template.description}</p>
 
+        {/* apps + websites */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-700">
           <div>
             <p className="font-medium">🧩 Apps:</p>
             <ul className="list-disc pl-4 mt-1">
-              {Array.isArray(template.apps) && template.apps.length > 0 ? (
+              {template.apps?.length > 0 ? (
                 template.apps.map((app, idx) => <li key={idx}>{app}</li>)
               ) : (
                 <li className="italic text-gray-400">No apps specified</li>
@@ -115,7 +109,7 @@ export default function TemplateDetail() {
           <div>
             <p className="font-medium">🌐 Websites:</p>
             <ul className="list-disc pl-4 mt-1">
-              {Array.isArray(template.websites) && template.websites.length > 0 ? (
+              {template.websites?.length > 0 ? (
                 template.websites.map((url, idx) => <li key={idx}>{url}</li>)
               ) : (
                 <li className="italic text-gray-400">No websites specified</li>
@@ -125,13 +119,9 @@ export default function TemplateDetail() {
         </div>
 
         <div className="mt-6 space-y-2 text-sm text-gray-700">
-          <p>
-            <strong>📊 Usage Count:</strong> {template.usageCount || 0}
-          </p>
+          <p><strong>📊 Usage Count:</strong> {template.usageCount || 0}</p>
           {template.schedule && (
-            <p>
-              <strong>⏰ Scheduled:</strong> {template.schedule}
-            </p>
+            <p><strong>⏰ Scheduled:</strong> {template.schedule}</p>
           )}
         </div>
 

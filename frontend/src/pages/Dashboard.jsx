@@ -384,11 +384,14 @@ useEffect(() => {
         Launch
       </button>
 
-     <Link to={`/template/${template._id}`} 
-        className="px-4 py-3 bg-neutral-700 hover:bg-neutral-600 border border-neutral-600 text-neutral-200 rounded-xl transition-all duration-300 group/view"
-      >
-        <Eye className="w-4 h-4 group-hover/view:scale-110 transition-transform duration-300" />
-      </Link>
+     <Link
+  to={`/template/${template._id || template.id}`}
+  className="px-4 py-3 bg-neutral-700 hover:bg-neutral-600 border border-neutral-600 text-neutral-200 rounded-xl transition-all duration-300 group/view"
+>
+  <Eye className="w-4 h-4 group-hover/view:scale-110 transition-transform duration-300" />
+</Link>
+
+
 
       <Link to={`/templates/edit/${template._id}`} 
         className="px-4 py-3 bg-neutral-700 hover:bg-neutral-600 border border-neutral-600 text-neutral-200 rounded-xl transition-all duration-300 group/edit"
