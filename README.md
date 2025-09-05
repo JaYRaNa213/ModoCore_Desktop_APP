@@ -27,175 +27,145 @@
 
 ## 📁 Project Structure
 ```
-├── .env
-├── .gitignore
-├── dist
-│   ├── assets
-│   │   ├── index-B4gH2CKm.js
-│   │   └── index-CQMXqsQP.css
-│   ├── icon.ico
-│   ├── index.html
-│   ├── preload.js
-│   └── vite.svg
-├── electron.cjs
-├── eslint.config.js
-├── index.html
-├── package-lock.json
-├── package.json
-├── preload.js
-├── public
-│   ├── icon.ico
-│   └── vite.svg
-├── README.md
-├── release
-│   ├── builder-debug.yml
-│   ├── builder-effective-config.yaml
-│   ├── ContextSwap Setup 1.0.2.exe
-│   ├── ContextSwap Setup 1.0.2.exe.blockmap
-│   ├── latest.yml
-│   └── win-unpacked
-│       ├── chrome_100_percent.pak
-│       ├── chrome_200_percent.pak
-│       ├── ContextSwap.exe
-│       ├── d3dcompiler_47.dll
-│       ├── ffmpeg.dll
-│       ├── icudtl.dat
-│       ├── libEGL.dll
-│       ├── libGLESv2.dll
-│       ├── LICENSE.electron.txt
-│       ├── LICENSES.chromium.html
-│       ├── locales
-│       │   ├── af.pak
-│       │   ├── am.pak
-│       │   ├── ar.pak
-│       │   ├── bg.pak
-│       │   ├── bn.pak
-│       │   ├── ca.pak
-│       │   ├── cs.pak
-│       │   ├── da.pak
-│       │   ├── de.pak
-│       │   ├── el.pak
-│       │   ├── en-GB.pak
-│       │   ├── en-US.pak
-│       │   ├── es-419.pak
-│       │   ├── es.pak
-│       │   ├── et.pak
-│       │   ├── fa.pak
-│       │   ├── fi.pak
-│       │   ├── fil.pak
-│       │   ├── fr.pak
-│       │   ├── gu.pak
-│       │   ├── he.pak
-│       │   ├── hi.pak
-│       │   ├── hr.pak
-│       │   ├── hu.pak
-│       │   ├── id.pak
-│       │   ├── it.pak
-│       │   ├── ja.pak
-│       │   ├── kn.pak
-│       │   ├── ko.pak
-│       │   ├── lt.pak
-│       │   ├── lv.pak
-│       │   ├── ml.pak
-│       │   ├── mr.pak
-│       │   ├── ms.pak
-│       │   ├── nb.pak
-│       │   ├── nl.pak
-│       │   ├── pl.pak
-│       │   ├── pt-BR.pak
-│       │   ├── pt-PT.pak
-│       │   ├── ro.pak
-│       │   ├── ru.pak
-│       │   ├── sk.pak
-│       │   ├── sl.pak
-│       │   ├── sr.pak
-│       │   ├── sv.pak
-│       │   ├── sw.pak
-│       │   ├── ta.pak
-│       │   ├── te.pak
-│       │   ├── th.pak
-│       │   ├── tr.pak
-│       │   ├── uk.pak
-│       │   ├── ur.pak
-│       │   ├── vi.pak
-│       │   ├── zh-CN.pak
-│       │   └── zh-TW.pak
-│       ├── resources
-│       │   ├── app-update.yml
-│       │   ├── app.asar
-│       │   └── elevate.exe
-│       ├── resources.pak
-│       ├── snapshot_blob.bin
-│       ├── v8_context_snapshot.bin
-│       ├── vk_swiftshader.dll
-│       ├── vk_swiftshader_icd.json
-│       └── vulkan-1.dll
-├── src
-│   ├── App.css
-│   ├── App.jsx
-│   ├── assets
-│   │   ├── app-icon.ico
-│   │   └── react.svg
-│   ├── auth
-│   │   ├── Login.jsx
-│   │   ├── PrivateRoute.jsx
-│   │   └── Register.jsx
-│   ├── components
-│   │   ├── AutomationForm.jsx
-│   │   ├── CronHelperModal.jsx
-│   │   ├── Header.jsx
-│   │   ├── LogTable.jsx
-│   │   ├── Sidebar.jsx
-│   │   ├── ui
-│   │   │   ├── Button.jsx
-│   │   │   ├── Card.jsx
-│   │   │   ├── Input.jsx
-│   │   │   ├── Modal.jsx
-│   │   │   ├── Textarea.jsx
-│   │   │   └── ToggleSwitch.jsx
-│   │   └── WindowControls.jsx
-│   ├── context
-│   │   ├── AppContext.jsx
-│   │   ├── AuthContext.jsx
-│   │   └── TemplateContext.jsx
-│   ├── hooks
-│   │   ├── useFetchLogs.js
-│   │   ├── useLocalStorage.js
-│   │   └── usePreviousAppWebsites.js
-│   ├── index.css
-│   ├── main.jsx
-│   ├── pages
-│   │   ├── AddTemplate.jsx
-│   │   ├── admin
-│   │   │   └── AdminPanel.jsx
-│   │   ├── Analytics.jsx
-│   │   ├── AutomationLogs.jsx
-│   │   ├── Automations.jsx
-│   │   ├── Dashboard.jsx
-│   │   ├── EditTemplate.jsx
-│   │   ├── LaunchHistory.jsx
-│   │   ├── Logs.jsx
-│   │   ├── NotFound.jsx
-│   │   ├── Notifications.jsx
-│   │   ├── Profile.jsx
-│   │   ├── ScheduledTemplates.jsx
-│   │   ├── Settings.jsx
-│   │   ├── StatCard.jsx
-│   │   ├── TemplateCard.jsx
-│   │   ├── TemplateDetail.jsx
-│   │   └── Templates.jsx
+├── .gitattributes
+├── .github
+│   └── workflows
+│       └── release.yml
+├── backend
+│   ├── .env
+│   ├── .gitignore
+│   ├── app.js
+│   ├── config
+│   │   └── db.js
+│   ├── controllers
+│   │   ├── automation.controller.js
+│   │   ├── guest.controller.js
+│   │   ├── log.controller.js
+│   │   ├── setting.controller.js
+│   │   ├── template.controller.js
+│   │   └── user.controller.js
+│   ├── middlewares
+│   │   ├── auth.middleware.js
+│   │   └── error.middleware.js
+│   ├── models
+│   │   ├── automation.model.js
+│   │   ├── automationLogs.model.js
+│   │   ├── preferences.model.js
+│   │   ├── template.model.js
+│   │   └── user.model.js
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── README.md
+│   ├── routes
+│   │   ├── admin.routes.js
+│   │   ├── automation.routes.js
+│   │   ├── guest.route.js
+│   │   ├── log.routes.js
+│   │   ├── template.routes.js
+│   │   └── user.routes.js
+│   ├── scheduler
+│   │   └── automation.scheduler.js
+│   ├── server.js
 │   ├── services
-│   │   ├── analyticsService.js
-│   │   ├── api.js
-│   │   ├── automationService.js
-│   │   └── TemplateService.js
+│   │   ├── scheduler.service.js
+│   │   └── sync.service.js
+│   ├── tree.cjs
+│   ├── tree.txt
 │   └── utils
-│       ├── guestTemplates.js
-│       └── validators.js
-├── tailwind.config.js
-├── tree.cjs
-├── tree.txt
-└── vite.config.js
+│       ├── jwt.js
+│       ├── launchApps.js
+│       ├── launcher.util.js
+│       └── logger.js
+├── frontend
+│   ├── .env
+│   ├── .gitignore
+│   ├── dist
+│   │   ├── assets
+│   │   │   ├── index-BLHBy10J.css
+│   │   │   └── index-CcCMfaIW.js
+│   │   ├── icon.ico
+│   │   ├── index.html
+│   │   ├── preload.js
+│   │   └── vite.svg
+│   ├── electron.cjs
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── preload.js
+│   ├── public
+│   │   ├── icon.ico
+│   │   └── vite.svg
+│   ├── README.md
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── assets
+│   │   │   ├── app-icon.ico
+│   │   │   └── react.svg
+│   │   ├── auth
+│   │   │   ├── Login.jsx
+│   │   │   ├── PrivateRoute.jsx
+│   │   │   └── Register.jsx
+│   │   ├── components
+│   │   │   ├── AutomationForm.jsx
+│   │   │   ├── CronHelperModal.jsx
+│   │   │   ├── Header.jsx
+│   │   │   ├── LogTable.jsx
+│   │   │   ├── Sidebar.jsx
+│   │   │   ├── ui
+│   │   │   │   ├── Button.jsx
+│   │   │   │   ├── Card.jsx
+│   │   │   │   ├── Input.jsx
+│   │   │   │   ├── Modal.jsx
+│   │   │   │   ├── Textarea.jsx
+│   │   │   │   └── ToggleSwitch.jsx
+│   │   │   └── WindowControls.jsx
+│   │   ├── context
+│   │   │   ├── AuthContext.jsx
+│   │   │   └── TemplateContext.jsx
+│   │   ├── hooks
+│   │   │   ├── useFetchLogs.js
+│   │   │   ├── useLocalStorage.js
+│   │   │   └── usePreviousAppWebsites.js
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   ├── pages
+│   │   │   ├── AddTemplate.jsx
+│   │   │   ├── admin
+│   │   │   │   └── AdminPanel.jsx
+│   │   │   ├── Analytics.jsx
+│   │   │   ├── AutomationLogs.jsx
+│   │   │   ├── Automations.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── EditTemplate.jsx
+│   │   │   ├── LaunchHistory.jsx
+│   │   │   ├── Logs.jsx
+│   │   │   ├── NotFound.jsx
+│   │   │   ├── Notifications.jsx
+│   │   │   ├── Profile.jsx
+│   │   │   ├── ScheduledTemplates.jsx
+│   │   │   ├── Settings.jsx
+│   │   │   ├── StatCard.jsx
+│   │   │   ├── TemplateCard.jsx
+│   │   │   ├── TemplateDetail.jsx
+│   │   │   └── Templates.jsx
+│   │   ├── services
+│   │   │   ├── analyticsService.js
+│   │   │   ├── api.js
+│   │   │   ├── automationService.js
+│   │   │   ├── guestApi.js
+│   │   │   └── TemplateService.js
+│   │   └── utils
+│   │       ├── guestTemplates.js
+│   │       └── validators.js
+│   ├── tailwind.config.js
+│   ├── tree.cjs
+│   ├── tree.txt
+│   └── vite.config.js
+├── h origin main --force
+├── README.md
+└── tree.cjs
 ```
 
 yaml

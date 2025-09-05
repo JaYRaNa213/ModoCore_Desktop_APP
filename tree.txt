@@ -1,0 +1,139 @@
+├── .gitattributes
+├── .github
+│   └── workflows
+│       └── release.yml
+├── backend
+│   ├── .env
+│   ├── .gitignore
+│   ├── app.js
+│   ├── config
+│   │   └── db.js
+│   ├── controllers
+│   │   ├── automation.controller.js
+│   │   ├── guest.controller.js
+│   │   ├── log.controller.js
+│   │   ├── setting.controller.js
+│   │   ├── template.controller.js
+│   │   └── user.controller.js
+│   ├── middlewares
+│   │   ├── auth.middleware.js
+│   │   └── error.middleware.js
+│   ├── models
+│   │   ├── automation.model.js
+│   │   ├── automationLogs.model.js
+│   │   ├── preferences.model.js
+│   │   ├── template.model.js
+│   │   └── user.model.js
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── README.md
+│   ├── routes
+│   │   ├── admin.routes.js
+│   │   ├── automation.routes.js
+│   │   ├── guest.route.js
+│   │   ├── log.routes.js
+│   │   ├── template.routes.js
+│   │   └── user.routes.js
+│   ├── scheduler
+│   │   └── automation.scheduler.js
+│   ├── server.js
+│   ├── services
+│   │   ├── scheduler.service.js
+│   │   └── sync.service.js
+│   ├── tree.cjs
+│   ├── tree.txt
+│   └── utils
+│       ├── jwt.js
+│       ├── launchApps.js
+│       ├── launcher.util.js
+│       └── logger.js
+├── frontend
+│   ├── .env
+│   ├── .gitignore
+│   ├── dist
+│   │   ├── assets
+│   │   │   ├── index-BLHBy10J.css
+│   │   │   └── index-CcCMfaIW.js
+│   │   ├── icon.ico
+│   │   ├── index.html
+│   │   ├── preload.js
+│   │   └── vite.svg
+│   ├── electron.cjs
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── preload.js
+│   ├── public
+│   │   ├── icon.ico
+│   │   └── vite.svg
+│   ├── README.md
+│   ├── src
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── assets
+│   │   │   ├── app-icon.ico
+│   │   │   └── react.svg
+│   │   ├── auth
+│   │   │   ├── Login.jsx
+│   │   │   ├── PrivateRoute.jsx
+│   │   │   └── Register.jsx
+│   │   ├── components
+│   │   │   ├── AutomationForm.jsx
+│   │   │   ├── CronHelperModal.jsx
+│   │   │   ├── Header.jsx
+│   │   │   ├── LogTable.jsx
+│   │   │   ├── Sidebar.jsx
+│   │   │   ├── ui
+│   │   │   │   ├── Button.jsx
+│   │   │   │   ├── Card.jsx
+│   │   │   │   ├── Input.jsx
+│   │   │   │   ├── Modal.jsx
+│   │   │   │   ├── Textarea.jsx
+│   │   │   │   └── ToggleSwitch.jsx
+│   │   │   └── WindowControls.jsx
+│   │   ├── context
+│   │   │   ├── AuthContext.jsx
+│   │   │   └── TemplateContext.jsx
+│   │   ├── hooks
+│   │   │   ├── useFetchLogs.js
+│   │   │   ├── useLocalStorage.js
+│   │   │   └── usePreviousAppWebsites.js
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   ├── pages
+│   │   │   ├── AddTemplate.jsx
+│   │   │   ├── admin
+│   │   │   │   └── AdminPanel.jsx
+│   │   │   ├── Analytics.jsx
+│   │   │   ├── AutomationLogs.jsx
+│   │   │   ├── Automations.jsx
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── EditTemplate.jsx
+│   │   │   ├── LaunchHistory.jsx
+│   │   │   ├── Logs.jsx
+│   │   │   ├── NotFound.jsx
+│   │   │   ├── Notifications.jsx
+│   │   │   ├── Profile.jsx
+│   │   │   ├── ScheduledTemplates.jsx
+│   │   │   ├── Settings.jsx
+│   │   │   ├── StatCard.jsx
+│   │   │   ├── TemplateCard.jsx
+│   │   │   ├── TemplateDetail.jsx
+│   │   │   └── Templates.jsx
+│   │   ├── services
+│   │   │   ├── analyticsService.js
+│   │   │   ├── api.js
+│   │   │   ├── automationService.js
+│   │   │   ├── guestApi.js
+│   │   │   └── TemplateService.js
+│   │   └── utils
+│   │       ├── guestTemplates.js
+│   │       └── validators.js
+│   ├── tailwind.config.js
+│   ├── tree.cjs
+│   ├── tree.txt
+│   └── vite.config.js
+├── h origin main --force
+├── README.md
+└── tree.cjs
