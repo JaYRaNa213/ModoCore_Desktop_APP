@@ -14,12 +14,15 @@ function createWindow() {
       ? path.join(__dirname, "public", "icon.ico")
       : path.join(process.resourcesPath, "icon.ico"),
     frame: true, 
+    autoHideMenuBar: true, 
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: false,
       contextIsolation: true,
     },
   });
+
+   win.setMenu(null);
 
   if (isDev) {
     process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
