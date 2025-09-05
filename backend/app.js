@@ -6,7 +6,7 @@ import templateRoutes from "./routes/template.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import automationRoutes from "./routes/automation.routes.js";
 import logRoutes from "./routes/log.routes.js";
-
+import guestRoutes from "./routes/guest.route.js";
 dotenv.config();
 const app = express();
 
@@ -22,6 +22,8 @@ app.use("/api/templates", templateRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/automation", automationRoutes);
 app.use("/api/automation-logs", logRoutes);
+
+app.use("/api/guest", guestRoutes);
 
 // Global Error Handler
 app.use((err, req, res, next) => {
