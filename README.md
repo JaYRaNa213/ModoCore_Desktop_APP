@@ -26,13 +26,14 @@
 ---
 
 ## 📁 Project Structure
-
+```
 context_p/
 ├── frontend/ # Electron + Vite + React (Main App)
 │ ├── src/ # React source code
 │ ├── dist/ # Production build output
 │ └── public/ # Static assets like icon.ico
 ├── backend/ # (Coming Soon) Node.js/Express API
+```
 
 yaml
 Copy
@@ -127,11 +128,6 @@ Would you like me to include `.exe` download links or usage instructions too?
 
 
 
-
-
-
-
-Ask ChatGPT
 
 
 
