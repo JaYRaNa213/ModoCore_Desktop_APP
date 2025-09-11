@@ -6,6 +6,28 @@ const isDev = !app.isPackaged;
 
 let win; // Store globally to access in updater, etc.
 
+
+const { protocol } = require("electron");
+function registerAppProtocol() {
+  protocol.registerFileProtocol("app", (request, callback) => {
+    try {
+      let url = request.url.replace("app://", "");
+      if (!url || url === "/" || url.startsWith("?")) {
+        url = "index.html";
+      }
+
+      // ✅ Always resolve from frontend/dist
+      const filePath = path.join(__dirname, "frontend", "dist", url);
+
+      console.log("📂 Resolving:", request.url, "->", filePath);
+      callback({ path: filePath });
+    } catch (error) {
+      console.error("❌ Failed to load app:// resource:", error);
+    }
+  });
+}
+
+
 function createWindow() {
   win = new BrowserWindow({
     width: 1280,
@@ -23,18 +45,21 @@ function createWindow() {
   });
 
    win.setMenu(null);
+if (isDev) {
+  process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
+  win.loadURL("http://localhost:5173");
+  win.webContents.openDevTools();
+} else {
+  win.loadURL("app://index.html");
+}
 
-  if (isDev) {
-    process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
-    win.loadURL("http://localhost:5173");
-    win.webContents.openDevTools(); // Dev only
-  } else {
-    win.loadFile(path.join(__dirname, "dist", "index.html")).catch(console.error);
 
-    win.webContents.on("devtools-opened", () => {
-      win.webContents.closeDevTools(); // Prevent devtools in prod
-    });
-  }
+win.webContents.on("did-fail-load", (event, errorCode, errorDescription, validatedURL) => {
+  console.error("❌ Page failed to load:", validatedURL, errorCode, errorDescription);
+});
+
+
+
 }
 
 // ✅ IPC listeners (define once globally)
@@ -75,9 +100,8 @@ function setupAutoUpdater() {
   autoUpdater.on("update-not-available", () => console.log("✅ No update available."));
   autoUpdater.on("error", (error) => console.error("❌ Auto update error:", error));
 }
-
-// ✅ App lifecycle
 app.whenReady().then(() => {
+  if (!isDev) registerAppProtocol();
   createWindow();
   if (!isDev) setupAutoUpdater();
 });
