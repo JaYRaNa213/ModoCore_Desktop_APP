@@ -47,7 +47,7 @@ export default function Sidebar() {
             </div>
             <div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent tracking-tight">
-                ContextSwap
+                Templaunch
               </h1>
               <p className="text-xs text-gray-400 -mt-1">Workspace Manager</p>
             </div>
@@ -105,7 +105,7 @@ export default function Sidebar() {
         <div className="text-xs text-gray-400 text-center space-y-1">
           <p className="flex items-center justify-center gap-2">
             <ShieldCheck className="w-3 h-3" />
-            © 2025 ContextSwap
+            © 2025 Templaunch
           </p>
           <p className="text-gray-500">Built with ❤️ by Jay Rana</p>
         </div>

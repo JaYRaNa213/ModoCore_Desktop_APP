@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const IGNORE = ['node_modules', '.git', '.DS_Store', '.vscode','release' ];
+const IGNORE = ['node_modules', '.git', '.DS_Store', '.vscode' ];
 
 function generateTree(dir, prefix = '') {
   const files = fs.readdirSync(dir).filter(f => !IGNORE.includes(f));

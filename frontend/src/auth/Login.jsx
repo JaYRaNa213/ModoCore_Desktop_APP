@@ -50,7 +50,7 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-black px-4">
       <div className="bg-neutral-900 p-8 rounded-xl w-full max-w-md shadow-2xl">
         <h1 className="text-3xl font-bold text-white text-center mb-6">
-          Login to ContextSwap
+          Login to Templaunch
         </h1>
         <form onSubmit={handleLogin} className="space-y-4">
           <input

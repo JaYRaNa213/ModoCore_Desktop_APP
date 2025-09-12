@@ -22,7 +22,7 @@ release/
 *.blockmap
 *.zip
 *.tar.gz
-ContextSwap Setup*.exe
+Templaunch Setup*.exe
 
 # Vite
 .vite/

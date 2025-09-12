@@ -2,26 +2,51 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/Button";
+import api from "../services/api";
 
 export default function Templates() {
   const [templates, setTemplates] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/templates").then((res) => {
-      setTemplates(res.data);
-    });
-  }, []);
+  api.get("/templates").then((res) => {
+    setTemplates(res.data);
+  });
+}, []);
+
+
+// useEffect(() => {
+//   axios
+//     .get(`${import.meta.env.VITE_API_URL}/templates`)
+//     .then((res) => {
+//       setTemplates(res.data);
+//     });
+// }, []);
+
 
   const handleLaunch = async (id) => {
-    try {
-      await axios.post(`http://localhost:5000/api/templates/${id}/launch`);
-      alert("Template launched!");
-    } catch (err) {
-      console.error("Failed to launch template", err);
-      alert("Launch failed");
-    }
-  };
+  try {
+    await api.post(`/templates/${id}/launch`);
+    alert("Template launched!");
+  } catch (err) {
+    console.error("Failed to launch template", err);
+    alert("Launch failed");
+  }
+};
+
+
+// const handleLaunch = async (id) => {
+//   try {
+//     await axios.post(
+//       `${import.meta.env.VITE_API_URL}/templates/${id}/launch`
+//     );
+//     alert("Template launched!");
+//   } catch (err) {
+//     console.error("Failed to launch template", err);
+//     alert("Launch failed");
+//   }
+// };
+
 
   return (
     <div className="p-6">

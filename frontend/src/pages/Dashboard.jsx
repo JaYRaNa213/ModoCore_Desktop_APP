@@ -68,7 +68,10 @@ export default function Dashboard() {
 
     if (user && template._id) {
       // Logged-in user: call backend launch
-      await axios.post(`http://localhost:5000/api/templates/${template._id}/launch`);
+     await axios.post(
+  `${import.meta.env.VITE_API_URL}/templates/${template._id}/launch`
+);
+
       alert("✅ Template launched!");
     } else {
       // Guest user: launch directly from local template

@@ -46,7 +46,7 @@ console.log("Header → user:", user);
                 </div>
                 <div>
                   <h1 className="text-xl font-bold bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent group-hover:from-purple-300 group-hover:via-white group-hover:to-purple-300 transition-all duration-300">
-                    ContextSwap
+                    Templaunch
                   </h1>
                   <p className="text-xs text-gray-400 -mt-1">
                     Workspace Templates

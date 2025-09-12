@@ -19,7 +19,7 @@ mongoose
     console.log("✅ MongoDB connected");
     app.listen(PORT, () => {
       console.log(`🚀 Server running at http://localhost:${PORT}`);
-      startAutomationScheduler();
+      // startAutomationScheduler();
     });
   })
   .catch((error) => {
