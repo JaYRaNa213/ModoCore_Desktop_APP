@@ -45,11 +45,12 @@
 │       └── logger.js
 ├── frontend
 │   ├── .env
+│   ├── .env.production
 │   ├── .gitignore
 │   ├── dist
 │   │   ├── assets
-│   │   │   ├── index-Beaz1yb7.js
-│   │   │   └── index-BLHBy10J.css
+│   │   │   ├── index-BLHBy10J.css
+│   │   │   └── index-BoYDjW0k.js
 │   │   ├── icon.ico
 │   │   ├── index.html
 │   │   ├── preload.js
@@ -67,13 +68,12 @@
 │   ├── release
 │   │   ├── builder-debug.yml
 │   │   ├── builder-effective-config.yaml
-│   │   ├── Templaunch Setup 1.0.3.exe
-│   │   ├── Templaunch Setup 1.0.3.exe.blockmap
 │   │   ├── latest.yml
+│   │   ├── Templaunch Setup 1.0.0.exe
+│   │   ├── Templaunch Setup 1.0.0.exe.blockmap
 │   │   └── win-unpacked
 │   │       ├── chrome_100_percent.pak
 │   │       ├── chrome_200_percent.pak
-│   │       ├── Templaunch.exe
 │   │       ├── d3dcompiler_47.dll
 │   │       ├── ffmpeg.dll
 │   │       ├── icudtl.dat
@@ -143,6 +143,7 @@
 │   │       │   └── elevate.exe
 │   │       ├── resources.pak
 │   │       ├── snapshot_blob.bin
+│   │       ├── Templaunch.exe
 │   │       ├── v8_context_snapshot.bin
 │   │       ├── vk_swiftshader.dll
 │   │       ├── vk_swiftshader_icd.json

@@ -1,42 +1,15 @@
-const { app, BrowserWindow, dialog, ipcMain } = require("electron");
-const { autoUpdater } = require("electron-updater");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 
 const isDev = !app.isPackaged;
-
-let win; // Store globally to access in updater, etc.
-
-
-const { protocol } = require("electron");
-function registerAppProtocol() {
-  protocol.registerFileProtocol("app", (request, callback) => {
-    try {
-      let url = request.url.replace("app://", "");
-      if (!url || url === "/" || url.startsWith("?")) {
-        url = "index.html";
-      }
-
-      // ✅ Always resolve from frontend/dist
-      const filePath = path.join(__dirname, "frontend", "dist", url);
-
-      console.log("📂 Resolving:", request.url, "->", filePath);
-      callback({ path: filePath });
-    } catch (error) {
-      console.error("❌ Failed to load app:// resource:", error);
-    }
-  });
-}
-
+let win;
 
 function createWindow() {
   win = new BrowserWindow({
     width: 1280,
     height: 800,
-    icon: isDev
-      ? path.join(__dirname, "public", "icon.ico")
-      : path.join(process.resourcesPath, "icon.ico"),
-    frame: true, 
-    autoHideMenuBar: true, 
+    icon: path.join(__dirname, "public", "icon.ico"),
+    autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: false,
@@ -44,67 +17,31 @@ function createWindow() {
     },
   });
 
-   win.setMenu(null);
-if (isDev) {
-  process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
+  if (isDev) {
   win.loadURL("http://localhost:5173");
-  win.webContents.openDevTools();
 } else {
-  win.loadURL("app://index.html");
+  win.loadFile(path.join(__dirname, "dist", "index.html"));
 }
 
 
-win.webContents.on("did-fail-load", (event, errorCode, errorDescription, validatedURL) => {
-  console.error("❌ Page failed to load:", validatedURL, errorCode, errorDescription);
-});
-
-
-
+  // DevTools shortcut (Ctrl+Shift+I)
+  win.webContents.on("before-input-event", (event, input) => {
+    if ((input.control || input.meta) && input.shift && input.key.toLowerCase() === "i") {
+      win.webContents.isDevToolsOpened() ? win.webContents.closeDevTools() : win.webContents.openDevTools({ mode: "detach" });
+    }
+  });
 }
 
-// ✅ IPC listeners (define once globally)
-ipcMain.on("close-window", () => {
-  BrowserWindow.getFocusedWindow()?.close();
-});
-
-ipcMain.on("minimize-window", () => {
-  BrowserWindow.getFocusedWindow()?.minimize();
-});
-
+// IPC window controls
+ipcMain.on("close-window", () => BrowserWindow.getFocusedWindow()?.close());
+ipcMain.on("minimize-window", () => BrowserWindow.getFocusedWindow()?.minimize());
 ipcMain.on("maximize-window", () => {
   const currentWindow = BrowserWindow.getFocusedWindow();
-  if (currentWindow) {
-    currentWindow.isMaximized() ? currentWindow.unmaximize() : currentWindow.maximize();
-  }
+  if (currentWindow) currentWindow.isMaximized() ? currentWindow.unmaximize() : currentWindow.maximize();
 });
 
-// ✅ Auto-updater logic (production only)
-function setupAutoUpdater() {
-  autoUpdater.checkForUpdatesAndNotify();
-
-  autoUpdater.on("update-downloaded", () => {
-    dialog.showMessageBox({
-      type: "info",
-      title: "Update Ready",
-      message: "A new version has been downloaded. Restart the app to apply the update.",
-      buttons: ["Restart Now", "Later"],
-    }).then((result) => {
-      if (result.response === 0) {
-        autoUpdater.quitAndInstall();
-      }
-    });
-  });
-
-  autoUpdater.on("checking-for-update", () => console.log("🔄 Checking for update..."));
-  autoUpdater.on("update-available", () => console.log("⬇️ Update available."));
-  autoUpdater.on("update-not-available", () => console.log("✅ No update available."));
-  autoUpdater.on("error", (error) => console.error("❌ Auto update error:", error));
-}
-app.whenReady().then(() => {
-  if (!isDev) registerAppProtocol();
-  createWindow();
-  if (!isDev) setupAutoUpdater();
-});
+// App lifecycle
+app.whenReady().then(createWindow);
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();

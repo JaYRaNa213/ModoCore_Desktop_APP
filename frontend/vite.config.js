@@ -18,7 +18,7 @@ export default defineConfig({
           dest: '',
         },
         {
-          src: 'public/icon.ico',
+          src: 'public/*',
           dest: '', // ✅ This ensures it's available as dist/icon.ico
         },
       ],
