@@ -4,12 +4,12 @@
 
 ****Templaunch** is a productivity-focused desktop application built with **Electron**, **React**, and **TailwindCSS**. It’s designed to help users switch between different work contexts—like Coding, Studying, Meetings, etc.—with ease and efficiency. The app supports extensibility, templating, and will soon be integrated with a powerful backend.**
 
- [Live Demo : Templaunch Desktop App Download](https://contextswap-8lun.onrender.com/)     
+ [Live Demo : Templaunch Desktop App Download](https://templaunch.vercel.app/)     
 
 </div>
 ---
 
-<img src="./img/swap.png" alt="Templaunch" width="900" />
+<img src="./image.png" alt="Templaunch" width="900" />
 
 
 ## 🔧 Tech Stack
@@ -258,6 +258,7 @@ Let me know if you'd like:
 - Auto-update section for users
 
 Would you like me to include `.exe` download links or usage instructions too?
+
 
 
 
