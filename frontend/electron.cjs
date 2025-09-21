@@ -4,6 +4,9 @@ const path = require("path");
 const isDev = !app.isPackaged;
 let win;
 
+// Disable security warnings in development (optional)
+if (isDev) process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+
 function createWindow() {
   win = new BrowserWindow({
     width: 1280,
@@ -12,24 +15,46 @@ function createWindow() {
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-      nodeIntegration: false,
-      contextIsolation: true,
+      nodeIntegration: false,   // ✅ keeps your app safe
+      contextIsolation: true,   // ✅ keeps your app safe
     },
   });
 
   if (isDev) {
-  win.loadURL("http://localhost:5173");
-} else {
-  win.loadFile(path.join(__dirname, "dist", "index.html"));
-}
-
+    // Vite dev server
+    win.loadURL("http://localhost:5173");
+  } else {
+    // Production build
+    win.loadFile(path.join(__dirname, "dist", "index.html"));
+  }
 
   // DevTools shortcut (Ctrl+Shift+I)
   win.webContents.on("before-input-event", (event, input) => {
     if ((input.control || input.meta) && input.shift && input.key.toLowerCase() === "i") {
-      win.webContents.isDevToolsOpened() ? win.webContents.closeDevTools() : win.webContents.openDevTools({ mode: "detach" });
+      win.webContents.isDevToolsOpened()
+        ? win.webContents.closeDevTools()
+        : win.webContents.openDevTools({ mode: "detach" });
     }
   });
+
+  win.webContents.on('console-message', (event, level, message, line, sourceId) => {
+  if (message.includes("Autofill")) {
+    event.preventDefault(); // ignore Autofill errors
+  }
+});
+
+
+  // Add a strict Content Security Policy in production
+  if (!isDev) {
+    win.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+      callback({
+        responseHeaders: {
+          ...details.responseHeaders,
+          "Content-Security-Policy": ["default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"]
+        }
+      });
+    });
+  }
 }
 
 // IPC window controls
