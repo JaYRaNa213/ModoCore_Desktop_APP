@@ -29,6 +29,12 @@
       "icon": "public/icon.ico",
       "target": "nsis"
     },
+    "linux": {
+    "icon": "public/icon.png"
+  },
+  "mac": {
+    "icon": "public/icon.png"
+  },
     "files": [
       "dist/**/*",
       "electron.cjs",
