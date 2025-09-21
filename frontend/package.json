@@ -26,7 +26,7 @@
     "appId": "com.Templaunch.app",
     "productName": "Templaunch",
     "win": {
-      "icon": "public/icon.ico",
+      "icon": "public/icon.png",
       "target": "nsis"
     },
     "linux": {
