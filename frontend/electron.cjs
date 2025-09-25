@@ -11,7 +11,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1280,
     height: 800,
-    icon: path.join(__dirname, "public", "icon.png"),
+    icon: path.join(__dirname, "public", "icon.ico"),
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -50,7 +50,7 @@ function createWindow() {
       callback({
         responseHeaders: {
           ...details.responseHeaders,
-          "Content-Security-Policy": ["default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"]
+          "Content-Security-Policy": ["default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://contextswap-backend.onrender.com"]
         }
       });
     });

@@ -10,30 +10,29 @@
   
   },
   "scripts": {
-  "dev": "concurrently \"vite\" \"electron .\"",
-  "build:react": "vite build",
-  "build": "npm run build:react && electron-builder",
-  "electron:dev": "vite && electron .",
-  "lint": "eslint .",
-  "preview": "vite preview",
-  "start": "electron .",
-  "dist": "electron-builder --win --x64",
-  "release": "electron-builder --win --x64 --publish always",
-  "electron": "electron ."
-}
-,
+    "dev": "concurrently \"vite\" \"electron .\"",
+    "build:react": "cross-env VITE_API_URL=https://contextswap-backend.onrender.com/api vite build",
+    "build": "npm run build:react && electron-builder",
+    "electron:dev": "vite && electron .",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "start": "electron .",
+    "dist": "electron-builder --win --x64",
+    "release": "electron-builder --win --x64 --publish always",
+    "electron": "electron ."
+  },
   "build": {
     "appId": "com.Templaunch.app",
     "productName": "Templaunch",
     "win": {
-      "icon": "public/icon.png",
+      "icon": "public/icon.ico",
       "target": "nsis"
     },
     "linux": {
-    "icon": "public/icon.png"
+    "icon": "public/icon.icon"
   },
   "mac": {
-    "icon": "public/icon.png"
+    "icon": "public/icon.ico"
   },
     "files": [
       "dist/**/*",
