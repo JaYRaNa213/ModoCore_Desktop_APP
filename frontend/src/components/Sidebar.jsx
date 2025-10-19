@@ -37,11 +37,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
         )}
       >
         {/* Animated background */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900"></div>
-          <div className="absolute top-0 left-1/4 w-32 h-32 bg-purple-600/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/3 right-1/4 w-24 h-24 bg-indigo-600/10 rounded-full blur-3xl animate-pulse animation-delay-2000"></div>
-        </div>
+       
 
         {/* Logo */}
         <div className="flex items-center gap-3 mb-10">
