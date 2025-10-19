@@ -50,7 +50,7 @@ function createWindow() {
       callback({
         responseHeaders: {
           ...details.responseHeaders,
-          "Content-Security-Policy": ["default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://contextswap-backend.onrender.com"]
+          "Content-Security-Policy": ["default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://contextswap-backend.onrender.com; connect-src 'self' https://contextswap-backend.onrender.com"]
         }
       });
     });

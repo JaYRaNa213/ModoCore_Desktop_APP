@@ -16,13 +16,13 @@ export default function Notifications() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">🔔 Notifications</h1>
+        <h1 className="text-2xl font-bold text-white mb-4">🔔 Notifications</h1>
         
-        <div className="bg-white shadow rounded-xl p-5 border">
-          <h2 className="text-lg font-semibold mb-3 text-gray-700">Recent Activity</h2>
+        <div className="bg-[#0d131f] shadow rounded-xl p-5 border">
+          <h2 className="text-lg font-semibold mb-3 text-white-700">Recent Activity</h2>
           <ul className="space-y-2">
             {activities.map((item, index) => (
-              <li key={index} className="text-gray-600 flex justify-between">
+              <li key={index} className="text-white-600 flex justify-between">
                 <span>{item.text}</span>
                 <span className="text-sm text-gray-400">{item.time}</span>
               </li>
@@ -31,11 +31,11 @@ export default function Notifications() {
         </div>
       </div>
 
-      <div className="bg-white shadow rounded-xl p-5 border">
-        <h2 className="text-lg font-semibold mb-3 text-gray-700">Reminders</h2>
+      <div className="bg-[#0d131f] shadow rounded-xl p-5 border">
+        <h2 className="text-lg font-semibold mb-3 text-white-700">Reminders</h2>
         <ul className="space-y-3">
           {reminders.map((item, index) => (
-            <li key={index} className="flex items-center gap-3 text-gray-600">
+            <li key={index} className="flex items-center gap-3 text-white-600">
               {item.icon}
               <span>{item.text}</span>
             </li>
