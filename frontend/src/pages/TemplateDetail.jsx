@@ -75,34 +75,34 @@ export default function TemplateDetail() {
         <div className="flex gap-3">
           <button
             onClick={() => navigate(`/templates/edit/${template._id || template.id}`)}
-            className="text-sm text-indigo-600 hover:underline flex items-center gap-1"
+            className="text-sm text-white-700 hover:underline flex items-center gap-1"
           >
             <Pencil size={16} /> Edit
           </button>
           <button
             onClick={() => navigate("/templates")}
-            className="text-sm text-gray-500 hover:underline flex items-center gap-1"
+            className="text-sm text-white-500 hover:underline flex items-center gap-1"
           >
             <ArrowLeft size={16} /> Back
           </button>
         </div>
       </div>
 
-      <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-100">
+      <div className="bg-[#0d131f] shadow-lg rounded-xl p-6 border border-gray-100">
         <h2 className="text-xl font-semibold text-indigo-600 mb-2">
           {template.title}
         </h2>
         <p className="text-gray-600 mb-4">{template.description}</p>
 
         {/* apps + websites */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-700">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-white-700">
           <div>
             <p className="font-medium">🧩 Apps:</p>
             <ul className="list-disc pl-4 mt-1">
               {template.apps?.length > 0 ? (
                 template.apps.map((app, idx) => <li key={idx}>{app}</li>)
               ) : (
-                <li className="italic text-gray-400">No apps specified</li>
+                <li className="italic text-gray-500">No apps specified</li>
               )}
             </ul>
           </div>
@@ -118,7 +118,7 @@ export default function TemplateDetail() {
           </div>
         </div>
 
-        <div className="mt-6 space-y-2 text-sm text-gray-700">
+        <div className="mt-6 space-y-2 text-sm text-white-700">
           <p><strong>📊 Usage Count:</strong> {template.usageCount || 0}</p>
           {template.schedule && (
             <p><strong>⏰ Scheduled:</strong> {template.schedule}</p>

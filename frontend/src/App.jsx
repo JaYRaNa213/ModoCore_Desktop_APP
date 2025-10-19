@@ -150,7 +150,15 @@ export default function App() {
   return (
     <Routes>
       {/* Auth routes */}
+      
+
+      {/* Main routes */}
       <Route
+        path="*"
+        element={
+          <Layout>
+            <Routes>
+              <Route
         path="/login"
         element={
           <div className="min-h-screen flex items-center justify-center bg-neutral-900 text-white">
@@ -166,13 +174,6 @@ export default function App() {
           </div>
         }
       />
-
-      {/* Main routes */}
-      <Route
-        path="*"
-        element={
-          <Layout>
-            <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/templates" element={<Templates />} />
               {/* <Route path="/analytics" element={<Analytics />} /> */}
