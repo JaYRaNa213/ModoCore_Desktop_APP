@@ -1,11 +1,12 @@
+// electron.cjs
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 
 const isDev = !app.isPackaged;
 let win;
 
-// Disable security warnings in development (optional)
-if (isDev) process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+// ✅ Disable noisy security warnings in development
+if (isDev) process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = "true";
 
 function createWindow() {
   win = new BrowserWindow({
@@ -13,59 +14,81 @@ function createWindow() {
     height: 800,
     icon: path.join(__dirname, "public", "icon.ico"),
     autoHideMenuBar: true,
+    backgroundColor: "#1e1e1e",
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-      nodeIntegration: false,   // ✅ keeps your app safe
-      contextIsolation: true,   // ✅ keeps your app safe
+      nodeIntegration: false, // ✅ keeps app secure
+      contextIsolation: true, // ✅ isolates preload safely
     },
   });
 
+  // ✅ Load app depending on environment
   if (isDev) {
-    // Vite dev server
     win.loadURL("http://localhost:5173");
   } else {
-    // Production build
     win.loadFile(path.join(__dirname, "dist", "index.html"));
   }
 
-  // DevTools shortcut (Ctrl+Shift+I)
+  // ✅ Toggle DevTools with Ctrl+Shift+I (or Cmd+Opt+I on macOS)
   win.webContents.on("before-input-event", (event, input) => {
-    if ((input.control || input.meta) && input.shift && input.key.toLowerCase() === "i") {
-      win.webContents.isDevToolsOpened()
-        ? win.webContents.closeDevTools()
-        : win.webContents.openDevTools({ mode: "detach" });
+    const isToggleShortcut =
+      (input.control || input.meta) && input.shift && input.key.toLowerCase() === "i";
+    if (isToggleShortcut) {
+      if (win.webContents.isDevToolsOpened()) {
+        win.webContents.closeDevTools();
+      } else {
+        win.webContents.openDevTools({ mode: "detach" });
+      }
     }
   });
 
-  win.webContents.on('console-message', (event, level, message, line, sourceId) => {
-  if (message.includes("Autofill")) {
-    event.preventDefault(); // ignore Autofill errors
-  }
-});
+  // ✅ Prevent annoying autofill console spam
+  win.webContents.on("console-message", (event, level, message) => {
+    if (message.includes("Autofill")) {
+      event.preventDefault();
+    }
+  });
 
-
-  // Add a strict Content Security Policy in production
+  // ✅ Apply a strong Content Security Policy (CSP) in production
   if (!isDev) {
     win.webContents.session.webRequest.onHeadersReceived((details, callback) => {
       callback({
         responseHeaders: {
           ...details.responseHeaders,
-          "Content-Security-Policy": ["default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://contextswap-backend.onrender.com; connect-src 'self' https://contextswap-backend.onrender.com"]
-        }
+          "Content-Security-Policy": [
+            "default-src 'self'; " +
+              "script-src 'self'; " +
+              "style-src 'self' 'unsafe-inline'; " +
+              "img-src 'self' data: https://contextswap-backend.onrender.com; " +
+              "connect-src 'self' https://contextswap-backend.onrender.com; " +
+              "font-src 'self' data:; " +
+              "object-src 'none'; frame-ancestors 'none';"
+          ],
+        },
       });
     });
   }
 }
 
-// IPC window controls
-ipcMain.on("close-window", () => BrowserWindow.getFocusedWindow()?.close());
-ipcMain.on("minimize-window", () => BrowserWindow.getFocusedWindow()?.minimize());
-ipcMain.on("maximize-window", () => {
+/* ---------------- IPC Window Controls ---------------- */
+ipcMain.on("close-window", () => {
   const currentWindow = BrowserWindow.getFocusedWindow();
-  if (currentWindow) currentWindow.isMaximized() ? currentWindow.unmaximize() : currentWindow.maximize();
+  if (currentWindow) currentWindow.close();
 });
 
-// App lifecycle
+ipcMain.on("minimize-window", () => {
+  const currentWindow = BrowserWindow.getFocusedWindow();
+  if (currentWindow) currentWindow.minimize();
+});
+
+ipcMain.on("maximize-window", () => {
+  const currentWindow = BrowserWindow.getFocusedWindow();
+  if (currentWindow) {
+    currentWindow.isMaximized() ? currentWindow.unmaximize() : currentWindow.maximize();
+  }
+});
+
+/* ---------------- App Lifecycle ---------------- */
 app.whenReady().then(createWindow);
 
 app.on("window-all-closed", () => {
