@@ -50,11 +50,34 @@
 │   ├── .gitignore
 │   ├── dist
 │   │   ├── assets
-│   │   │   ├── index-CaSlPOrx.js
-│   │   │   └── index-lZ5JQnPS.css
+│   │   │   ├── index-CxSDfJNM.css
+│   │   │   └── index-CzViy_b_.js
 │   │   ├── icon.ico
 │   │   ├── icon.png
 │   │   ├── index.html
+│   │   ├── pictures
+│   │   │   ├── 11.jpg
+│   │   │   ├── 12.jpg
+│   │   │   ├── 123.jpg
+│   │   │   ├── 1234.jpg
+│   │   │   ├── Attack.jpg
+│   │   │   ├── dada.jpg
+│   │   │   ├── demonslayer.jpg
+│   │   │   ├── fffu.jpg
+│   │   │   ├── gddgsh.jpg
+│   │   │   ├── girl1.jpg
+│   │   │   ├── girl2.jpg
+│   │   │   ├── girl3.jpg
+│   │   │   ├── girl4.jpg
+│   │   │   ├── girl5.jpg
+│   │   │   ├── girl6.jpg
+│   │   │   ├── gojo1.jpg
+│   │   │   ├── gojo2.jpg
+│   │   │   ├── jayay.jpg
+│   │   │   ├── levi.jpg
+│   │   │   ├── onepiece.jpg
+│   │   │   ├── Tanjiro.jpg
+│   │   │   └── toji.jpg
 │   │   ├── preload.js
 │   │   └── vite.svg
 │   ├── electron.cjs
@@ -76,6 +99,12 @@
 │   │   │   ├── demonslayer.jpg
 │   │   │   ├── fffu.jpg
 │   │   │   ├── gddgsh.jpg
+│   │   │   ├── girl1.jpg
+│   │   │   ├── girl2.jpg
+│   │   │   ├── girl3.jpg
+│   │   │   ├── girl4.jpg
+│   │   │   ├── girl5.jpg
+│   │   │   ├── girl6.jpg
 │   │   │   ├── gojo1.jpg
 │   │   │   ├── gojo2.jpg
 │   │   │   ├── jayay.jpg

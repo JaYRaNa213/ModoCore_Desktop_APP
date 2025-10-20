@@ -4,31 +4,31 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import { ArrowLeft } from "lucide-react";
-
 const avatarOptions = [
-  "/pictures/11.jpg",
-  "/pictures/12.jpg",
-  "/pictures/123.jpg",
-  "/pictures/1234.jpg",
-  "/pictures/Attack.jpg",
-  "/pictures/demonslayer.jpg",
-  "/pictures/fffu.jpg",
-  "/pictures/gddgsh.jpg",
-  "/pictures/gojo1.jpg",
-  "/pictures/gojo2.jpg",
-  "/pictures/jayay.jpg",
-  "/pictures/levi.jpg",
-  "/pictures/onepiece.jpg",
-  "/pictures/Tanjiro.jpg",
-  "/pictures/toji.jpg",
-  "/pictures/dada.jpg",
-  "/pictures/girl1.jpg",
-  "/pictures/girl2.jpg",
-  "/pictures/girl3.jpg",
-  "/pictures/girl4.jpg",
-  "/pictures/girl5.jpg",
-  "/pictures/girl6.jpg"
+  import.meta.env.BASE_URL + "pictures/11.jpg",
+  import.meta.env.BASE_URL + "pictures/12.jpg",
+  import.meta.env.BASE_URL + "pictures/123.jpg",
+  import.meta.env.BASE_URL + "pictures/1234.jpg",
+  import.meta.env.BASE_URL + "pictures/Attack.jpg",
+  import.meta.env.BASE_URL + "pictures/demonslayer.jpg",
+  import.meta.env.BASE_URL + "pictures/fffu.jpg",
+  import.meta.env.BASE_URL + "pictures/gddgsh.jpg",
+  import.meta.env.BASE_URL + "pictures/gojo1.jpg",
+  import.meta.env.BASE_URL + "pictures/gojo2.jpg",
+  import.meta.env.BASE_URL + "pictures/jayay.jpg",
+  import.meta.env.BASE_URL + "pictures/levi.jpg",
+  import.meta.env.BASE_URL + "pictures/onepiece.jpg",
+  import.meta.env.BASE_URL + "pictures/Tanjiro.jpg",
+  import.meta.env.BASE_URL + "pictures/toji.jpg",
+  import.meta.env.BASE_URL + "pictures/dada.jpg",
+  import.meta.env.BASE_URL + "pictures/girl1.jpg",
+  import.meta.env.BASE_URL + "pictures/girl2.jpg",
+  import.meta.env.BASE_URL + "pictures/girl3.jpg",
+  import.meta.env.BASE_URL + "pictures/girl4.jpg",
+  import.meta.env.BASE_URL + "pictures/girl5.jpg",
+  import.meta.env.BASE_URL + "pictures/girl6.jpg"
 ];
+
 
 export default function Profile() {
   const { user, login } = useAuth();
