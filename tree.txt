@@ -43,15 +43,17 @@
 │       ├── launchApps.js
 │       ├── launcher.util.js
 │       └── logger.js
+├── context - Shortcut.lnk
 ├── frontend
 │   ├── .env
 │   ├── .env.production
 │   ├── .gitignore
 │   ├── dist
 │   │   ├── assets
-│   │   │   ├── index-BLHBy10J.css
-│   │   │   └── index-BoYDjW0k.js
+│   │   │   ├── index-CaSlPOrx.js
+│   │   │   └── index-lZ5JQnPS.css
 │   │   ├── icon.ico
+│   │   ├── icon.png
 │   │   ├── index.html
 │   │   ├── preload.js
 │   │   └── vite.svg
@@ -63,6 +65,24 @@
 │   ├── preload.js
 │   ├── public
 │   │   ├── icon.ico
+│   │   ├── icon.png
+│   │   ├── pictures
+│   │   │   ├── 11.jpg
+│   │   │   ├── 12.jpg
+│   │   │   ├── 123.jpg
+│   │   │   ├── 1234.jpg
+│   │   │   ├── Attack.jpg
+│   │   │   ├── dada.jpg
+│   │   │   ├── demonslayer.jpg
+│   │   │   ├── fffu.jpg
+│   │   │   ├── gddgsh.jpg
+│   │   │   ├── gojo1.jpg
+│   │   │   ├── gojo2.jpg
+│   │   │   ├── jayay.jpg
+│   │   │   ├── levi.jpg
+│   │   │   ├── onepiece.jpg
+│   │   │   ├── Tanjiro.jpg
+│   │   │   └── toji.jpg
 │   │   └── vite.svg
 │   ├── README.md
 │   ├── release
@@ -214,6 +234,7 @@
 │   ├── tree.cjs
 │   ├── tree.txt
 │   └── vite.config.js
+├── image.png
 ├── README.md
 ├── tree.cjs
 └── tree.txt
