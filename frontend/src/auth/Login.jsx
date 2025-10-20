@@ -17,24 +17,33 @@ export default function Login() {
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError("");
+ const handleLogin = async (e) => {
+  e.preventDefault();
+  setError("");
 
-    try {
-      const localTemplates = getGuestTemplates();
-      const res = await api.post("/users/login", { ...form, localTemplates });
-      const data = res.data;
+  try {
+    const localTemplates = getGuestTemplates();
+    const res = await api.post("/users/login", { ...form, localTemplates });
+    const data = res.data;
 
-      login(data.user, data.token);
-      saveGuestTemplates([]); // clear guest templates after sync
-      navigate("/");
-    } catch (err) {
-      const message =
-        err?.response?.data?.message || "Login failed. Please try again.";
-      setError(message);
-    }
-  };
+    // normalize user
+    const loggedInUser = data.user || {
+      _id: data._id,
+      username: data.username,
+      email: data.email,
+      profileImage: data.profileImage || "",
+    };
+
+    login(loggedInUser, data.token);
+    saveGuestTemplates([]);
+    navigate("/");
+  } catch (err) {
+    const message =
+      err?.response?.data?.message || "Login failed. Please try again.";
+    setError(message);
+  }
+};
+
 
   return (
     <div className="min-h-screen  flex items-center justify-center bg-[#0d131f] text-white px-4 sm:px-6">
