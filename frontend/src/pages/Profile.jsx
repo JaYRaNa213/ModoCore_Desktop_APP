@@ -11,7 +11,6 @@ const avatarOptions = [
   "/pictures/123.jpg",
   "/pictures/1234.jpg",
   "/pictures/Attack.jpg",
-  
   "/pictures/demonslayer.jpg",
   "/pictures/fffu.jpg",
   "/pictures/gddgsh.jpg",
@@ -22,7 +21,6 @@ const avatarOptions = [
   "/pictures/onepiece.jpg",
   "/pictures/Tanjiro.jpg",
   "/pictures/toji.jpg",
-  
   "/pictures/dada.jpg",
   "/pictures/girl1.jpg",
   "/pictures/girl2.jpg",
@@ -30,8 +28,6 @@ const avatarOptions = [
   "/pictures/girl4.jpg",
   "/pictures/girl5.jpg",
   "/pictures/girl6.jpg"
-
-
 ];
 
 export default function Profile() {
@@ -57,19 +53,24 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="max-w-xl mx-auto px-6 py-10 space-y-6">
-        <Link to="/" className="text-gray-400 hover:text-white inline-flex gap-2">
-          <ArrowLeft className="w-4 h-4" />
+    <div className="min-h-screen bg-gradient-to-b from-purple-900 via-black to-gray-900 text-white py-10">
+      <div className="max-w-3xl mx-auto px-6 space-y-8">
+        {/* Back Link */}
+        <Link
+          to="/"
+          className="text-gray-400 hover:text-white inline-flex items-center gap-2 transition-colors duration-300"
+        >
+          <ArrowLeft className="w-5 h-5" />
           Back to dashboard
         </Link>
 
-        <h1 className="text-3xl font-bold mb-4">Your Profile</h1>
+        {/* Page Title */}
+        <h1 className="text-4xl font-bold text-center md:text-left">Your Profile</h1>
 
         {/* Profile Card */}
-        <div className="bg-neutral-800 rounded-xl p-6 flex items-center gap-8">
+        <div className="bg-neutral-800 rounded-2xl shadow-xl p-6 flex flex-col md:flex-row items-center md:items-start gap-6 transition-transform transform hover:scale-105 duration-300">
           {/* Left: Rectangular Image */}
-          <div className="flex-shrink-0 w-40 h-50 overflow-hidden rounded-lg">
+          <div className="flex-shrink-0 w-40 h-56 md:w-48 md:h-60 overflow-hidden rounded-xl border-4 border-purple-500 shadow-lg">
             <img
               src={selectedAvatar}
               alt="profile"
@@ -77,34 +78,38 @@ export default function Profile() {
             />
           </div>
 
-          {/* Right: User info */}
-          <div className="flex-1">
-            <p className="text-2xl font-semibold">{profile.username}</p>
-            <p className="text-gray-400 text-sm mt-1">
-              {profile.email || "Not logged in"}
+          {/* Right: User Info */}
+          <div className="flex-1 text-center md:text-left space-y-2">
+            <p className="text-3xl font-semibold">{profile.username}</p>
+            <p className="text-gray-400 text-base">{profile.email || "Not logged in"}</p>
+            <p className="text-gray-400 text-sm mt-2">
+              Select your avatar below to personalize your profile
             </p>
           </div>
         </div>
 
-        <h3 className="text-lg mt-6">Choose your avatar</h3>
-        <div className="grid grid-cols-6 gap-4">
-          {avatarOptions.map((url) => (
-            <button
-              key={url}
-              onClick={() => handleSelectAvatar(url)}
-              className={`p-1 rounded-xl border overflow-hidden ${
-                selectedAvatar === url
-                  ? "border-purple-500"
-                  : "border-gray-700"
-              }`}
-            >
-              <img
-                src={url}
-                className="w-full h-20 object-cover rounded-lg"
-                alt="avatar option"
-              />
-            </button>
-          ))}
+        {/* Avatar Selection */}
+        <div>
+          <h3 className="text-xl font-semibold mb-4">Choose your avatar</h3>
+          <div className="grid grid-cols-4 sm:grid-cols-6 gap-4">
+            {avatarOptions.map((url) => (
+              <button
+                key={url}
+                onClick={() => handleSelectAvatar(url)}
+                className={`overflow-hidden rounded-xl border-2 p-1 transition-transform transform hover:scale-105 duration-300 ${
+                  selectedAvatar === url
+                    ? "border-purple-500"
+                    : "border-gray-700 hover:border-purple-400"
+                }`}
+              >
+                <img
+                  src={url}
+                  alt="avatar option"
+                  className="w-full h-24 object-cover rounded-lg"
+                />
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
