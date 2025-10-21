@@ -25,14 +25,14 @@
     "appId": "com.Templaunch.app",
     "productName": "Templaunch",
     "win": {
-      "icon": "public/icon.ico",
+      "icon": "public/ico.png",
       "target": "nsis"
     },
     "linux": {
-    "icon": "public/icon.icon"
+    "icon": "public/ico.png"
   },
   "mac": {
-    "icon": "public/icon.ico"
+    "icon": "public/ico.png"
   },
     "files": [
       "dist/**/*",
