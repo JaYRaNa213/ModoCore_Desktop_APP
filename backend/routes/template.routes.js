@@ -22,6 +22,6 @@ router.delete("/:id", authMiddleware, deleteTemplate);
 router.get("/",authMiddleware, getAllTemplates);
 router.get("/:id",authMiddleware, getTemplateById);
 router.post("/:id/use", incrementUsage);
-router.post("/:id/launch", launchTemplate);
+router.post("/:id/launch",authMiddleware, launchTemplate);
 
 export default router;

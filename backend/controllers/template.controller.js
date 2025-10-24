@@ -77,22 +77,23 @@ export const runTemplateNow = async (req, res) => {
 
 export const launchTemplate = async (req, res) => {
   try {
-    const { id } = req.params; // ✅ make sure this comes from the route
+    const { id } = req.params;
     const template = await Template.findById(id);
     if (!template) {
       return res.status(404).json({ error: "Template not found" });
     }
 
-    await doLaunch(template); // this handles launching apps + websites
+    await doLaunch(template, req.user, "user"); // ✅ FIXED
     template.usageCount += 1;
     await template.save();
 
-    res.json({ message: "Template launched" });
+    res.json({ message: "Template launched successfully" });
   } catch (err) {
     console.error("🚨 Launch Error:", err.message);
     res.status(500).json({ error: "Launch failed", details: err.message });
   }
 };
+
 
 
 
