@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
@@ -12,10 +12,19 @@ import {
 } from "lucide-react";
 
 export default function Header() {
-  const { user, logout, loading } = useAuth();
+  const { user, logout, loading, guestName, setGuestName, isGuest } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [guestNameDraft, setGuestNameDraft] = useState(guestName);
+
+  useEffect(() => {
+    setGuestNameDraft(guestName);
+  }, [guestName]);
+
+  const handleGuestNameCommit = () => {
+    setGuestName(guestNameDraft);
+  };
 
   const navLinks = [
     { path: "/", label: "Dashboard", icon: Home },
@@ -76,7 +85,32 @@ export default function Header() {
 
             {/* ✅ Right: Actions */}
             <div className="flex items-center gap-3 sm:gap-4">
-              
+
+              {isGuest && (
+                <>
+                  <div className="hidden sm:flex items-center gap-3 bg-gray-900/60 border border-gray-800/60 px-3 py-1.5 rounded-xl">
+                    <span className="text-xs text-gray-400">Welcome,</span>
+                    <input
+                      value={guestNameDraft}
+                      onChange={(e) => setGuestNameDraft(e.target.value)}
+                      onBlur={handleGuestNameCommit}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleGuestNameCommit();
+                          e.currentTarget.blur();
+                        }
+                      }}
+                      className="bg-transparent border-none text-sm text-white focus:outline-none focus:ring-0 placeholder-gray-500 w-28"
+                      maxLength={30}
+                      placeholder="Guest User"
+                    />
+                  </div>
+                  <span className="hidden sm:block text-xs text-emerald-300">
+                    Guest mode — your data is stored permanently.
+                  </span>
+                </>
+              )}
+
               {/* Download Button */}
               <a
                 href="https://github.com/JaYRaNa213/ModoCore_Desktop_APP/releases/download/v1.0.0/Templaunch.Setup.1.0.0.exe"
@@ -100,22 +134,7 @@ export default function Header() {
                   <LogOut className="w-4 h-4" />
                   Sign Out
                 </button>
-              ) : (
-                <div className="hidden sm:flex items-center gap-3">
-                  <Link
-                    to="/login"
-                    className="px-4 py-2 text-gray-300 hover:text-white font-medium transition-all duration-300 hover:bg-gray-800/50 rounded-xl"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-                  >
-                    Register
-                  </Link>
-                </div>
-              )}
+              ) : null}
 
               {/* ✅ Mobile Menu Toggle */}
               <button
@@ -152,6 +171,29 @@ export default function Header() {
               </Link>
             ))}
 
+            {isGuest && (
+              <div className="space-y-2 bg-gray-900/60 border border-gray-800/60 rounded-xl p-3">
+                <label className="text-xs uppercase tracking-wide text-gray-400">Display name</label>
+                <input
+                  value={guestNameDraft}
+                  onChange={(e) => setGuestNameDraft(e.target.value)}
+                  onBlur={handleGuestNameCommit}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleGuestNameCommit();
+                      e.currentTarget.blur();
+                    }
+                  }}
+                  className="w-full px-3 py-2 rounded-lg bg-black/60 border border-gray-700/60 text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  placeholder="Guest User"
+                  maxLength={30}
+                />
+                <p className="text-[11px] text-emerald-300">
+                  Guest mode — your data is stored permanently.
+                </p>
+              </div>
+            )}
+
             {/* Download Button (Mobile) */}
             <a
               href="https://github.com/JaYRaNa213/ModoCore_Desktop_APP/releases/download/v1.0.0/Templaunch.Setup.1.0.0.exe"
@@ -176,24 +218,7 @@ export default function Header() {
                 <LogOut className="w-5 h-5" />
                 Sign Out
               </button>
-            ) : (
-              <div className="flex flex-col gap-3">
-                <Link
-                  to="/login"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block text-center w-full py-2.5 text-gray-300 hover:text-white bg-gray-800/50 hover:bg-gray-700/60 rounded-xl font-medium transition-all duration-300"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block text-center w-full py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium rounded-xl shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300"
-                >
-                  Register
-                </Link>
-              </div>
-            )}
+            ) : null}
           </div>
         </div>
       </header>

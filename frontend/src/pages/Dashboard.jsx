@@ -1,18 +1,16 @@
 // Dashboard.jsx
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../services/api";
+
 import { Link } from "react-router-dom";
 import { getTopTemplates } from "../services/TemplateService";
-import { getGuestTemplates } from "../utils/guestTemplates";
 import { doLaunch } from "../utils/guestTemplates";
-import { purgeOldGuestTemplates } from "../utils/guestTemplates";
 import { useAuth } from "../context/AuthContext";
 
 
 import {
   Plus,
   BookOpen,
-  Bot,
   ShieldCheck,
   Flame,
   LayoutTemplate,
@@ -50,10 +48,9 @@ export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterActive, setFilterActive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  // const freshTemplates = purgeOldGuestTemplates();
 
 
-  const { user } = useAuth(); // 👈 get current user
+  const { user, guestId, guestName } = useAuth(); // 👈 get current user
 
   
   const handleLaunch = async (template) => {
@@ -66,18 +63,25 @@ export default function Dashboard() {
       return;
     }
 
-    if (user && template._id) {
-      // Logged-in user: call backend launch
-     await axios.post(
-  `${import.meta.env.VITE_API_URL}/templates/${template._id}/launch`
-);
+    if (template._id) {
+      const guestConfig = user
+        ? undefined
+        : {
+            headers: {
+              "X-Guest-Id": guestId,
+              "X-Guest-Name": guestName,
+            },
+          };
 
-      alert("✅ Template launched!");
-    } else {
-      // Guest user: launch directly from local template
-      await doLaunch(template); // Safe now even if only apps/websites present
-      alert("✅ Guest template launched!");
+      await api.post(
+        `/templates/${template._id}/launch`,
+        user ? {} : { guestId },
+        guestConfig
+      );
     }
+
+    await doLaunch(template);
+      alert("✅ Template launched!");
   } catch (err) {
     console.error("🚨 Launch failed", err.response?.data || err.message);
     alert("❌ Launch failed: " + (err.response?.data?.details || err.message));
@@ -85,25 +89,13 @@ export default function Dashboard() {
 };
 
 useEffect(() => {
- if (!user) purgeOldGuestTemplates();
   const fetchTopTemplates = async () => {
     setIsLoading(true);
     try {
       let data = [];
 
-      if (user) {
-        // Logged-in: get top from backend
-        const backendData = await getTopTemplates(6);
+      const backendData = await getTopTemplates(user, 6);
         data = Array.isArray(backendData) ? backendData : [];
-      } else {
-        // Guest: get from localStorage
-        const guestTemplates = getGuestTemplates();
-        data = guestTemplates.sort((a, b) => {
-          const aTime = new Date(a.createdAt).getTime();
-          const bTime = new Date(b.createdAt).getTime();
-          return bTime - aTime; // latest first
-        }).slice(0, 3); // take top 3
-      }
 
       setTopTemplates(data);
     } catch (error) {
@@ -115,7 +107,7 @@ useEffect(() => {
   };
 
   fetchTopTemplates();
-}, [user]);
+}, [user, guestId]);
 
 
   const userTemplatesCount = topTemplates.length;
@@ -467,19 +459,6 @@ useEffect(() => {
     <p className="text-gray-400 text-sm">
       Track usage and performance
     </p>
-  </Link>
-
-  <Link
-    // to="/automations"
-    className="group relative bg-[#1f1f1f] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03]"
-  >
-    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl flex items-center justify-center mb-4 shadow-md">
-      <Bot className="w-6 h-6 text-white" />
-    </div>
-    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">
-      Automations (coming soon)
-    </h3>
-    <p className="text-gray-400 text-sm">Set up automatic launches</p>
   </Link>
 
   <Link

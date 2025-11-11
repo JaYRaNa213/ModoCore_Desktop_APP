@@ -2,7 +2,6 @@ import open from "open";
 import { existsSync, readdirSync } from "fs";
 import { spawn } from "child_process";
 import path from "path";
-import AutomationLog from "../models/automationLogs.model.js";
 
 /**
  * Normalize all types of URLs or schemes (http, mailto, tel, ftp, custom)
@@ -23,9 +22,7 @@ const resolveExecutablePath = (appPath) => {
   const base = path.basename(appPath).toLowerCase();
 
   if (existsSync(dir)) {
-    const match = readdirSync(dir).find(
-      (f) => f.toLowerCase() === base
-    );
+    const match = readdirSync(dir).find((f) => f.toLowerCase() === base);
     if (match) return path.join(dir, match);
   }
 
@@ -33,7 +30,7 @@ const resolveExecutablePath = (appPath) => {
 };
 
 /**
- * Launch an app: full .exe path or CLI shortcut
+ * Launch a local app (.exe or CLI)
  */
 const launchApp = async (rawApp) => {
   const app = rawApp.trim();
@@ -47,34 +44,26 @@ const launchApp = async (rawApp) => {
       spawn(resolved, [], {
         detached: true,
         stdio: "ignore",
-        shell: true, // ✅ important for .exe support on Windows
+        shell: true, // Required for .exe support on Windows
       }).unref();
-      console.log(`✅ Launched: ${resolved}`);
+      console.log(`✅ Launched app: ${resolved}`);
     } catch (err) {
       console.error(`❌ Failed to launch app: ${resolved}`, err.message);
     }
   } else {
-    // fallback to open if it's a CLI app
     try {
       await open(resolved);
-      console.log(`✅ Launched CLI app: ${resolved}`);
+      console.log(`✅ Opened CLI app: ${resolved}`);
     } catch (err) {
-      console.error(`❌ Failed to open app: ${resolved}`, err.message);
+      console.error(`❌ Failed to open CLI app: ${resolved}`, err.message);
     }
   }
 };
 
 /**
- * Final Launcher (for both guest + user)
- * @param {Object} template - the template object
- * @param {String} userId - ID of the user triggering this
- * @param {String} source - "manual" | "schedule" | "admin" | "guest"
+ * Launch template: apps + websites
  */
-export const launchTemplate = async (
-  template,
-  userId = null,
-  source = "manual"
-) => {
+export const launchTemplate = async (template) => {
   try {
     const { apps = [], websites = [] } = template;
 
@@ -84,35 +73,13 @@ export const launchTemplate = async (
 
     for (const raw of websites) {
       const url = normalizeUrl(raw);
-      try {
-        await open(url);
-        console.log(`🌐 Opened website: ${url}`);
-      } catch (err) {
-        console.error(`❌ Failed to open website: ${url}`, err.message);
-      }
+      await open(url);
+      console.log(`🌐 Opened website: ${url}`);
     }
 
-    if (source !== "guest") {
-      await AutomationLog.create({
-        automationId: template._id,
-        triggeredBy: userId,
-        status: "success",
-        source,
-      });
-    }
+    console.log("🚀 Launch completed successfully");
   } catch (error) {
     console.error("🚨 Launcher crashed:", error.message);
-
-    if (source !== "guest") {
-      await AutomationLog.create({
-        automationId: template._id,
-        triggeredBy: userId,
-        status: "failed",
-        error: error.message,
-        source,
-      });
-    }
-
     throw new Error("Could not launch template");
   }
 };

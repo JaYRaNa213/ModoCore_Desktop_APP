@@ -1,9 +1,7 @@
 // Templates.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import toast from "react-hot-toast";
-import api from "../services/api";
 import {
   Rocket,
   Trash2,
@@ -32,10 +30,11 @@ import {
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { doLaunch } from "../utils/guestTemplates";
-import { getGuestTemplates,saveGuestTemplates } from "../utils/guestTemplates";
-import { purgeOldGuestTemplates } from "../utils/guestTemplates";
-
-import { deleteGuestTemplate } from "../utils/guestTemplates"; 
+import {
+  getAllTemplates,
+  deleteTemplate as deleteTemplateService,
+} from "../services/TemplateService";
+import api from "../services/api";
 
 
 export default function Templates() {
@@ -45,22 +44,16 @@ export default function Templates() {
   const [viewMode, setViewMode] = useState("grid"); // grid or list
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
-  const { user, loading } = useAuth();
+  const { user, loading, guestId, guestName } = useAuth();
 
 useEffect(() => {
-  if (loading) return;      // 🔸 wait for auth context to be ready
+  if (loading) return; // 🔸 wait for auth context to be ready
 
   const fetchTemplates = async () => {
     setIsLoading(true);
     try {
-      if (user) {
-        const response = await api.get("/templates");
-        setTemplates(response.data);
-      } else {
-        // Guest
-        const guestTemplates = getGuestTemplates();
-        setTemplates(guestTemplates);
-      }
+      const data = await getAllTemplates(user);
+      setTemplates(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching templates:", error);
       toast.error("Failed to load templates");
@@ -70,7 +63,7 @@ useEffect(() => {
   };
 
   fetchTemplates();
-}, [user, loading]);
+}, [user, loading, guestId]);
 
 
   
@@ -84,15 +77,24 @@ useEffect(() => {
       return;
     }
 
-    if (user && template._id) {
-      // Logged-in user: call backend launch
-      await api.post(`/templates/${template._id}/launch`);
-      alert("✅ Template launched!");
-    } else {
-      // Guest user: launch directly from local template
-      await doLaunch(template); // Safe now even if only apps/websites present
-      alert("✅ Guest template launched!");
+    if (template._id) {
+      const guestConfig = user
+        ? undefined
+        : {
+            headers: {
+              "X-Guest-Id": guestId,
+              "X-Guest-Name": guestName,
+            },
+          };
+      await api.post(
+        `/templates/${template._id}/launch`,
+        user ? {} : { guestId },
+        guestConfig
+      );
     }
+
+    await doLaunch(template);
+      alert("✅ Template launched!");
   } catch (err) {
     console.error("🚨 Launch failed", err.response?.data || err.message);
     alert("❌ Launch failed: " + (err.response?.data?.details || err.message));
@@ -103,20 +105,10 @@ const handleDelete = async (id, title) => {
   if (!window.confirm(`Are you sure you want to delete "${title}"?`)) return;
 
   try {
-    if (user) {
-      // Logged in user => delete from MongoDB
-      await api.delete(`/templates/${id}`);
+    await deleteTemplateService(id, user);
       toast.success("Template deleted successfully");
-    } else {
-      // Guest => localStorage
-      deleteGuestTemplate(id);
-      toast.success("Template deleted locally");
-    }
 
-    // Update UI (both cases)
-    setTemplates(prev =>
-      prev.filter(t => t._id !== id && t.id !== id)
-    );
+    setTemplates(prev => prev.filter(t => t._id !== id && t.id !== id));
   } catch (err) {
     console.error("Delete failed:", err.response?.data || err.message);
     toast.error("Failed to delete template");

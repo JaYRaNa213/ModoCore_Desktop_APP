@@ -32,8 +32,10 @@ export const syncTemplatesToDB = async (userId, localTemplates = []) => {
         websites,
         schedule,
         usageCount: 0,
-        userId
-        
+        userId,
+        userType: "member",
+        guestId: null,
+        guestName: null,
       });
       added++;
     } catch (err) {

@@ -6,10 +6,6 @@ import App from "./App.jsx";
 import "./index.css";
 import { HashRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import { purgeOldGuestTemplates } from "./utils/guestTemplates";
-
-// ✅ Call once during startup
-purgeOldGuestTemplates();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

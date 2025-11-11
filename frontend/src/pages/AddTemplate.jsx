@@ -33,7 +33,6 @@ import { Card, CardContent } from "../components/ui/Card";
 
 import { createTemplate } from "../services/TemplateService";
 
-import { addGuestTemplate } from "../utils/guestTemplates";
 import { useAuth } from "../context/AuthContext";
 
 
@@ -95,7 +94,6 @@ export default function AddTemplate() {
     schedule: schedule.trim(),
     apps: filteredApps,
     websites: filteredWebsites,
-    createdAt: new Date().toISOString(), // ✅ for guest expiry tracking
   };
 
   try {
@@ -112,18 +110,14 @@ export default function AddTemplate() {
     }
 
 
-    if (user) {
-      await createTemplate(newTemplate, user); // save to DB
-      toast.success("Template saved to your account!");
-    } else {
-      addGuestTemplate(newTemplate); // ✅ save to localStorage
-      toast.success("Template saved locally for 3 days!");
-    }
+    await createTemplate(newTemplate, user);
+    toast.success("Template saved successfully!");
 
     navigate("/");
   } catch (err) {
     console.error("Error creating template:", err);
-    toast.error("Something went wrong. Please try again.");
+    const message = err?.response?.data?.message || err?.message || "Something went wrong. Please try again.";
+    toast.error(message);
   } finally {
     setLoading(false);
   }

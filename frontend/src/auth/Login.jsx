@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
-import { getGuestTemplates, saveGuestTemplates } from "../utils/guestTemplates";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -22,8 +21,7 @@ export default function Login() {
   setError("");
 
   try {
-    const localTemplates = getGuestTemplates();
-    const res = await api.post("/users/login", { ...form, localTemplates });
+    const res = await api.post("/users/login", { ...form, localTemplates: [] });
     const data = res.data;
 
     // normalize user
@@ -35,7 +33,6 @@ export default function Login() {
     };
 
     login(loggedInUser, data.token);
-    saveGuestTemplates([]);
     navigate("/");
   } catch (err) {
     const message =

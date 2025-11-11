@@ -8,12 +8,11 @@ import { useAuth } from "../context/AuthContext";
 import { getTemplateById } from "../services/TemplateService"; // ✅ use service
 
 import api from "../services/api"; // ✅ use API wrapper (with token)
-import axios from "axios"; // fallback if you want direct calls
 
 export default function TemplateDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, guestId, guestName } = useAuth();
   const [template, setTemplate] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -50,14 +49,24 @@ export default function TemplateDetail() {
         return;
       }
 
-      if (user && template._id) {
-        // ✅ use API wrapper (automatically includes token)
-        await api.post(`/templates/${template._id}/launch`);
-        alert("✅ Template launched!");
-      } else {
-        await doLaunch(template);
-        alert("✅ Guest template launched!");
+      if (template._id) {
+        const guestConfig = user
+          ? undefined
+          : {
+              headers: {
+                "X-Guest-Id": guestId,
+                "X-Guest-Name": guestName,
+              },
+            };
+        await api.post(
+          `/templates/${template._id}/launch`,
+          user ? {} : { guestId },
+          guestConfig
+        );
       }
+
+      await doLaunch(template);
+      alert("✅ Template launched!");
     } catch (err) {
       console.error("🚨 Launch failed", err.response?.data || err.message);
       alert("❌ Launch failed: " + (err.response?.data?.details || err.message));

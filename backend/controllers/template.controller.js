@@ -1,12 +1,75 @@
 import Template from "../models/template.model.js";
 
-import { launchTemplate as doLaunch } from "../utils/launcher.util.js";
+/**
+ * Helper: get guest id from request
+ * If none provided, returns null
+ */
+const extractGuestId = (req) =>
+  req.body?.guestId || req.query?.guestId || req.headers["x-guest-id"] || null;
 
-// ✅ Create a new template
+/**
+ * Helper to generate a reasonably unique guest id (no external deps)
+ * Not cryptographically secure but fine for client-side sticky id usage.
+ */
+const generateGuestId = () => {
+  return `guest_${Date.now().toString(36)}_${Math.floor(Math.random() * 1e6).toString(36)}`;
+};
+
+// Build payload for createTemplate; if no guestId provided, we generate one
+const buildTemplatePayload = (req) => {
+  const { title, description, apps = [], websites = [], schedule = null } = req.body || {};
+
+  const payload = {
+    title,
+    description,
+    apps,
+    websites,
+    schedule,
+    usageCount: 0,
+  };
+
+  if (req.user) {
+    payload.userId = req.user._id || req.user.id;
+    payload.userType = "member";
+    payload.guestId = null;
+    payload.guestName = null;
+  } else {
+    // accept provided guestId or generate a new one
+    const incomingGuestId = extractGuestId(req);
+    const resolvedGuestId = incomingGuestId || generateGuestId();
+    payload.userType = "guest";
+    payload.guestId = resolvedGuestId;
+    payload.guestName = req.body?.guestName || req.headers["x-guest-name"] || "Guest User";
+  }
+
+  return payload;
+};
+
+
+// Create a new template (works for guests + members)
 export const createTemplate = async (req, res, next) => {
   try {
-    const { title, description, apps, websites } = req.body; // ✅ include websites
-    const newTemplate = await Template.create({ title, description, apps, websites ,userId: req.user.id,});
+    const payload = buildTemplatePayload(req);
+
+    if (!payload.title) {
+      return res.status(400).json({ message: "Title is required" });
+    }
+
+    const hasApps = Array.isArray(payload.apps) && payload.apps.length > 0;
+    const hasWebsites = Array.isArray(payload.websites) && payload.websites.length > 0;
+
+    if (!hasApps && !hasWebsites) {
+      return res.status(400).json({ message: "Add at least one app or website" });
+    }
+
+    const newTemplate = await Template.create(payload);
+
+    // If we generated a guestId server-side and the client did not provide it,
+    // return it in a response header so the frontend can persist it (localStorage).
+    if (!req.body?.guestId && !req.query?.guestId && !req.headers["x-guest-id"] && payload.guestId) {
+      res.setHeader("x-guest-id", payload.guestId);
+    }
+
     res.status(201).json(newTemplate);
   } catch (err) {
     console.error("❌ Create Template Error:", err.message);
@@ -14,30 +77,42 @@ export const createTemplate = async (req, res, next) => {
   }
 };
 
-// Get all templates (with optional limit)
+
+// Get all templates — if user exists, return user's templates; if guestId provided, return guest templates; otherwise return all
 export const getAllTemplates = async (req, res, next) => {
   try {
     const { limit } = req.query;
-    const query = Template.find({ userId: req.user.id }).sort({ usageCount: -1 });
-    if (limit) query.limit(Number(limit));
+    const queryFilter = {};
+
+    if (req.user) {
+      queryFilter.userId = req.user._id || req.user.id;
+    } else {
+      const guestId = extractGuestId(req);
+      if (guestId) {
+        queryFilter.guestId = guestId;
+      } 
+      // else: no user and no guestId → return all templates (public)
+    }
+
+    let query = Template.find(queryFilter).sort({ usageCount: -1, updatedAt: -1 });
+    if (limit) query = query.limit(Number(limit));
 
     const templates = await query.exec();
     res.json(templates);
   } catch (err) {
+    console.error("❌ Get All Templates Error:", err.message);
     next(err);
   }
 };
 
-
-// ✅ Get a single template (with ownership check)
+// Get single template by id — fully public
 export const getTemplateById = async (req, res, next) => {
   try {
-    const template = await Template.findOne({
-      _id: req.params.id,
-      userId: req.user.id, // 👈 user-scoped
-    });
+    const template = await Template.findById(req.params.id);
 
-    if (!template) return res.status(404).json({ message: "Template not found" });
+    if (!template) {
+      return res.status(404).json({ message: "Template not found" });
+    }
 
     res.json(template);
   } catch (err) {
@@ -46,16 +121,17 @@ export const getTemplateById = async (req, res, next) => {
   }
 };
 
-
-// ✅ Increment usage
+// Increment usage — no ownership checks
 export const incrementUsage = async (req, res, next) => {
   try {
-    const template = await Template.findByIdAndUpdate(
-      req.params.id,
-      { $inc: { usageCount: 1 } },
-      { new: true }
-    );
-    if (!template) return res.status(404).json({ message: "Template not found" });
+    const template = await Template.findById(req.params.id);
+    if (!template) {
+      return res.status(404).json({ message: "Template not found" });
+    }
+
+    template.usageCount = (template.usageCount || 0) + 1;
+    await template.save();
+
     res.json(template);
   } catch (err) {
     console.error("❌ Increment Usage Error:", err.message);
@@ -63,18 +139,7 @@ export const incrementUsage = async (req, res, next) => {
   }
 };
 
-
-export const runTemplateNow = async (req, res) => {
-  try {
-    const template = await Template.findById(req.params.id);
-    if (!template) return res.status(404).json({ message: 'Not found' });
-    await launchTemplate(template);
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
+// Launch template (record usage) — no actual launching on server, just record & return
 export const launchTemplate = async (req, res) => {
   try {
     const { id } = req.params;
@@ -83,32 +148,25 @@ export const launchTemplate = async (req, res) => {
       return res.status(404).json({ error: "Template not found" });
     }
 
-    await doLaunch(template, req.user, "user"); // ✅ FIXED
-    template.usageCount += 1;
+    template.usageCount = (template.usageCount || 0) + 1;
     await template.save();
 
-    res.json({ message: "Template launched successfully" });
+    res.json({ message: "Template launch recorded" });
   } catch (err) {
     console.error("🚨 Launch Error:", err.message);
     res.status(500).json({ error: "Launch failed", details: err.message });
   }
 };
 
-
-
-
-// ✅ Delete a template (only if owned by user)
+// Delete template — public (anyone can delete) — modify if you later want ownership checks
 export const deleteTemplate = async (req, res, next) => {
   try {
-    const deleted = await Template.findOneAndDelete({
-      _id: req.params.id,
-      userId: req.user.id, // 👈 verify owner
-    });
-
-    if (!deleted) {
+    const template = await Template.findById(req.params.id);
+    if (!template) {
       return res.status(404).json({ message: "Template not found" });
     }
 
+    await template.deleteOne();
     res.json({ message: "Template deleted successfully" });
   } catch (err) {
     console.error("❌ Delete Template Error:", err.message);
@@ -116,27 +174,23 @@ export const deleteTemplate = async (req, res, next) => {
   }
 };
 
-
-
+// Edit template — public
 export const EditTemplate = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { title, description, apps, websites, schedule } = req.body;
+    const { title, description, apps, websites, schedule, guestName } = req.body || {};
 
     const template = await Template.findById(id);
-    if (!template) return res.status(404).json({ message: "Template not found" });
-
-    // Ensure the user owns the template
-    if (template.userId.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Unauthorized: Not your template" });
+    if (!template) {
+      return res.status(404).json({ message: "Template not found" });
     }
 
-    // Update fields
-    template.title = title || template.title;
-    template.description = description || template.description;
-    template.apps = apps || template.apps;
-    template.websites = websites || template.websites;
-    template.schedule = schedule || template.schedule;
+    if (title !== undefined) template.title = title;
+    if (description !== undefined) template.description = description;
+    if (apps !== undefined) template.apps = apps;
+    if (websites !== undefined) template.websites = websites;
+    if (schedule !== undefined) template.schedule = schedule;
+    if (guestName !== undefined) template.guestName = guestName;
 
     await template.save();
 

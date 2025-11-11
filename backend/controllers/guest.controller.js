@@ -1,5 +1,3 @@
-import { launchTemplate } from "../utils/launcher.util.js";
-
 export const launchGuestTemplate = async (req, res) => {
   try {
     const template = req.body; // { apps: [], websites: [] }
@@ -8,9 +6,7 @@ export const launchGuestTemplate = async (req, res) => {
       return res.status(400).json({ success: false, message: "No template provided" });
     }
 
-    await launchTemplate(template, null, "guest");
-
-    res.json({ success: true, message: "Guest template launched successfully" });
+    res.json({ success: true, message: "Guest template launch acknowledged" });
   } catch (error) {
     console.error("❌ Guest launch failed:", error.message);
     res.status(500).json({ success: false, message: "Failed to launch guest template", error: error.message });

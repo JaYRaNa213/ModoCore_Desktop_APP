@@ -1,27 +1,42 @@
-// routes/template.routes.js
+// backend/routes/template.routes.js
 import express from "express";
-import { authMiddleware } from "../middlewares/auth.middleware.js";
 import {
   createTemplate,
   getAllTemplates,
   getTemplateById,
-  incrementUsage,
   deleteTemplate,
+  EditTemplate,
   launchTemplate,
-  EditTemplate
 } from "../controllers/template.controller.js";
+import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-// 🔒 Auth-protected: Create/Edit/Delete should be allowed only for logged-in users
-router.post("/", authMiddleware, createTemplate);
-router.put("/:id", authMiddleware, EditTemplate);
-router.delete("/:id", authMiddleware, deleteTemplate);
+/**
+ * Optional authentication middleware
+ * Allows guest access but validates token if present
+ */
+const optionalAuth = async (req, res, next) => {
+  const header = req.headers.authorization;
+  if (!header || !header.startsWith("Bearer ")) {
+    // No token → allow guest
+    return next();
+  }
 
-// ✅ Public: Fetch and use templates
-router.get("/",authMiddleware, getAllTemplates);
-router.get("/:id",authMiddleware, getTemplateById);
-router.post("/:id/use", incrementUsage);
-router.post("/:id/launch",authMiddleware, launchTemplate);
+  try {
+    await authMiddleware(req, res, next);
+  } catch (err) {
+    console.error("OptionalAuth Error:", err.message);
+    // Invalid token → treat as guest, not as error
+    return next();
+  }
+};
+
+router.post("/", optionalAuth, createTemplate);
+router.get("/", optionalAuth, getAllTemplates);
+router.get("/:id", optionalAuth, getTemplateById);
+router.put("/:id", optionalAuth, EditTemplate);
+router.delete("/:id", optionalAuth, deleteTemplate);
+router.post("/:id/launch", optionalAuth, launchTemplate);
 
 export default router;
