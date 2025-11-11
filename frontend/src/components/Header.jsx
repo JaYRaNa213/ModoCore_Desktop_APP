@@ -12,18 +12,28 @@ import {
 } from "lucide-react";
 
 export default function Header() {
-  const { user, logout, loading, guestName, setGuestName, isGuest } = useAuth();
+  const { user, logout, loading, isGuest } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [guestNameDraft, setGuestNameDraft] = useState(guestName);
+  const [guestNameDraft, setGuestNameDraft] = useState("");
 
+  // ✅ Load guest name from localStorage on mount
   useEffect(() => {
-    setGuestNameDraft(guestName);
-  }, [guestName]);
+    const savedName = localStorage.getItem("guestName");
+    if (savedName) {
+      setGuestNameDraft(savedName);
+    } else {
+      localStorage.setItem("guestName", "User");
+      setGuestNameDraft("User");
+    }
+  }, []);
 
+  // ✅ Save guest name when committed
   const handleGuestNameCommit = () => {
-    setGuestName(guestNameDraft);
+    const name = guestNameDraft.trim() || "User";
+    setGuestNameDraft(name);
+    localStorage.setItem("guestName", name);
   };
 
   const navLinks = [
@@ -83,44 +93,43 @@ export default function Header() {
               </nav>
             </div>
 
-            {/* ✅ Right: Actions */}
             <div className="flex items-center gap-3 sm:gap-4">
+          {isGuest && (
+            <>
+              <div className="hidden sm:flex items-center gap-3 bg-gray-900/60 border border-gray-800/60 px-3 py-1.5 rounded-xl">
+                <span className="text-xs text-gray-400">Welcome,</span>
+                <input
+                  value={guestNameDraft}
+                  onChange={(e) => setGuestNameDraft(e.target.value)}
+                  onBlur={handleGuestNameCommit}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleGuestNameCommit();
+                      e.currentTarget.blur();
+                    }
+                  }}
+                  className="bg-transparent border-none text-sm text-white focus:outline-none focus:ring-0 placeholder-gray-500 w-28"
+                  maxLength={30}
+                  placeholder="User"
+                />
+              </div>
+              <span className="hidden sm:block text-xs text-emerald-300">
+                Your name is saved locally.
+              </span>
+            </>
+          )}
 
-              {isGuest && (
-                <>
-                  <div className="hidden sm:flex items-center gap-3 bg-gray-900/60 border border-gray-800/60 px-3 py-1.5 rounded-xl">
-                    <span className="text-xs text-gray-400">Welcome,</span>
-                    <input
-                      value={guestNameDraft}
-                      onChange={(e) => setGuestNameDraft(e.target.value)}
-                      onBlur={handleGuestNameCommit}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          handleGuestNameCommit();
-                          e.currentTarget.blur();
-                        }
-                      }}
-                      className="bg-transparent border-none text-sm text-white focus:outline-none focus:ring-0 placeholder-gray-500 w-28"
-                      maxLength={30}
-                      placeholder="Guest User"
-                    />
-                  </div>
-                  <span className="hidden sm:block text-xs text-emerald-300">
-                    Guest mode — your data is stored permanently.
-                  </span>
-                </>
-              )}
+          {/* Download Button */}
+          <a
+            href="https://github.com/JaYRaNa213/ModoCore_Desktop_APP/releases/download/v1.0.0/Templaunch.Setup.1.0.0.exe"
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+          >
+            Download App
+          </a>
 
-              {/* Download Button */}
-              <a
-                href="https://github.com/JaYRaNa213/ModoCore_Desktop_APP/releases/download/v1.0.0/Templaunch.Setup.1.0.0.exe"
-                download
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden sm:flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-              >
-                Download App
-              </a>
 
               {/* Auth Buttons */}
               {user ? (

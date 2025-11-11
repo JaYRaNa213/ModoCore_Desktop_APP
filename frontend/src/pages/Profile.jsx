@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import { ArrowLeft } from "lucide-react";
+
 const avatarOptions = [
   import.meta.env.BASE_URL + "pictures/11.jpg",
   import.meta.env.BASE_URL + "pictures/12.jpg",
@@ -29,15 +30,27 @@ const avatarOptions = [
   import.meta.env.BASE_URL + "pictures/girl6.jpg"
 ];
 
-
 export default function Profile() {
   const { user, login } = useAuth();
   const [selectedAvatar, setSelectedAvatar] = useState(avatarOptions[0]);
-  const [profile, setProfile] = useState({ username: "Guest User", email: "" });
+  const [profile, setProfile] = useState({ username: "", email: "" });
 
   useEffect(() => {
+    // Get guest name from localStorage (set in Header.jsx)
+    const guestName = localStorage.getItem("guestName");
+
     if (user) {
-      setProfile({ username: user.username, email: user.email });
+      // Logged-in user
+      setProfile({
+        username: user.username || guestName || "User",
+        email: user.email || "",
+      });
+    } else {
+      // Guest user, show entered name
+      setProfile({
+        username: guestName || "User",
+        email: "",
+      });
     }
   }, [user]);
 
@@ -46,11 +59,17 @@ export default function Profile() {
 
     if (user) {
       login({ ...user, profileImage: url }, localStorage.getItem("token"));
-      toast.success("Avatar selected!");
-    } else {
-      toast.success("Avatar selected!");
     }
+
+    localStorage.setItem("selectedAvatar", url);
+    toast.success("Avatar selected!");
   };
+
+  useEffect(() => {
+    // Load saved avatar if exists
+    const savedAvatar = localStorage.getItem("selectedAvatar");
+    if (savedAvatar) setSelectedAvatar(savedAvatar);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-900 via-black to-gray-900 text-white py-10">
@@ -80,8 +99,12 @@ export default function Profile() {
 
           {/* Right: User Info */}
           <div className="flex-1 text-center md:text-left space-y-2">
-            <p className="text-3xl font-semibold">{profile.username}</p>
-            <p className="text-gray-400 text-base">{profile.email || "Not logged in"}</p>
+            <p className="text-3xl font-semibold">
+              {profile.username || "User"}
+            </p>
+            {profile.email ? (
+              <p className="text-gray-400 text-base">{profile.email}</p>
+            ) : null}
             <p className="text-gray-400 text-sm mt-2">
               Select your avatar below to personalize your profile
             </p>
