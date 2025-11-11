@@ -50,48 +50,49 @@ export default function Header() {
     <>
       {/* Header */}
       <header className="bg-black/50 backdrop-blur-xl border-b border-gray-800/50 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            
-            {/* ✅ Left: Logo + Desktop Nav */}
-            <div className="flex items-center gap-6">
-              {/* Logo */}
-              <Link to="/" className="flex items-center gap-3 group">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                  <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </div>
-                <div className="hidden sm:block">
-                  <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent group-hover:from-purple-300 group-hover:via-white group-hover:to-purple-300 transition-all duration-300">
-                    Templaunch
-                  </h1>
-                  <p className="text-[10px] sm:text-xs text-gray-400 -mt-1">
-                    Workspace Templates
-                  </p>
-                </div>
-              </Link>
+      <div className="flex items-center justify-between h-16 px-4 sm:px-6 md:px-8">
+  {/* ✅ Left: Logo + Desktop Nav */}
+  <div className="flex items-center gap-4 sm:gap-6">
+    {/* Logo + Title */}
+    <div className="flex items-center gap-2 sm:gap-3">
+      <img
+        src="/ico.png"
+        alt="logo"
+        className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg object-contain transition-all duration-300"
+      />
 
-              {/* Desktop Navigation */}
-              <nav className="hidden lg:flex items-center gap-1">
-                {navLinks.map(({ path, label, icon: Icon }) => (
-                  <Link
-                    key={path}
-                    to={path}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all duration-300 group ${
-                      isActivePath(path)
-                        ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg"
-                        : "text-gray-300 hover:text-white hover:bg-gray-800/50"
-                    }`}
-                  >
-                    <Icon
-                      className={`w-4 h-4 transition-transform duration-300 ${
-                        isActivePath(path) ? "" : "group-hover:scale-110"
-                      }`}
-                    />
-                    <span>{label}</span>
-                  </Link>
-                ))}
-              </nav>
-            </div>
+      <div className="hidden sm:block">
+        <h1 className="text-base sm:text-lg md:text-xl font-bold bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent transition-all duration-300">
+          Templaunch
+        </h1>
+        <p className="text-[10px] sm:text-xs text-gray-400 -mt-1">
+          Workspace Templates
+        </p>
+      </div>
+    </div>
+
+    {/* Desktop Navigation */}
+    <nav className="hidden lg:flex items-center gap-1">
+      {navLinks.map(({ path, label, icon: Icon }) => (
+        <Link
+          key={path}
+          to={path}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all duration-300 group ${
+            isActivePath(path)
+              ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg"
+              : "text-gray-300 hover:text-white hover:bg-gray-800/50"
+          }`}
+        >
+          <Icon
+            className={`w-4 h-4 transition-transform duration-300 ${
+              isActivePath(path) ? "" : "group-hover:scale-110"
+            }`}
+          />
+          <span>{label}</span>
+        </Link>
+      ))}
+    </nav>
+  
 
             <div className="flex items-center gap-3 sm:gap-4">
           {isGuest && (

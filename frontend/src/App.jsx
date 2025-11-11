@@ -34,9 +34,9 @@ function Layout({ children }) {
       {/* Right content */}
       <div className="relative flex flex-col flex-1 w-0">
         {/* Window controls (desktop only) */}
-        <div className="hidden md:block">
+        {/* <div className="hidden md:block">
           <WindowControls />
-        </div>
+        </div> */}
 
         {/* Header */}
        <div className="sticky top-0 z-50">
