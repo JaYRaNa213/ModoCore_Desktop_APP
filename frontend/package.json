@@ -7,20 +7,21 @@
   "description": "Templaunch – Smart workspace switcher for productivity modes",
   "author": {
     "name": "Jay Rana"
-  
   },
   "scripts": {
-    "dev": "concurrently \"vite\" \"electron .\"",
-    "build:react": "cross-env VITE_API_URL=https://contextswap-backend.onrender.com/api vite build",
-    "build": "npm run build:react && electron-builder",
-    "electron:dev": "vite && electron .",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "start": "electron .",
-    "dist": "electron-builder --win --x64",
-    "release": "electron-builder --win --x64 --publish always",
-    "electron": "electron ."
-  },
+  "dev": "concurrently -k -n \"VITE,ELECTRON\" -c \"bgBlue.bold,bgMagenta.bold\" \"vite\" \"wait-on tcp:5173 && electron .\"",
+  "electron": "electron .",
+  "build:react": "cross-env VITE_API_URL=https://contextswap-backend.onrender.com/api vite build",
+  "build": "npm run build:react && electron-builder",
+  "start": "electron .",
+  "dist": "electron-builder --win --x64",
+  "release": "electron-builder --win --x64 --publish always",
+  "lint": "eslint .",
+  "preview": "vite preview"
+},
+
+
+
   "build": {
     "appId": "com.Templaunch.app",
     "productName": "Templaunch",
@@ -29,11 +30,11 @@
       "target": "nsis"
     },
     "linux": {
-    "icon": "public/ico.png"
-  },
-  "mac": {
-    "icon": "public/ico.png"
-  },
+      "icon": "public/ico.png"
+    },
+    "mac": {
+      "icon": "public/ico.png"
+    },
     "files": [
       "dist/**/*",
       "electron.cjs",
@@ -83,6 +84,7 @@
     "globals": "^16.3.0",
     "postcss": "^8.5.6",
     "vite": "^7.0.5",
-    "vite-plugin-static-copy": "^3.1.1"
+    "vite-plugin-static-copy": "^3.1.1",
+    "wait-on": "^9.0.3"
   }
 }

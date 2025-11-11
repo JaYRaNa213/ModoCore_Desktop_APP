@@ -1,12 +1,11 @@
 // Dashboard.jsx
 import { useEffect, useState } from "react";
 import api from "../services/api";
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getTopTemplates } from "../services/TemplateService";
 import { doLaunch } from "../utils/guestTemplates";
 import { useAuth } from "../context/AuthContext";
-
+import { launchWebsites } from "../services/websiteLauncher";
 
 import {
   Plus,
@@ -31,87 +30,100 @@ import {
   Target,
   Rocket,
   Clock,
-  
   BarChart3,
 } from "lucide-react";
-// import { StatCard } from "../components/StatCard";
+
 import { Card, CardContent } from "../components/ui/Card";
 import StatCard from "./StatCard";
-import { useNavigate } from "react-router-dom";
-
-
 
 export default function Dashboard() {
   const navigate = useNavigate();
-
   const [topTemplates, setTopTemplates] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterActive, setFilterActive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-
   const { user, guestId, guestName } = useAuth(); // 👈 get current user
 
-  
+  // ✅ Launch templates (apps via backend, websites in app tabs)
   const handleLaunch = async (template) => {
-  try {
-    const hasApps = Array.isArray(template.apps) && template.apps.length > 0;
-    const hasWebsites = Array.isArray(template.websites) && template.websites.length > 0;
-
-    if (!hasApps && !hasWebsites) {
-      alert("⚠️ This template has no apps or websites to launch.");
-      return;
-    }
-
-    if (template._id) {
-      const guestConfig = user
-        ? undefined
-        : {
-            headers: {
-              "X-Guest-Id": guestId,
-              "X-Guest-Name": guestName,
-            },
-          };
-
-      await api.post(
-        `/templates/${template._id}/launch`,
-        user ? {} : { guestId },
-        guestConfig
-      );
-    }
-
-    await doLaunch(template);
-      alert("✅ Template launched!");
-  } catch (err) {
-    console.error("🚨 Launch failed", err.response?.data || err.message);
-    alert("❌ Launch failed: " + (err.response?.data?.details || err.message));
-  }
-};
-
-useEffect(() => {
-  const fetchTopTemplates = async () => {
-    setIsLoading(true);
     try {
-      let data = [];
+      const hasApps = Array.isArray(template.apps) && template.apps.length > 0;
+      const hasWebsites =
+        Array.isArray(template.websites) && template.websites.length > 0;
 
-      const backendData = await getTopTemplates(user, 6);
-        data = Array.isArray(backendData) ? backendData : [];
+      if (!hasApps && !hasWebsites) {
+        alert("⚠️ This template has no apps or websites to launch.");
+        return;
+      }
 
-      setTopTemplates(data);
+      // Track launch usage for logged-in or guest users
+      if (template._id) {
+        const guestConfig = user
+          ? undefined
+          : {
+              headers: {
+                "X-Guest-Id": guestId,
+                "X-Guest-Name": guestName,
+              },
+            };
+
+        await api.post(
+          `/templates/${template._id}/launch`,
+          user ? {} : { guestId },
+          guestConfig
+        );
+      }
+
+      // ✅ Handle websites inside app tabs (Electron)
+      if (hasWebsites && typeof window !== "undefined" && window.electronAPI) {
+
+        for (const raw of template.websites) {
+          const url = raw.startsWith("http") ? raw : "https://" + raw;
+          window.electronAPI.createTab(url); // open inside app tab
+        }
+        console.log("🌐 Websites opened inside app tabs!");
+      } 
+      // 🌍 Fallback for browser (non-Electron)
+      else if (hasWebsites) {
+        launchWebsites(template.websites);
+      }
+
+      // ✅ Launch apps via backend (same as before)
+      if (hasApps) {
+        await doLaunch(template);
+      }
+
+      alert("✅ Launch completed!");
     } catch (error) {
-      console.error("Error fetching templates:", error);
-      setTopTemplates([]);
-    } finally {
-      setIsLoading(false);
+      console.error("Error launching template:", error);
+      alert("⚠️ Failed to launch template.");
     }
   };
 
-  fetchTopTemplates();
-}, [user, guestId]);
+  // ✅ Fetch top templates
+  useEffect(() => {
+    const fetchTopTemplates = async () => {
+      setIsLoading(true);
+      try {
+        const backendData = await getTopTemplates(user, 6);
+        setTopTemplates(Array.isArray(backendData) ? backendData : []);
+      } catch (error) {
+        console.error("Error fetching templates:", error);
+        setTopTemplates([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
+    fetchTopTemplates();
+  }, [user, guestId]);
 
   const userTemplatesCount = topTemplates.length;
-  const totalUsage = topTemplates.reduce((acc, template) => acc + (template.usageCount || 0), 0);
+  const totalUsage = topTemplates.reduce(
+    (acc, template) => acc + (template.usageCount || 0),
+    0
+  );
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">

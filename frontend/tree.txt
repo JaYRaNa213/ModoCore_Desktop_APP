@@ -1,11 +1,38 @@
 ├── .env
+├── .env.production
 ├── .gitignore
 ├── dist
 │   ├── assets
-│   │   ├── index-BLHBy10J.css
-│   │   └── index-CcCMfaIW.js
+│   │   ├── index-B4xThYEr.js
+│   │   └── index-CxSDfJNM.css
+│   ├── ico.png
 │   ├── icon.ico
+│   ├── icon.icoj
+│   ├── icon.pngk
 │   ├── index.html
+│   ├── pictures
+│   │   ├── 11.jpg
+│   │   ├── 12.jpg
+│   │   ├── 123.jpg
+│   │   ├── 1234.jpg
+│   │   ├── Attack.jpg
+│   │   ├── dada.jpg
+│   │   ├── demonslayer.jpg
+│   │   ├── fffu.jpg
+│   │   ├── gddgsh.jpg
+│   │   ├── girl1.jpg
+│   │   ├── girl2.jpg
+│   │   ├── girl3.jpg
+│   │   ├── girl4.jpg
+│   │   ├── girl5.jpg
+│   │   ├── girl6.jpg
+│   │   ├── gojo1.jpg
+│   │   ├── gojo2.jpg
+│   │   ├── jayay.jpg
+│   │   ├── levi.jpg
+│   │   ├── onepiece.jpg
+│   │   ├── Tanjiro.jpg
+│   │   └── toji.jpg
 │   ├── preload.js
 │   └── vite.svg
 ├── electron.cjs
@@ -15,7 +42,33 @@
 ├── package.json
 ├── preload.js
 ├── public
+│   ├── ico.png
 │   ├── icon.ico
+│   ├── icon.icoj
+│   ├── icon.pngk
+│   ├── pictures
+│   │   ├── 11.jpg
+│   │   ├── 12.jpg
+│   │   ├── 123.jpg
+│   │   ├── 1234.jpg
+│   │   ├── Attack.jpg
+│   │   ├── dada.jpg
+│   │   ├── demonslayer.jpg
+│   │   ├── fffu.jpg
+│   │   ├── gddgsh.jpg
+│   │   ├── girl1.jpg
+│   │   ├── girl2.jpg
+│   │   ├── girl3.jpg
+│   │   ├── girl4.jpg
+│   │   ├── girl5.jpg
+│   │   ├── girl6.jpg
+│   │   ├── gojo1.jpg
+│   │   ├── gojo2.jpg
+│   │   ├── jayay.jpg
+│   │   ├── levi.jpg
+│   │   ├── onepiece.jpg
+│   │   ├── Tanjiro.jpg
+│   │   └── toji.jpg
 │   └── vite.svg
 ├── README.md
 ├── src
@@ -29,11 +82,9 @@
 │   │   ├── PrivateRoute.jsx
 │   │   └── Register.jsx
 │   ├── components
-│   │   ├── AutomationForm.jsx
-│   │   ├── CronHelperModal.jsx
 │   │   ├── Header.jsx
-│   │   ├── LogTable.jsx
 │   │   ├── Sidebar.jsx
+│   │   ├── TabsManager.jsx
 │   │   ├── ui
 │   │   │   ├── Button.jsx
 │   │   │   ├── Card.jsx
@@ -46,7 +97,6 @@
 │   │   ├── AuthContext.jsx
 │   │   └── TemplateContext.jsx
 │   ├── hooks
-│   │   ├── useFetchLogs.js
 │   │   ├── useLocalStorage.js
 │   │   └── usePreviousAppWebsites.js
 │   ├── index.css
@@ -54,14 +104,9 @@
 │   ├── pages
 │   │   ├── AddTemplate.jsx
 │   │   ├── admin
-│   │   │   └── AdminPanel.jsx
 │   │   ├── Analytics.jsx
-│   │   ├── AutomationLogs.jsx
-│   │   ├── Automations.jsx
 │   │   ├── Dashboard.jsx
 │   │   ├── EditTemplate.jsx
-│   │   ├── LaunchHistory.jsx
-│   │   ├── Logs.jsx
 │   │   ├── NotFound.jsx
 │   │   ├── Notifications.jsx
 │   │   ├── Profile.jsx
@@ -74,9 +119,9 @@
 │   ├── services
 │   │   ├── analyticsService.js
 │   │   ├── api.js
-│   │   ├── automationService.js
 │   │   ├── guestApi.js
-│   │   └── TemplateService.js
+│   │   ├── TemplateService.js
+│   │   └── websiteLauncher.js
 │   └── utils
 │       ├── guestTemplates.js
 │       └── validators.js

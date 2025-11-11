@@ -18,13 +18,18 @@ import EditTemplate from "./pages/EditTemplate";
 import WindowControls from "./components/WindowControls";
 import { useState } from "react";
 
+import TabsManager from "./components/TabsManager";
+
 function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="flex h-screen bg-neutral-900 text-white overflow-hidden">
+
+      
       {/* Sidebar (responsive) */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+     
 
       {/* Right content */}
       <div className="relative flex flex-col flex-1 w-0">
@@ -34,7 +39,11 @@ function Layout({ children }) {
         </div>
 
         {/* Header */}
-        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+       <div className="sticky top-0 z-50">
+  <TabsManager />
+  <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+</div>
+
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 py-4 md:py-6">
