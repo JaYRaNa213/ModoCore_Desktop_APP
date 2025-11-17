@@ -10,6 +10,7 @@ import {
   Target,
   Plus,
 } from "lucide-react";
+import Logo from "../assets/app-icon.png";
 
 export default function Header() {
   const { user, logout, loading, isGuest } = useAuth();
@@ -56,10 +57,10 @@ export default function Header() {
     {/* Logo + Title */}
     <div className="flex items-center gap-2 sm:gap-3">
       <img
-        src="/ico.png"
-        alt="logo"
-        className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg object-contain transition-all duration-300"
-      />
+  src={Logo}
+  alt="logo"
+  className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
+/>
 
       <div className="hidden sm:block">
         <h1 className="text-base sm:text-lg md:text-xl font-bold bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent transition-all duration-300">
