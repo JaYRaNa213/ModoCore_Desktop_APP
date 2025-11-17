@@ -12,7 +12,7 @@
 //   win = new BrowserWindow({
 //     width: 1280,
 //     height: 800,
-//     icon: path.join(__dirname, "public", "icon.ico"),
+//     : path.join(__dirname, "public", "icon.ico"),icon
 //     autoHideMenuBar: true,
 //     backgroundColor: "#1e1e1e",
 //     webPreferences: {
@@ -116,7 +116,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1280,
     height: 800,
-    icon: path.join(__dirname, "public", "icon.ico"),
+    icon: path.join(__dirname,  "ico.png"),
     autoHideMenuBar: true,
     backgroundColor: "#1e1e1e",
     webPreferences: {
@@ -126,7 +126,7 @@ function createWindow() {
     },
   });
 
-  // ✅ Try to load Vite (for dev)
+  //  Try to load Vite (for dev)
   const devUrl = "http://localhost:5173";
   win
     .loadURL(devUrl)
