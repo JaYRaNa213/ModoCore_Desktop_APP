@@ -8,6 +8,7 @@ import {
   Zap,
 } from "lucide-react";
 import clsx from "clsx";
+import Logo from "../assets/app-icon.png";
 
 const links = [
   { name: "Dashboard", path: "/", icon: <LayoutDashboard size={18} /> },
@@ -42,8 +43,11 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
         {/* Logo */}
         <div className="flex items-center gap-3 mb-10">
 
-          <img src="/public/ico.png" alt="logo" className="w-8 h-8 rounded-lg" />
-      
+<img
+  src={Logo}
+  alt="logo"
+  className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
+/>
           <div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent tracking-tight">
               Templaunch

@@ -116,7 +116,8 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1280,
     height: 800,
-    icon: path.join(__dirname,  "ico.png"),
+   icon: path.join(process.resourcesPath, "icons", "icon.ico"),
+
     autoHideMenuBar: true,
     backgroundColor: "#1e1e1e",
     webPreferences: {

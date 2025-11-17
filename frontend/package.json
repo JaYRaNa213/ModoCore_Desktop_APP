@@ -25,15 +25,16 @@
   "build": {
     "appId": "com.Templaunch.app",
     "productName": "Templaunch",
+    
     "win": {
-      "icon": "public/ico.png",
+      "icon": "icons/icon.ico",
       "target": "nsis"
     },
     "linux": {
-      "icon": "public/ico.png"
+      "icon": "icons/icon.ico"
     },
     "mac": {
-      "icon": "public/ico.png"
+      "icon": "icons/icon.ico"
     },
     "files": [
       "dist/**/*",
@@ -44,7 +45,7 @@
     ],
     "directories": {
       "output": "release",
-      "buildResources": "public"
+      "buildResources": "build"
     },
     "asar": true,
     "publish": {
