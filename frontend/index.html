@@ -3,7 +3,16 @@
   <head>
     <!-- ✅ Secure Content Security Policy -->
     <meta http-equiv="Content-Security-Policy"
-  content="default-src 'self'; connect-src 'self' https://contextswap-backend.onrender.com http://localhost:5000; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.pinimg.com https://img.freepik.com https://encrypted-tbn0.gstatic.com https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com https://t4.ftcdn.net https://static.vecteezy.com https://thumbs.dreamstime.com;">
+  content="
+    default-src 'self' data: blob:;
+    script-src 'self' 'unsafe-inline' 'unsafe-eval';
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data: https:;
+    connect-src 'self' https: http: ws: wss:;
+    media-src *;
+    frame-src *;
+    object-src 'none';
+  ">
 
 
 
