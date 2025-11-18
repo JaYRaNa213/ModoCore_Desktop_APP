@@ -15,7 +15,6 @@ import Profile from "./pages/Profile";
 import Notifications from "./pages/Notifications";
 import AddTemplate from "./pages/AddTemplate";
 import EditTemplate from "./pages/EditTemplate";
-import WindowControls from "./components/WindowControls";
 import { useState } from "react";
 
 import TabsManager from "./components/TabsManager";

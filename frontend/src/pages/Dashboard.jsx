@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { getTopTemplates } from "../services/TemplateService";
 import { doLaunch } from "../utils/guestTemplates";
 import { useAuth } from "../context/AuthContext";
-import { launchWebsites } from "../services/websiteLauncher";
 
 import {
   Plus,
@@ -75,24 +74,7 @@ export default function Dashboard() {
         );
       }
 
-      // ✅ Handle websites inside app tabs (Electron)
-      if (hasWebsites && typeof window !== "undefined" && window.electronAPI) {
-
-        for (const raw of template.websites) {
-          const url = raw.startsWith("http") ? raw : "https://" + raw;
-          window.electronAPI.createTab(url); // open inside app tab
-        }
-        console.log("🌐 Websites opened inside app tabs!");
-      } 
-      // 🌍 Fallback for browser (non-Electron)
-      else if (hasWebsites) {
-        launchWebsites(template.websites);
-      }
-
-      // ✅ Launch apps via backend (same as before)
-      if (hasApps) {
-        await doLaunch(template);
-      }
+      await doLaunch(template);
 
       alert("✅ Launch completed!");
     } catch (error) {

@@ -34,6 +34,15 @@ contextBridge.exposeInMainWorld("electronAPI", {
   switchTab: (index) => ipcRenderer.invoke("switch-tab", index),
   closeTab: (index) => ipcRenderer.invoke("close-tab", index),
   reloadTab: (index) => ipcRenderer.invoke("reload-tab", index),
+  getTabsState: () => ipcRenderer.invoke("tabs:get-state"),
+  onTabsUpdate: (callback) => {
+    const listener = (_event, data) => callback?.(data);
+    ipcRenderer.on("tabs:update", listener);
+    return () => ipcRenderer.removeListener("tabs:update", listener);
+  },
+
+  /* ---------- App Launch APIs ---------- */
+  launchApps: (apps) => ipcRenderer.invoke("launch-apps", apps),
 
   /* ---------- Window Control APIs ---------- */
   closeWindow: () => ipcRenderer.send("close-window"),
