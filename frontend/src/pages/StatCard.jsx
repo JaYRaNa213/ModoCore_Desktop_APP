@@ -12,5 +12,6 @@ export default function StatCard({ title, value, icon }) {
         </div>
       </div>
     </div>
+    
   );
 }
