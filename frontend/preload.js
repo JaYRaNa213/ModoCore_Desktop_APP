@@ -35,6 +35,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   closeTab: (index) => ipcRenderer.invoke("close-tab", index),
   reloadTab: (index) => ipcRenderer.invoke("reload-tab", index),
   getTabsState: () => ipcRenderer.invoke("tabs:get-state"),
+  updateContentBounds: (bounds) => ipcRenderer.invoke("tabs:update-bounds", bounds),
   onTabsUpdate: (callback) => {
     const listener = (_event, data) => callback?.(data);
     ipcRenderer.on("tabs:update", listener);

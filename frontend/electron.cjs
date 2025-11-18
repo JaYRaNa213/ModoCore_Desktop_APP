@@ -114,6 +114,7 @@ let activeTabIndex = -1;
 let tabIdCounter = 0;
 
 const CONTENT_TOP_OFFSET = 160;
+let customContentBounds = null;
 
 const normalizeUrl = (input = "") => {
   const trimmed = input.trim();
@@ -196,15 +197,24 @@ const sendTabsUpdate = () => {
   });
 };
 
-const setViewBounds = (view) => {
-  if (!win || !view) return;
+const getDefaultContentBounds = () => {
+  if (!win) return null;
   const [width, height] = win.getContentSize();
-  view.setBounds({
+  return {
     x: 0,
     y: CONTENT_TOP_OFFSET,
     width,
     height: Math.max(0, height - CONTENT_TOP_OFFSET),
-  });
+  };
+};
+
+const getActiveContentBounds = () => customContentBounds || getDefaultContentBounds();
+
+const setViewBounds = (view) => {
+  if (!win || !view) return;
+  const bounds = getActiveContentBounds();
+  if (!bounds) return;
+  view.setBounds(bounds);
   view.setAutoResize({ width: true, height: true });
 };
 
@@ -407,6 +417,21 @@ ipcMain.handle("tabs:get-state", () => ({
   tabs: sanitizeTabsForRenderer(),
   activeTabIndex,
 }));
+
+ipcMain.handle("tabs:update-bounds", (event, bounds) => {
+  if (!bounds || typeof bounds !== "object") {
+    customContentBounds = null;
+  } else {
+    const sanitized = {
+      x: Math.max(0, Math.floor(bounds.x ?? 0)),
+      y: Math.max(0, Math.floor(bounds.y ?? 0)),
+      width: Math.max(0, Math.floor(bounds.width ?? 0)),
+      height: Math.max(0, Math.floor(bounds.height ?? 0)),
+    };
+    customContentBounds = sanitized;
+  }
+  refreshVisibleTabs();
+});
 
 ipcMain.handle("launch-apps", async (event, apps = []) => {
   const sanitized = sanitizeAppEntries(apps);

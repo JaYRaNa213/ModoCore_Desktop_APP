@@ -15,12 +15,46 @@ import Profile from "./pages/Profile";
 import Notifications from "./pages/Notifications";
 import AddTemplate from "./pages/AddTemplate";
 import EditTemplate from "./pages/EditTemplate";
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 import TabsManager from "./components/TabsManager";
 
+const useElectronAPI = () => {
+  if (typeof window === "undefined") return null;
+  return window.electronAPI || null;
+};
+
 function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const contentAreaRef = useRef(null);
+  const electronAPI = useElectronAPI();
+
+  const notifyBounds = useCallback(() => {
+    if (!electronAPI?.updateContentBounds) return;
+    const el = contentAreaRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    electronAPI.updateContentBounds({
+      x: Math.round(rect.left),
+      y: Math.round(rect.top),
+      width: Math.round(rect.width),
+      height: Math.round(rect.height),
+    });
+  }, [electronAPI]);
+
+  useEffect(() => {
+    if (!electronAPI?.updateContentBounds) return undefined;
+    notifyBounds();
+    const handler = () => notifyBounds();
+    window.addEventListener("resize", handler);
+    return () => {
+      window.removeEventListener("resize", handler);
+    };
+  }, [electronAPI, notifyBounds]);
+
+  useEffect(() => {
+    notifyBounds();
+  }, [sidebarOpen, notifyBounds]);
 
   return (
     <div className="flex h-screen bg-neutral-900 text-white overflow-hidden">
@@ -45,7 +79,10 @@ function Layout({ children }) {
 
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 py-4 md:py-6">
+        <main
+          ref={contentAreaRef}
+          className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 py-4 md:py-6"
+        >
           {children}
         </main>
       </div>
