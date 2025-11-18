@@ -177,7 +177,7 @@ export default function TabsManager() {
               }`}
               style={{ WebkitAppRegion: "no-drag" }}
             >
-              {workspaceVisible ? "Hide Workspace" : "Show Workspace"}
+              {workspaceVisible ? "Show Templates" : "Show Workspace"}
             </button>
           </div>
         </div>
