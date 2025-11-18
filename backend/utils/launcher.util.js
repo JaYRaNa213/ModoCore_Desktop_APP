@@ -89,16 +89,26 @@ import { existsSync, readdirSync } from "fs";
 import { spawn } from "child_process";
 import path from "path";
 
+const sanitizeAppEntries = (apps = []) =>
+  apps
+    .map((entry) => (typeof entry === "string" ? entry.trim() : ""))
+    .filter(Boolean);
+
 /**
  * Try to resolve and normalize executable path
  */
-const resolveExecutablePath = (appPath) => {
+const resolveExecutablePath = (appPathRaw) => {
+  if (typeof appPathRaw !== "string") return "";
+
+  const appPath = appPathRaw.trim();
+  if (!appPath) return "";
+
   if (existsSync(appPath)) return appPath;
 
   const dir = path.dirname(appPath);
   const base = path.basename(appPath).toLowerCase();
 
-  if (existsSync(dir)) {
+  if (dir && existsSync(dir)) {
     const match = readdirSync(dir).find((f) => f.toLowerCase() === base);
     if (match) return path.join(dir, match);
   }
@@ -110,8 +120,8 @@ const resolveExecutablePath = (appPath) => {
  * Launch a local app (.exe or CLI)
  */
 const launchApp = async (rawApp) => {
-  const app = rawApp.trim();
-  if (!app) return;
+  const app = typeof rawApp === "string" ? rawApp.trim() : "";
+  if (!app) return false;
 
   const resolved = resolveExecutablePath(app);
   const isExePath = resolved.endsWith(".exe") && existsSync(resolved);
@@ -124,8 +134,10 @@ const launchApp = async (rawApp) => {
         shell: true, // Required for .exe support on Windows
       }).unref();
       console.log(`✅ Launched app: ${resolved}`);
+      return true;
     } catch (err) {
       console.error(`❌ Failed to launch app: ${resolved}`, err.message);
+      return false;
     }
   } else {
     try {
@@ -135,8 +147,10 @@ const launchApp = async (rawApp) => {
         shell: true,
       }).unref();
       console.log(`✅ Opened CLI app: ${app}`);
+      return true;
     } catch (err) {
       console.error(`❌ Failed to open CLI app: ${app}`, err.message);
+      return false;
     }
   }
 };
@@ -144,15 +158,26 @@ const launchApp = async (rawApp) => {
 /**
  * Launch template: only apps
  */
-export const launchTemplate = async (template) => {
+export const launchTemplate = async (template = {}) => {
   try {
-    const { apps = [] } = template;
-
-    for (const app of apps) {
-      await launchApp(app);
+    const apps = sanitizeAppEntries(template.apps);
+    if (!apps.length) {
+      console.warn("⚠️ No valid apps found in template payload");
+      return;
     }
 
-    console.log("🚀 Launch completed successfully (apps only)");
+    let successCount = 0;
+
+    for (const app of apps) {
+      const launched = await launchApp(app);
+      if (launched) successCount += 1;
+    }
+
+    if (successCount === 0) {
+      throw new Error("Every app launch attempt failed");
+    }
+
+    console.log(`🚀 Launch completed successfully for ${successCount} app(s)`);
   } catch (error) {
     console.error("🚨 Launcher crashed:", error.message);
     throw new Error("Could not launch apps");

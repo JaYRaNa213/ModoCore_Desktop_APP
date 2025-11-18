@@ -24,17 +24,14 @@ import {
   Calendar,
 } from "lucide-react";
 
-
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 import { Textarea } from "../components/ui/Textarea";
 import { Card, CardContent } from "../components/ui/Card";
 
-
 import { createTemplate } from "../services/TemplateService";
 
 import { useAuth } from "../context/AuthContext";
-
 
 export default function AddTemplate() {
   const [title, setTitle] = useState("");
@@ -47,8 +44,6 @@ export default function AddTemplate() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth(); // check if user is logged in
-
-
 
   const handleAddApp = () => setApps([...apps, ""]);
   const handleAddWebsite = () => setWebsites([...websites, ""]);
@@ -79,49 +74,49 @@ export default function AddTemplate() {
     }
   };
 
-   
-
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+    e.preventDefault();
+    setLoading(true);
 
-  const filteredApps = apps.filter((a) => a.trim() !== "");
-  const filteredWebsites = websites.filter((w) => w.trim() !== "");
+    const filteredApps = apps.filter((a) => a.trim() !== "");
+    const filteredWebsites = websites.filter((w) => w.trim() !== "");
 
-  const newTemplate = {
-    title: title.trim(),
-    description: description.trim(),
-    schedule: schedule.trim(),
-    apps: filteredApps,
-    websites: filteredWebsites,
+    const newTemplate = {
+      title: title.trim(),
+      description: description.trim(),
+      schedule: schedule.trim(),
+      apps: filteredApps,
+      websites: filteredWebsites,
+    };
+
+    try {
+      if (!newTemplate.title) {
+        toast.error("Template title is required.");
+        setLoading(false);
+        return;
+      }
+
+      if (filteredApps.length === 0 && filteredWebsites.length === 0) {
+        toast.error("Add at least one app or website.");
+        setLoading(false);
+        return;
+      }
+
+      await createTemplate(newTemplate, user);
+      toast.success("Template saved successfully!");
+
+      navigate("/");
+    } catch (err) {
+      console.error("Error creating template:", err);
+      const message =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Something went wrong. Please try again.";
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
   };
-
-  try {
-    if (!newTemplate.title) {
-      toast.error("Template title is required.");
-      setLoading(false);
-      return;
-    }
-
-    if (filteredApps.length === 0 && filteredWebsites.length === 0) {
-      toast.error("Add at least one app or website.");
-      setLoading(false);
-      return;
-    }
-
-
-    await createTemplate(newTemplate, user);
-    toast.success("Template saved successfully!");
-
-    navigate("/");
-  } catch (err) {
-    console.error("Error creating template:", err);
-    const message = err?.response?.data?.message || err?.message || "Something went wrong. Please try again.";
-    toast.error(message);
-  } finally {
-    setLoading(false);
-  }
-};
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
@@ -172,8 +167,12 @@ export default function AddTemplate() {
                   <FileText className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <label className="block text-lg font-semibold text-white">Template Title *</label>
-                  <p className="text-sm text-gray-400">Give your template a memorable name</p>
+                  <label className="block text-lg font-semibold text-white">
+                    Template Title *
+                  </label>
+                  <p className="text-sm text-gray-400">
+                    Give your template a memorable name
+                  </p>
                 </div>
               </div>
               <input
@@ -193,8 +192,12 @@ export default function AddTemplate() {
                   <FileText className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <label className="block text-lg font-semibold text-white">Description</label>
-                  <p className="text-sm text-gray-400">Explain what this template does</p>
+                  <label className="block text-lg font-semibold text-white">
+                    Description
+                  </label>
+                  <p className="text-sm text-gray-400">
+                    Explain what this template does
+                  </p>
                 </div>
               </div>
               <textarea
@@ -212,8 +215,12 @@ export default function AddTemplate() {
                   <Calendar className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <label className="block text-lg font-semibold text-white">Schedule (Optional)</label>
-                  <p className="text-sm text-gray-400">Cron format for automated launching</p>
+                  <label className="block text-lg font-semibold text-white">
+                    Schedule (Optional)
+                  </label>
+                  <p className="text-sm text-gray-400">
+                    Cron format for automated launching
+                  </p>
                 </div>
               </div>
               <input
@@ -225,21 +232,20 @@ export default function AddTemplate() {
               />
               <div className="mt-3 p-3 bg-purple-600/10 border border-purple-600/20 rounded-lg">
                 <p className="text-sm text-slate-400 mt-1">
-  Example: <code>0 12 * * *</code> (daily at noon) &nbsp;
-  <a
-    href="https://crontab.guru"
-    target="_blank"
-    rel="noreferrer"
-    className="underline text-blue-400"
-  >
-    Need help?
-  </a>
-</p>
-
+                  Example: <code>0 12 * * *</code> (daily at noon)&nbsp;
+                  <a
+                    href="https://crontab.guru"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline text-blue-400"
+                  >
+                    Need help?
+                  </a>
+                </p>
               </div>
             </div>
 
-            {/* Apps Section */}
+            {/* Applications */}
             <div className="bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl p-6 hover:bg-gray-900/70 transition-all duration-300">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -247,7 +253,9 @@ export default function AddTemplate() {
                     <Monitor className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <label className="block text-lg font-semibold text-white">Applications</label>
+                    <label className="block text-lg font-semibold text-white">
+                      Applications
+                    </label>
                     <p className="text-sm text-gray-400">Apps to launch with this template</p>
                   </div>
                 </div>
@@ -270,8 +278,7 @@ export default function AddTemplate() {
                   </button>
                 </div>
               </div>
-              
-              {/* App Tips */}
+
               {showAppTips && (
                 <div className="mb-6 p-4 bg-blue-600/10 border border-blue-600/20 rounded-xl">
                   <h4 className="text-blue-300 font-medium mb-3 flex items-center gap-2">
@@ -303,7 +310,7 @@ export default function AddTemplate() {
                   </div>
                 </div>
               )}
-              
+
               <div className="space-y-3">
                 {apps.map((app, index) => (
                   <div key={index} className="flex items-center gap-3">
@@ -330,7 +337,7 @@ export default function AddTemplate() {
               </div>
             </div>
 
-            {/* Websites Section */}
+            {/* Websites */}
             <div className="bg-gray-900/50 backdrop-blur-xl border border-gray-800/50 rounded-2xl p-6 hover:bg-gray-900/70 transition-all duration-300">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -361,11 +368,10 @@ export default function AddTemplate() {
                   </button>
                 </div>
               </div>
-              
-              {/* Website Tips */}
+
               {showWebTips && (
                 <div className="mb-6 p-4 bg-orange-600/10 border border-orange-600/20 rounded-xl">
-                  <h4 className="text-orange-300 font-medium mb-3 flex items-center gap-2">
+                  <h4 className="text-orange-300 font-medium mb-3 flex items센터 gap-2">
                     <ExternalLink className="w-4 h-4" />
                     Website URL guidelines:
                   </h4>
@@ -381,16 +387,24 @@ export default function AddTemplate() {
                     <div>
                       <p className="font-medium text-orange-100 mb-2">Examples:</p>
                       <div className="space-y-1">
-                        <code className="block bg-orange-600/20 px-2 py-1 rounded text-xs">https://github.com</code>
-                        <code className="block bg-orange-600/20 px-2 py-1 rounded text-xs">https://youtube.com</code>
-                        <code className="block bg-orange-600/20 px-2 py-1 rounded text-xs">http://localhost:3000</code>
-                        <code className="block bg-orange-600/20 px-2 py-1 rounded text-xs">https://amazon.in</code>
+                        <code className="block bg-orange-600/20 px-2 py-1 rounded text-xs">
+                          https://github.com
+                        </code>
+                        <code className="block bg-orange-600/20 px-2 py-1 rounded text-xs">
+                          https://youtube.com
+                        </code>
+                        <code className="block bg-orange-600/20 px-2 py-1 rounded text-xs">
+                          http://localhost:3000
+                        </code>
+                        <code className="block bg-orange-600/20 px-2 py-1 rounded text-xs">
+                          https://amazon.in
+                        </code>
                       </div>
                     </div>
                   </div>
                 </div>
               )}
-              
+
               <div className="space-y-3">
                 {websites.map((site, index) => (
                   <div key={index} className="flex items-center gap-3">
@@ -436,7 +450,7 @@ export default function AddTemplate() {
                   </>
                 )}
               </button>
-              
+
               <button
                 type="button"
                 onClick={() => navigate(-1)}
@@ -447,7 +461,9 @@ export default function AddTemplate() {
             </div>
 
             {/* Validation Info */}
-            {(!title.trim() || (apps.filter(a => a.trim()).length === 0 && websites.filter(w => w.trim()).length === 0)) && (
+            {(!title.trim() ||
+              (apps.filter((a) => a.trim()).length === 0 &&
+                websites.filter((w) => w.trim()).length === 0)) && (
               <div className="bg-amber-600/10 border border-amber-600/20 rounded-xl p-4">
                 <div className="flex items-center gap-3">
                   <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0" />
@@ -455,9 +471,10 @@ export default function AddTemplate() {
                     <p className="font-medium mb-1">Required fields:</p>
                     <ul className="list-disc list-inside space-y-1">
                       {!title.trim() && <li>Template title is required</li>}
-                      {apps.filter(a => a.trim()).length === 0 && websites.filter(w => w.trim()).length === 0 && (
-                        <li>Add at least one app or website</li>
-                      )}
+                      {apps.filter((a) => a.trim()).length === 0 &&
+                        websites.filter((w) => w.trim()).length === 0 && (
+                          <li>Add at least one app or website</li>
+                        )}
                     </ul>
                   </div>
                 </div>

@@ -8,7 +8,9 @@ const resolveGuestContext = () => {
 
   let guestId = localStorage.getItem("guestId");
   if (!guestId) {
-    guestId = window.crypto?.randomUUID?.() || `guest-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    guestId =
+      window.crypto?.randomUUID?.() ||
+      `guest-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     localStorage.setItem("guestId", guestId);
   }
 
@@ -47,7 +49,9 @@ export const getAllTemplates = async (user) => {
 // ✅ Get top N templates (sorted by usageCount)
 export const getTopTemplates = async (user, limit = 3) => {
   const all = await getAllTemplates(user);
-  return all.sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0)).slice(0, limit);
+  return all
+    .sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0))
+    .slice(0, limit);
 };
 
 // ✅ Create template
@@ -83,7 +87,6 @@ export const getTemplateById = async (id, user) => {
   }
 };
 
-
 // ✅ Update template
 export const updateTemplate = async (id, data, user) => {
   if (user) {
@@ -104,13 +107,10 @@ export const deleteTemplate = async (id, user) => {
     return res.data;
   } else {
     const { guestId } = resolveGuestContext();
-    const res = await api.delete(
-      `/templates/${id}`,
-      {
-        ...buildGuestConfig(),
-        data: { guestId },
-      }
-    );
+    const res = await api.delete(`/templates/${id}`, {
+      ...buildGuestConfig(),
+      data: { guestId },
+    });
     return res.data;
   }
 };
