@@ -123,7 +123,7 @@ export default function Header() {
 
           {/* Download Button */}
           <a
-            href="https://github.com/JaYRaNa213/ModoCore_Desktop_APP/releases/download/v1.0.0/Templaunch.Setup.1.0.0.exe"
+            href="https://github.com/JaYRaNa213/Templaunch_landing_website/releases/download/v1.0.0/Templaunch.Setup.1.0.0.exe"
             download
             target="_blank"
             rel="noopener noreferrer"
@@ -207,7 +207,7 @@ export default function Header() {
 
             {/* Download Button (Mobile) */}
             <a
-              href="https://github.com/JaYRaNa213/ModoCore_Desktop_APP/releases/download/v1.0.0/Templaunch.Setup.1.0.0.exe"
+              href="https://github.com/JaYRaNa213/Templaunch_landing_website/releases/download/v1.0.0/Templaunch.Setup.1.0.0.exe"
               download
               target="_blank"
               rel="noopener noreferrer"
