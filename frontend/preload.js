@@ -36,6 +36,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
   reloadTab: (index) => ipcRenderer.invoke("reload-tab", index),
   getTabsState: () => ipcRenderer.invoke("tabs:get-state"),
   updateContentBounds: (bounds) => ipcRenderer.invoke("tabs:update-bounds", bounds),
+  setTabsVisibility: (visible) => ipcRenderer.invoke("tabs:set-visibility", visible),
+  hideAllBrowserViews: () => ipcRenderer.invoke("tabs:hide-all"),
+  restoreActiveBrowserView: () => ipcRenderer.invoke("tabs:restore-active"),
   onTabsUpdate: (callback) => {
     const listener = (_event, data) => callback?.(data);
     ipcRenderer.on("tabs:update", listener);

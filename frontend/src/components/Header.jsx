@@ -39,7 +39,7 @@ export default function Header() {
 
   const navLinks = [
     { path: "/", label: "Dashboard", icon: Home },
-    { path: "/templates", label: "Templates", icon: Target },
+    { path: "/templates", label: "Workspace", icon: Target },
     { path: "/add-template", label: "Create", icon: Plus },
   ];
 

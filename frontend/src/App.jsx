@@ -16,6 +16,7 @@ import Notifications from "./pages/Notifications";
 import AddTemplate from "./pages/AddTemplate";
 import EditTemplate from "./pages/EditTemplate";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useLocation } from "react-router-dom";
 
 import TabsManager from "./components/TabsManager";
 
@@ -28,6 +29,7 @@ function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const contentAreaRef = useRef(null);
   const electronAPI = useElectronAPI();
+  const location = useLocation();
 
   const notifyBounds = useCallback(() => {
     if (!electronAPI?.updateContentBounds) return;
@@ -55,6 +57,17 @@ function Layout({ children }) {
   useEffect(() => {
     notifyBounds();
   }, [sidebarOpen, notifyBounds]);
+
+  useEffect(() => {
+    if (!electronAPI) return;
+    const path = location.pathname || "/";
+    const inTemplatesArea = path.startsWith("/templates") || path.startsWith("/template");
+    if (inTemplatesArea) {
+      electronAPI.restoreActiveBrowserView?.();
+    } else {
+      electronAPI.hideAllBrowserViews?.();
+    }
+  }, [electronAPI, location.pathname]);
 
   return (
     <div className="flex h-screen bg-neutral-900 text-white overflow-hidden">

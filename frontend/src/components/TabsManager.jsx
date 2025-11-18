@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { X, RotateCcw, Plus } from "lucide-react";
 import Logo from "../assets/app-icon.png";
 
@@ -13,6 +14,8 @@ export default function TabsManager() {
   const electronAPI = useElectronAPI();
   const [tabs, setTabs] = useState([]);
   const [activeTab, setActiveTab] = useState(-1);
+  const [workspaceVisible, setWorkspaceVisible] = useState(true);
+  const location = useLocation();
 
   const isElectron = Boolean(electronAPI);
 
@@ -23,6 +26,7 @@ export default function TabsManager() {
       setTabs(state?.tabs || []);
       const incomingActive = typeof state?.activeTabIndex === "number" ? state.activeTabIndex : -1;
       setActiveTab(incomingActive);
+      setWorkspaceVisible(state?.workspaceVisible ?? true);
     });
 
     electronAPI
@@ -33,6 +37,7 @@ export default function TabsManager() {
           setActiveTab(
             typeof state.activeTabIndex === "number" ? state.activeTabIndex : state.tabs?.length ? 0 : -1
           );
+          setWorkspaceVisible(state.workspaceVisible ?? true);
         }
       })
       .catch(() => {
@@ -60,6 +65,26 @@ export default function TabsManager() {
   const reloadTab = () => {
     if (!isElectron || activeTab < 0) return;
     electronAPI.reloadTab?.(activeTab);
+  };
+
+  const inTemplatesArea =
+    typeof location.pathname === "string" &&
+    (location.pathname.startsWith("/templates") || location.pathname.startsWith("/template"));
+
+  const toggleWorkspace = () => {
+    if (!isElectron) return;
+    if (!inTemplatesArea && !workspaceVisible) {
+      console.warn("Workspace view is only available on Templates pages.");
+      electronAPI.hideAllBrowserViews?.();
+      return;
+    }
+    const next = !workspaceVisible;
+    setWorkspaceVisible(next);
+    if (next) {
+      electronAPI.restoreActiveBrowserView?.();
+    } else {
+      electronAPI.hideAllBrowserViews?.();
+    }
   };
 
   const tabItems = useMemo(
@@ -124,23 +149,37 @@ export default function TabsManager() {
             );
           })}
 
-          <button
-            onClick={() => addTab()}
-            className="flex items-center justify-center w-8 h-8 rounded-full text-gray-300 hover:text-white hover:bg-gray-800/70 transition ml-1"
-            title="New Tab"
-            style={{ WebkitAppRegion: "no-drag" }}
-          >
-            <Plus size={16} />
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => addTab()}
+              className="flex items-center justify-center w-8 h-8 rounded-full text-gray-300 hover:text-white hover:bg-gray-800/70 transition ml-1"
+              title="New Tab"
+              style={{ WebkitAppRegion: "no-drag" }}
+            >
+              <Plus size={16} />
+            </button>
 
-          <button
-            onClick={reloadTab}
-            className="flex items-center justify-center w-8 h-8 rounded-full text-gray-300 hover:text-white hover:bg-gray-800/70 transition"
-            title="Reload Tab"
-            style={{ WebkitAppRegion: "no-drag" }}
-          >
-            <RotateCcw size={16} />
-          </button>
+            <button
+              onClick={reloadTab}
+              className="flex items-center justify-center w-8 h-8 rounded-full text-gray-300 hover:text-white hover:bg-gray-800/70 transition"
+              title="Reload Tab"
+              style={{ WebkitAppRegion: "no-drag" }}
+            >
+              <RotateCcw size={16} />
+            </button>
+
+            <button
+              onClick={toggleWorkspace}
+              className={`px-3 h-8 rounded-full text-sm font-medium transition ${
+                workspaceVisible
+                  ? "text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/10"
+                  : "text-gray-300 border border-gray-600 hover:bg-gray-700/40"
+              }`}
+              style={{ WebkitAppRegion: "no-drag" }}
+            >
+              {workspaceVisible ? "Hide Workspace" : "Show Workspace"}
+            </button>
+          </div>
         </div>
 
         <div className="hidden sm:flex items-center gap-1 ml-auto pl-2">

@@ -12,7 +12,7 @@ import Logo from "../assets/app-icon.png";
 
 const links = [
   { name: "Dashboard", path: "/", icon: <LayoutDashboard size={18} /> },
-  { name: "Templates", path: "/templates", icon: <ListTodo size={18} /> },
+  { name: "Workspace", path: "/templates", icon: <ListTodo size={18} /> },
   { name: "Notifications", path: "/notifications", icon: <Bell size={18} /> },
   { name: "Profile", path: "/profile", icon: <User size={18} /> },
 ];

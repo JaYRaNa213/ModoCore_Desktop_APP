@@ -111,6 +111,7 @@ const isDev = !app.isPackaged;
 let win;
 let tabs = [];
 let activeTabIndex = -1;
+let workspaceVisible = true;
 let tabIdCounter = 0;
 
 const CONTENT_TOP_OFFSET = 160;
@@ -194,6 +195,7 @@ const sendTabsUpdate = () => {
   win.webContents.send("tabs:update", {
     tabs: sanitizeTabsForRenderer(),
     activeTabIndex,
+    workspaceVisible,
   });
 };
 
@@ -218,19 +220,28 @@ const setViewBounds = (view) => {
   view.setAutoResize({ width: true, height: true });
 };
 
+const detachView = (view) => {
+  if (!win || !view) return;
+  try {
+    win.removeBrowserView(view);
+  } catch (err) {
+    // ignore
+  }
+};
+
 const refreshVisibleTabs = () => {
   if (!win) return;
   tabs.forEach((tab, index) => {
     const isActive = index === activeTabIndex;
-    try {
-      if (isActive) {
+    if (workspaceVisible && isActive) {
+      try {
         win.addBrowserView(tab.view);
         setViewBounds(tab.view);
-      } else {
-        win.removeBrowserView(tab.view);
+      } catch (err) {
+        // ignore
       }
-    } catch (err) {
-      // no-op when view is not attached
+    } else {
+      detachView(tab.view);
     }
   });
   sendTabsUpdate();
@@ -263,7 +274,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1280,
     height: 800,
-    icon: path.join(process.resourcesPath, "icons", "icon.ico"),
+   icon: path.join(process.resourcesPath, "icons", "icon.ico"),
     frame: false,
     titleBarStyle: "hidden",
     titleBarOverlay: {
@@ -339,6 +350,30 @@ const ensureActiveIndexWithinBounds = () => {
   if (activeTabIndex >= tabs.length) activeTabIndex = tabs.length - 1;
 };
 
+const setWorkspaceVisibility = (visible) => {
+  workspaceVisible = Boolean(visible);
+  refreshVisibleTabs();
+  return workspaceVisible;
+};
+
+const hideAllBrowserViews = () => {
+  tabs.forEach(({ view }) => detachView(view));
+  workspaceVisible = false;
+  sendTabsUpdate();
+};
+
+const restoreActiveBrowserView = () => {
+  if (!tabs.length) {
+    workspaceVisible = false;
+    sendTabsUpdate();
+    return false;
+  }
+  ensureActiveIndexWithinBounds();
+  workspaceVisible = true;
+  refreshVisibleTabs();
+  return true;
+};
+
 /* ---------------- IPC Window Controls ---------------- */
 ipcMain.on("close-window", () => {
   const currentWindow = BrowserWindow.getFocusedWindow();
@@ -385,7 +420,7 @@ ipcMain.handle("create-tab", (event, rawUrl) => {
 
 ipcMain.handle("switch-tab", (event, index) => {
   if (!tabs[index]) return;
-  activeTabIndex = index;
+    activeTabIndex = index;
   refreshVisibleTabs();
 });
 
@@ -416,6 +451,7 @@ ipcMain.handle("reload-tab", (event, index) => {
 ipcMain.handle("tabs:get-state", () => ({
   tabs: sanitizeTabsForRenderer(),
   activeTabIndex,
+  workspaceVisible,
 }));
 
 ipcMain.handle("tabs:update-bounds", (event, bounds) => {
@@ -431,6 +467,20 @@ ipcMain.handle("tabs:update-bounds", (event, bounds) => {
     customContentBounds = sanitized;
   }
   refreshVisibleTabs();
+});
+
+ipcMain.handle("tabs:set-visibility", (event, visible) => {
+  return { workspaceVisible: setWorkspaceVisibility(visible) };
+});
+
+ipcMain.handle("tabs:hide-all", () => {
+  hideAllBrowserViews();
+  return { workspaceVisible };
+});
+
+ipcMain.handle("tabs:restore-active", () => {
+  const restored = restoreActiveBrowserView();
+  return { workspaceVisible, restored };
 });
 
 ipcMain.handle("launch-apps", async (event, apps = []) => {
